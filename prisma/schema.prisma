@@ -8,26 +8,103 @@ generator client {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  username     String   @unique
+  id           Int        @id @default(autoincrement())
+  username     String     @unique
   name         String
-  email        String   @unique
+  email        String     @unique
   password     String
-  phone        String
-  creationDate DateTime
-  gender       String
-  birthDate    DateTime
-  profilePhoto String
+  phone        String?
+  creationDate DateTime   @default(now())
+  gender       Gender?
+  birthDate    DateTime?
+  profilePhoto String?
+
+  // Relacionamentos com outras tabelas
+  posts        Post[]
+  comments     Comment[]
+  commentLikes CommentLike[]
+  postLikes    PostLike[]
+  followers    Followed[] @relation("Followed", fields: [followerId], references: [id])
+  following    Following[] @relation("Following", fields: [followingId], references: [id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Following {
+  id           Int      @id @default(autoincrement())
+  followerId   Int
+  followingId  Int
+
+  // Relacionamentos com a tabela "User"
+  follower     User     @relation("FollowerFollowing", fields: [followerId], references: [id])
+  following    User     @relation("FollowingFollower", fields: [followingId], references: [id])
+
+  @@map(name: "Following")
+}
+
+model Followed {
+  id           Int      @id @default(autoincrement())
+  followingId  Int
+  followerId   Int
+
+  // Relacionamentos com a tabela "User"
+  following    User     @relation("FollowingFollower", fields: [followingId], references: [id])
+  follower     User     @relation("FollowerFollowing", fields: [followerId], references: [id])
+
+  @@map(name: "Followed")
 }
 
 
-model Sales {
+
+model Post {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  image          String?
+  description    String
+  disableComments Boolean  @default(false)
+  likes          Int      @default(0)
+
+  // Relacionamento com a tabela "User"
+  user           User     @relation(fields: [userId], references: [id])
+  comments       Comment[]
+  postLikes      PostLike[]
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  postId      Int
+  userId      Int
+  content     String
+  likes       Int      @default(0)
+
+  // Relacionamentos com as tabelas "Post" e "User"
+  post        Post     @relation(fields: [postId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  commentLikes CommentLike[]
+}
+
+model CommentLike {
+  id         Int      @id @default(autoincrement())
+  commentId  Int
+  userId     Int
+
+  // Relacionamentos com as tabelas "Comment" e "User"
+  comment    Comment  @relation(fields: [commentId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model PostLike {
   id        Int    @id @default(autoincrement())
-  sold      Int
-  id_user   Int
-  descricao String
+  postId    Int
+  userId    Int
+
+  // Relacionamentos com as tabelas "Post" e "User"
+  post      Post   @relation(fields: [postId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
 }
 
-model Amount {
-  id Int @id @default(autoincrement())
-}
+
