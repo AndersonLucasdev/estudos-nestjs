@@ -9,8 +9,28 @@ import { PatchUserDto } from '../dto/PatchUser.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(data: CreateUserDto): Promise<User> {
+  async GetUserById(id: number): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return user;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
+  async CreateUser(data: CreateUserDto): Promise<User> {
     const user = await this.prisma.user.create({ data });
+    return user;
+  }
+
+  async DeleteUser(id: number): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    await this.prisma.user.delete({ where: { id } });
     return user;
   }
 
@@ -25,19 +45,4 @@ export class UserService {
     return updatedUser;
   }
 
-  async getUserById(id: number): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    return user;
-  }
-
-  async deleteUser(id: number): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    await this.prisma.user.delete({ where: { id } });
-    return user;
-  }
 }
