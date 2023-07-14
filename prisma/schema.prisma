@@ -7,6 +7,108 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// model User {
+//   id           Int       @id @default(autoincrement())
+//   username     String    @db.VarChar(50)
+//   name         String    @db.VarChar(100)
+//   email        String    @db.VarChar(100)
+//   password     String    @db.VarChar(255)
+//   phone        String?   @db.VarChar(20)
+//   creationDate DateTime  @default(now()) @db.Timestamp
+//   gender       Gender?
+//   birthDate    DateTime? @db.Date
+//   profilePhoto String?   @db.Text
+
+//   // Relacionamentos com outras tabelas
+//   posts        Post[]
+//   comments     Comment[]
+//   commentLikes CommentLike[]
+//   postLikes    PostLike[]
+//   following     UserFollowing[] @relation("Following")
+//   followers     UserFollowers[] @relation("UserFollowers")
+//   UserFollowing UserFollowing[]
+//   UserFollowers UserFollowers[]
+// }
+
+// // Definição da tabela "Post"
+// model Post {
+//   id              Int     @id @default(autoincrement())
+//   userId          Int
+//   image           String? @db.Text
+//   description     String  @db.Text
+//   disableComments Boolean @default(false) @db.Boolean
+//   likes           Int     @default(0)
+
+//   // Relacionamento com a tabela "User"
+//   user      User       @relation(fields: [userId], references: [id])
+//   comments  Comment[]
+//   postLikes PostLike[]
+// }
+
+// // Definição da tabela "Comment"
+// model Comment {
+//   id      Int    @id @default(autoincrement())
+//   postId  Int
+//   userId  Int
+//   content String @db.Text
+//   likes   Int    @default(0)
+
+//   // Relacionamentos com as tabelas "Post" e "User"
+//   post         Post          @relation(fields: [postId], references: [id])
+//   user         User          @relation(fields: [userId], references: [id])
+//   commentLikes CommentLike[]
+// }
+
+// // Definição da tabela "CommentLike"
+// model CommentLike {
+//   id        Int @id @default(autoincrement())
+//   commentId Int
+//   userId    Int
+
+//   // Relacionamentos com as tabelas "Comment" e "User"
+//   comment Comment @relation(fields: [commentId], references: [id])
+//   user    User    @relation(fields: [userId], references: [id])
+// }
+
+// // Definição da tabela "PostLike"
+// model PostLike {
+//   id     Int @id @default(autoincrement())
+//   postId Int
+//   userId Int
+
+//   // Relacionamentos com as tabelas "Post" e "User"
+//   post Post @relation(fields: [postId], references: [id])
+//   user User @relation(fields: [userId], references: [id])
+// }
+
+// model UserFollowing {
+//   id          Int @id @default(autoincrement())
+//   userId      Int
+//   followingId Int
+
+//   // Relacionamentos com a tabela "User"
+//   user      User @relation(fields: [userId], references: [id])
+//   following User @relation("Following", fields: [followingId], references: [id])
+// }
+
+// // Definição da tabela "UserFollowers"
+// model UserFollowers {
+//   id         Int @id @default(autoincrement())
+//   userId     Int
+//   followerId Int
+
+//   // Relacionamentos com a tabela "User"
+//   user     User @relation(fields: [userId], references: [id])
+//   follower User @relation("UserFollowers", fields: [followerId], references: [id])
+// }
+
+// // Definição do enum "Gender"
+// enum Gender {
+//   MALE
+//   FEMALE
+//   OTHER
+// }
+
 model User {
   id           Int       @id @default(autoincrement())
   username     String    @db.VarChar(50)
@@ -24,11 +126,8 @@ model User {
   comments     Comment[]
   commentLikes CommentLike[]
   postLikes    PostLike[]
-
-  following     UserFollowing[] @relation("Following")
-  followers     UserFollowers[] @relation("Followers")
-  UserFollowing UserFollowing[]
-  UserFollowers UserFollowers[]
+  followers   UserFollowers[] @relation("UserFollowers")
+  following   UserFollowers[] @relation("Following")
 }
 
 // Definição da tabela "Post"
@@ -82,26 +181,17 @@ model PostLike {
   user User @relation(fields: [userId], references: [id])
 }
 
-model UserFollowing {
-  id          Int @id @default(autoincrement())
-  userId      Int
-  followingId Int
-
-  // Relacionamentos com a tabela "User"
-  user      User @relation(fields: [userId], references: [id])
-  following User @relation("Following", fields: [followingId], references: [id])
-}
-
-// Definição da tabela "UserFollowers"
 model UserFollowers {
-  id         Int @id @default(autoincrement())
-  userId     Int
-  followerId Int
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  relatedUserId Int
 
-  // Relacionamentos com a tabela "User"
-  user     User @relation(fields: [userId], references: [id])
-  follower User @relation("Followers", fields: [followerId], references: [id])
+  user         User     @relation("UserFollowers", fields: [userId], references: [id])
+  relatedUser  User     @relation("Following", fields: [relatedUserId], references: [id])
+
+  @@unique([userId, relatedUserId])
 }
+
 
 // Definição do enum "Gender"
 enum Gender {
