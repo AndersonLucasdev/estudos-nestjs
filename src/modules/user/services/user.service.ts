@@ -1,10 +1,13 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import * as bcrypt from 'bcrypt';
-
 
 @Injectable()
 export class UserService {
@@ -44,5 +47,4 @@ export class UserService {
     const updatedUser = await this.prisma.user.update({ where: { id }, data });
     return updatedUser;
   }
-
 }

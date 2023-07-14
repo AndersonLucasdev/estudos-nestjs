@@ -110,24 +110,26 @@ generator client {
 // }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  username     String    @db.VarChar(50)
-  name         String    @db.VarChar(100)
-  email        String    @db.VarChar(100)
-  password     String    @db.VarChar(255)
-  phone        String?   @db.VarChar(20)
-  creationDate DateTime  @default(now()) @db.Timestamp
-  gender       Gender?
-  birthDate    DateTime? @db.Date
-  profilePhoto String?   @db.Text
+  id             Int       @id @default(autoincrement())
+  username       String    @db.VarChar(50)
+  name           String    @db.VarChar(100)
+  Bio            String?   @db.Text
+  email          String    @db.VarChar(100)
+  password       String    @db.VarChar(60)
+  phone          String?   @db.VarChar(20)
+  creationDate   DateTime  @default(now()) @db.Timestamp
+  lastUpdateDate DateTime  @updatedAt
+  gender         Gender?
+  birthDate      DateTime? @db.Date
+  profilePhoto   String?   @db.Text
 
   // Relacionamentos com outras tabelas
   posts        Post[]
   comments     Comment[]
   commentLikes CommentLike[]
   postLikes    PostLike[]
-  followers   UserFollowers[] @relation("UserFollowers")
-  following   UserFollowers[] @relation("Following")
+  followers    UserFollowers[] @relation("UserFollowers")
+  following    UserFollowers[] @relation("Following")
 }
 
 // Definição da tabela "Post"
@@ -182,16 +184,15 @@ model PostLike {
 }
 
 model UserFollowers {
-  id           Int      @id @default(autoincrement())
-  userId       Int
+  id            Int @id @default(autoincrement())
+  userId        Int
   relatedUserId Int
 
-  user         User     @relation("UserFollowers", fields: [userId], references: [id])
-  relatedUser  User     @relation("Following", fields: [relatedUserId], references: [id])
+  user        User @relation("UserFollowers", fields: [userId], references: [id])
+  relatedUser User @relation("Following", fields: [relatedUserId], references: [id])
 
   @@unique([userId, relatedUserId])
 }
-
 
 // Definição do enum "Gender"
 enum Gender {
