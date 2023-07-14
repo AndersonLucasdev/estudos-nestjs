@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -11,6 +12,7 @@ export class UserService {
 
   async GetUserById(id: number): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });
+
     return user;
   }
 
