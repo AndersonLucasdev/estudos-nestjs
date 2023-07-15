@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  ParseIntPipe,
   NotFoundException,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
@@ -33,17 +34,19 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUserById(@Param('id') id: number) {
-    try {
-      const user = await this.userService.GetUserById(id);
-      return { user };
-    } catch (error) {
+  async getUserById(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.userService.GetUserById(id);
+    if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
     }
+    return { user };
   }
 
   @Patch(':id')
-  async patchUser(@Param('id') id: number, @Body() patchUserDto: PatchUserDto) {
+  async patchUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchUserDto: PatchUserDto,
+  ) {
     try {
       const user = await this.userService.PatchUser(id, patchUserDto);
       if (!user) {
@@ -57,12 +60,8 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: number) {
-    try {
-      const user = await this.userService.DeleteUser(id);
-      return { message: 'Usuário removido com sucesso!', user };
-    } catch (error) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.userService.DeleteUser(id);
+    return { message: 'Usuário removido com sucesso!', user };
   }
 }

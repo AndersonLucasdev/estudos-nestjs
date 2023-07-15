@@ -9,7 +9,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let status = 500;
-    let message = 'Erro interno do servidor';
+    let message = 'Erro interno do servidor.';
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();

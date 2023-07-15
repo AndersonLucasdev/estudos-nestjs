@@ -12,15 +12,19 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor';
 @Module({
   imports: [PrismaModule, UserModule],
   controllers: [AppController],
-  providers: [AppService,
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    }
+  providers: [AppService
   ],
 })
 export class AppModule {}
+
+
+// ,
+//     {
+//       provide: APP_FILTER,
+//       useClass: AllExceptionsFilter,
+//     },
+//     {
+//       provide: APP_INTERCEPTOR,
+//       useClass: LoggingInterceptor,
+//     }
+

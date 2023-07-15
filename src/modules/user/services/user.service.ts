@@ -23,8 +23,12 @@ export class UserService {
   }
 
   async CreateUser(data: CreateUserDto): Promise<User> {
-    const existingUserEmail = await this.prisma.user.findFirst({ where: { email: data.email } });
-    const existingUserName = await this.prisma.user.findFirst({where : {username: data.username}})
+    const existingUserEmail = await this.prisma.user.findFirst({
+      where: { email: data.email },
+    });
+    const existingUserName = await this.prisma.user.findFirst({
+      where: { username: data.username },
+    });
     if (existingUserEmail) {
       throw new ConflictException('O e-mail já está em uso.');
     }
@@ -35,7 +39,9 @@ export class UserService {
     // Criar um hash da senha antes de salvar no banco de dados
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const user = await this.prisma.user.create({ data: { ...data, password: hashedPassword } });
+    const user = await this.prisma.user.create({
+      data: { ...data, password: hashedPassword },
+    });
     return user;
   }
 
@@ -74,29 +80,33 @@ export class UserService {
 
   async PatchUser(id: number, data: PatchUserDto): Promise<User> {
     const existingUser = await this.prisma.user.findUnique({ where: { id } });
-  
+
     if (!existingUser) {
       throw new NotFoundException('Usuário não encontrado');
     }
-  
+
     const { email, username } = data;
-  
+
     if (email && email !== existingUser.email) {
-      const userWithEmail = await this.prisma.user.findFirst({ where: { email } });
-  
+      const userWithEmail = await this.prisma.user.findFirst({
+        where: { email },
+      });
+
       if (userWithEmail) {
         throw new ConflictException('O e-mail já está em uso');
       }
     }
-  
+
     if (username && username !== existingUser.username) {
-      const userWithUsername = await this.prisma.user.findFirst({ where: { username } });
-  
+      const userWithUsername = await this.prisma.user.findFirst({
+        where: { username },
+      });
+
       if (userWithUsername) {
         throw new ConflictException('O nome de usuário já está em uso');
       }
     }
-  
+
     const updatedUser = await this.prisma.user.update({ where: { id }, data });
     return updatedUser;
   }
