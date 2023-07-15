@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
@@ -16,11 +25,11 @@ export class UserController {
   @Get()
   async getAllUsers() {
     try {
-        const user = await this.userService.getAllUsers();
-        return { user }
+      const user = await this.userService.GetAllUsers();
+      return { user };
     } catch (error) {
-        throw new NotFoundException('Não existem usuários.');
-      }
+      throw new NotFoundException('Não existem usuários.');
+    }
   }
 
   @Get(':id')
@@ -34,19 +43,16 @@ export class UserController {
   }
 
   @Patch(':id')
-  async patchUser(
-    @Param('id') id: number,
-    @Body() patchUserDto: PatchUserDto,
-  ) {
+  async patchUser(@Param('id') id: number, @Body() patchUserDto: PatchUserDto) {
     try {
       const user = await this.userService.PatchUser(id, patchUserDto);
       if (!user) {
-        throw new NotFoundException('Usuário não encontrado');
+        throw new NotFoundException('Usuário não encontrado.');
       }
 
       return { message: 'Usuário atualizado com sucesso!', user };
     } catch (error) {
-      return { error: 'Erro ao atualizar usuário: ' + error.message };
+      return { error: 'Erro ao atualizar usuário. ' + error.message };
     }
   }
 

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEmail, IsDate, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEmail, IsDate, IsEnum, Matches } from 'class-validator';
 import { Gender } from '@prisma/client';
 import { TrimSpaces } from 'src/utils/helpers';
 import { CapitalFirstLetter } from 'src/utils/helpers';
@@ -12,11 +12,14 @@ export class PatchUserDto {
   @IsOptional()
   name?: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'E-mail inválido' })
   @IsOptional()
   email?: string;
 
   @IsString()
+  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/, {
+    message: 'A senha deve ter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
+  })
   @IsOptional()
   password?: string;
 
