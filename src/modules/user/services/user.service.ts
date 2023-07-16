@@ -31,7 +31,9 @@ export class UserService {
     const trimmedEmail = TrimSpaces(email);
     const trimmedPassword = TrimSpaces(password);
     const trimmedPhone = phone ? TrimSpaces(phone) : undefined;
-    const trimmedProfilePhoto = profilePhoto ? TrimSpaces(profilePhoto) : undefined;
+    const trimmedProfilePhoto = profilePhoto
+      ? TrimSpaces(profilePhoto)
+      : undefined;
 
     const existingUserEmail = await this.prisma.user.findFirst({
       where: { email: trimmedEmail },
@@ -83,7 +85,9 @@ export class UserService {
     const { email, username, password, name, phone, profilePhoto } = data;
 
     if (email && email !== existingUser.email) {
-      const userWithEmail = await this.prisma.user.findFirst({ where: { email } });
+      const userWithEmail = await this.prisma.user.findFirst({
+        where: { email },
+      });
 
       if (userWithEmail) {
         throw new ConflictException('O e-mail já está em uso');
@@ -91,7 +95,9 @@ export class UserService {
     }
 
     if (username && username !== existingUser.username) {
-      const userWithUsername = await this.prisma.user.findFirst({ where: { username } });
+      const userWithUsername = await this.prisma.user.findFirst({
+        where: { username },
+      });
 
       if (userWithUsername) {
         throw new ConflictException('O nome de usuário já está em uso');
@@ -116,7 +122,10 @@ export class UserService {
       updatedData.profilePhoto = TrimSpaces(profilePhoto);
     }
 
-    const updatedUser = await this.prisma.user.update({ where: { id }, data: updatedData });
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updatedData,
+    });
 
     return updatedUser;
   }
