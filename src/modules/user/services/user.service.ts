@@ -24,10 +24,21 @@ export class UserService {
   }
 
   async CreateUser(data: CreateUserDto): Promise<User> {
-    const { username, name, email, password, phone, profilePhoto } = data;
+    const {
+      username,
+      name,
+      Bio,
+      email,
+      password,
+      phone,
+      profilePhoto,
+      gender,
+      birthDate,
+    } = data;
 
     const trimmedUsername = TrimSpaces(username);
     const capitalizedName = CapitalFirstLetter(name.trim());
+    const trimmedBio = Bio ? TrimSpaces(Bio) : undefined;
     const trimmedEmail = TrimSpaces(email);
     const trimmedPassword = TrimSpaces(password);
     const trimmedPhone = phone ? TrimSpaces(phone) : undefined;
@@ -41,6 +52,7 @@ export class UserService {
     const existingUserName = await this.prisma.user.findFirst({
       where: { username: trimmedUsername },
     });
+
     if (existingUserEmail) {
       throw new ConflictException('O e-mail já está em uso.');
     }
@@ -56,12 +68,16 @@ export class UserService {
       data: {
         username: trimmedUsername,
         name: capitalizedName,
+        Bio: trimmedBio,
         email: trimmedEmail,
         password: hashedPassword,
         phone: trimmedPhone,
         profilePhoto: trimmedProfilePhoto,
+        gender,
+        birthDate,
       },
     });
+
     return user;
   }
 
@@ -82,7 +98,17 @@ export class UserService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    const { email, username, password, name, phone, profilePhoto } = data;
+    const {
+      email,
+      username,
+      password,
+      name,
+      phone,
+      profilePhoto,
+      Bio,
+      gender,
+      birthDate,
+    } = data;
 
     if (email && email !== existingUser.email) {
       const userWithEmail = await this.prisma.user.findFirst({
@@ -106,12 +132,20 @@ export class UserService {
 
     const updatedData: Partial<PatchUserDto> = {};
 
-    if (password) {
-      updatedData.password = await bcrypt.hash(password, 10);
+    if (username) {
+      updatedData.username = TrimSpaces(username);
     }
 
     if (name) {
       updatedData.name = CapitalFirstLetter(TrimSpaces(name));
+    }
+
+    if (email) {
+      updatedData.email = TrimSpaces(email);
+    }
+
+    if (password) {
+      updatedData.password = await bcrypt.hash(password, 10);
     }
 
     if (phone) {
@@ -120,6 +154,18 @@ export class UserService {
 
     if (profilePhoto) {
       updatedData.profilePhoto = TrimSpaces(profilePhoto);
+    }
+
+    if (Bio) {
+      updatedData.Bio = TrimSpaces(Bio);
+    }
+
+    if (gender) {
+      updatedData.gender = gender;
+    }
+
+    if (birthDate) {
+      updatedData.birthDate = birthDate;
     }
 
     const updatedUser = await this.prisma.user.update({

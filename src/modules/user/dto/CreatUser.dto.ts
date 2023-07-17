@@ -1,52 +1,57 @@
-import {
-  IsString,
-  IsOptional,
-  IsEmail,
-  IsDate,
-  IsEnum,
-  MinLength,
-  Matches,
-} from 'class-validator';
-import { Gender } from '@prisma/client';
+// import {
+//   IsString,
+//   IsOptional,
+//   IsEmail,
+//   IsDate,
+//   IsEnum,
+//   MinLength,
+//   Matches,
+//   isString,
+// } from 'class-validator';
+// import { Gender } from '@prisma/client';
 
-export class CreateUserDto {
-  @IsString()
-  username: string;
+// export class CreateUserDto {
+//   @IsString()
+//   username: string;
 
-  @IsString()
-  name: string;
+//   @IsString()
+//   name: string;
 
-  @IsEmail({}, { message: 'E-mail inválido' })
-  email: string;
+//   @IsString()
+//   Bio: string;
 
-  @IsString()
-  @MinLength(6, {
-    message: 'A senha deve ter pelo menos 6 caracteres',
-  })
-  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).*$/, {
-    message:
-      'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
-  })
-  password: string;
+//   @IsEmail({}, { message: 'E-mail inválido' })
+//   email: string;
 
-  @IsString()
-  @IsOptional()
-  phone?: string;
+//   @IsString()
+//   @MinLength(6, {
+//     message: 'A senha deve ter pelo menos 6 caracteres',
+//   })
+//   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).*$/, {
+//     message:
+//       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
+//   })
+//   password: string;
 
-  @IsDate()
-  @IsOptional()
-  birthDate?: Date;
+//   @IsString()
+//   @IsOptional()
+//   phone?: string;
 
-  @IsString()
-  @IsOptional()
-  profilePhoto?: string;
+//   @IsDate()
+//   @IsOptional()
+//   birthDate?: Date;
 
-  @IsDate()
-  @IsOptional()
-  creationDate?: Date;
+//   @IsString()
+//   @IsOptional()
+//   profilePhoto?: string;
 
-  @IsString()
-  @IsOptional()
-  @IsEnum(Gender)
-  gender?: Gender;
-}
+//   @IsDate()
+//   @IsOptional()
+//   creationDate?: Date;
+
+//   @IsString()
+//   @IsOptional()
+//   @IsEnum(Gender)
+//   gender?: Gender;
+// }
+

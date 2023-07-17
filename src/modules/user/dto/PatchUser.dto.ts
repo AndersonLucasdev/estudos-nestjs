@@ -18,6 +18,10 @@ export class PatchUserDto {
   @IsOptional()
   name?: string;
 
+  @IsString()
+  @IsOptional()
+  Bio?: string;
+
   @IsEmail({}, { message: 'E-mail inválido' })
   @IsOptional()
   email?: string;
