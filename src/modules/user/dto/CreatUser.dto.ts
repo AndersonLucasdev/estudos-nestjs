@@ -5,8 +5,7 @@ import {
   IsDate,
   IsEnum,
   MinLength,
-  Matches,
-  isString,
+  Matches
 } from 'class-validator';
 import { Gender } from '@prisma/client';
 
@@ -18,7 +17,7 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
-  Bio: string;
+  Bio?: string;
 
   @IsEmail({}, { message: 'E-mail inválido' })
   email: string;

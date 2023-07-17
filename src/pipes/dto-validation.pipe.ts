@@ -15,7 +15,8 @@ export class DtoValidationPipe implements PipeTransform<any> {
     const errors = await validate(object);
 
     if (errors.length > 0) {
-      throw new BadRequestException('Validation failed');
+      const errorMessage = this.buildErrorMessage(errors);
+      throw new BadRequestException(errorMessage);
     }
 
     return value;
@@ -24,5 +25,12 @@ export class DtoValidationPipe implements PipeTransform<any> {
   private toValidate(metatype: Function): boolean {
     const types: Function[] = [String, Boolean, Number, Array, Object];
     return !types.includes(metatype);
+  }
+
+  private buildErrorMessage(errors: any[]): string {
+    const errorMessage = errors
+      .map((error) => Object.values(error.constraints).join(', '))
+      .join(', ');
+    return errorMessage;
   }
 }
