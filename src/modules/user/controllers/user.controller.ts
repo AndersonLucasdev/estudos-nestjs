@@ -7,17 +7,20 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  UsePipes,
   NotFoundException,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
+import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UsePipes(new DtoValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.CreateUser(createUserDto);
     return { message: 'Usuário criado com sucesso!', user };
