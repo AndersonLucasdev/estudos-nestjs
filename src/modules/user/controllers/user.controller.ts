@@ -88,6 +88,7 @@ import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
+import { formatUserData } from 'src/utils/FormartUserData';
 
 @Controller('users')
 export class UserController {
@@ -97,7 +98,8 @@ export class UserController {
   @UsePipes(new DtoValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto) {
     try {
-      const user = await this.userService.CreateUser(createUserDto);
+      const formattedUserData = formatUserData(createUserDto);
+      const user = await this.userService.CreateUser(formattedUserData);
       console.log(user);
       return { message: 'Usuário criado com sucesso!', user };
     } catch (error) {

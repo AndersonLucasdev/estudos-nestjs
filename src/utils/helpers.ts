@@ -7,6 +7,7 @@ export function TrimSpaces(value: any): string {
 }
 
 export function CapitalFirstLetter(texto: string): string {
+  console.log(texto)
   return texto
     .trim()
     .replace(/\s+/g, ' ')

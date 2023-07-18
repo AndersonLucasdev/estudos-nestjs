@@ -19,11 +19,10 @@ export function IsEmailCustomDecorator(validationOptions?: ValidationOptions) {
           }
 
           const trimmedValue = value.replace(/\s+/g, ''); // Remove all spaces
-          console.log(trimmedValue)
           return isEmail(trimmedValue); // Validate using class-validator's isEmail
         },
         defaultMessage(args: ValidationArguments) {
-          return `O formato de e-mail é inválido.`;
+          return `E-mail inválido.`;
         },
       },
     });
