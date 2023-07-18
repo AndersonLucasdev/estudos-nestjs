@@ -1,11 +1,15 @@
-export function TrimSpaces(value: string): string {
-  return value.trim();
+export function TrimSpaces(value: any): string {
+  if (typeof value !== 'string') {
+    return value;
   }
-  
-  export function CapitalFirstLetter(texto: string): string {
-    return texto
+
+  return value.trim();
+}
+
+export function CapitalFirstLetter(texto: string): string {
+  return texto
     .trim()
     .replace(/\s+/g, ' ')
     .toLowerCase()
     .replace(/(^|\s)\S/g, (match) => match.toUpperCase());
-  }
+}

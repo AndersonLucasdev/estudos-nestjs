@@ -80,6 +80,9 @@ import {
   ParseIntPipe,
   UsePipes,
   NotFoundException,
+  HttpStatus,
+  BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dto/CreatUser.dto';
@@ -95,11 +98,13 @@ export class UserController {
   async createUser(@Body() createUserDto: CreateUserDto) {
     try {
       const user = await this.userService.CreateUser(createUserDto);
-      console.log(user)
+      console.log(user);
       return { message: 'Usuário criado com sucesso!', user };
     } catch (error) {
-      console.log('Erro de validação no DTO:', error);
-      throw error;
+      console.log('Erro ao criar usuário:', error);
+      throw new BadRequestException(
+        'Erro ao criar usuário. Verifique os dados enviados.',
+      );
     }
   }
 

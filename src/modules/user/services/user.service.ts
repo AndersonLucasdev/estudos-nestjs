@@ -180,6 +180,7 @@
 import {
   Injectable,
   NotFoundException,
+  BadRequestException,
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -203,20 +204,29 @@ export class UserService {
   }
 
   async CreateUser(data: CreateUserDto): Promise<User> {
-    console.log(data)
-    const { email, password } = data;
+    try {
+      const { email, password } = data;
 
-    // Trim do campo de e-mail
-    const trimmedEmail = TrimSpaces(email);
+      // Trim do campo de e-mail
+      const trimmedEmail = TrimSpaces(email);
 
-    // Criar um hash da senha antes de salvar no banco de dados
-    const hashedPassword = await bcrypt.hash(password, 10);
+      // Criar um hash da senha antes de salvar no banco de dados
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.prisma.user.create({
-      data: { ...data, email: trimmedEmail, password: hashedPassword },
-    });
+      const user = await this.prisma.user.create({
+        data: { ...data, email: trimmedEmail, password: hashedPassword },
+      });
 
-    return user;
+      return user;
+    } catch (error) {
+      console.log('Erro ao criar usuário:', error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException(
+        'Erro ao criar usuário. Verifique os dados enviados.',
+      );
+    }
   }
 
   async DeleteUser(id: number): Promise<User> {

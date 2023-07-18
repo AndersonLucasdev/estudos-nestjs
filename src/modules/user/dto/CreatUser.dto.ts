@@ -10,26 +10,27 @@ import {
 import { Gender } from '@prisma/client';
 import { TrimSpacesDecorator } from 'src/decorators/trim-spaces.decorator';
 import { CapitalFirstLetterDecorator } from 'src/decorators/capital-first-letter.decorator';
+import { IsEmailCustomDecorator } from 'src/decorators/Is-Email-Custom.decorator';
 
 export class CreateUserDto {
   @IsString()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   username: string;
 
   @IsString()
-  //@CapitalFirstLetterDecorator()
+  @CapitalFirstLetterDecorator()
   name: string;
 
   @IsString()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   @IsOptional()
   Bio?: string;
 
-  @IsEmail({}, { message: 'E-mail inválido.' })
+  @IsEmailCustomDecorator()
   email: string;
 
   @IsString()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   @MinLength(6, {
     message: 'A senha deve ter pelo menos 6 caracteres.',
   })
@@ -40,7 +41,7 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   @IsOptional()
   phone?: string;
 
@@ -49,12 +50,12 @@ export class CreateUserDto {
   birthDate?: Date;
 
   @IsString()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   @IsOptional()
   profilePhoto?: string;
 
   @IsDate()
-  //@TrimSpacesDecorator()
+  @TrimSpacesDecorator()
   @IsOptional()
   creationDate?: Date;
 
