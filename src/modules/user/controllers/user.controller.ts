@@ -97,17 +97,11 @@ export class UserController {
   @Post()
   @UsePipes(new DtoValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto) {
-    try {
+    
       const formattedUserData = formatUserData(createUserDto);
       const user = await this.userService.CreateUser(formattedUserData);
-      console.log(user);
       return { message: 'Usuário criado com sucesso!', user };
-    } catch (error) {
-      console.log('Erro ao criar usuário:', error);
-      throw new BadRequestException(
-        'Erro ao criar usuário. Verifique os dados enviados.',
-      );
-    }
+    
   }
 
   @Get()

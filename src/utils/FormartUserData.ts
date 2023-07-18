@@ -4,7 +4,6 @@ import { TrimSpaces, CapitalFirstLetter } from "./helpers";
 export function formatUserData(createUserDto: CreateUserDto): CreateUserDto {
     // Remover espaços em branco no início e fim dos campos de texto
     createUserDto.username = TrimSpaces(createUserDto.username);
-    createUserDto.name = TrimSpaces(createUserDto.name);
 
     // Transformar a primeira letra de cada palavra em maiúscula e remover espaços extras entre as palavras
     createUserDto.name = CapitalFirstLetter(createUserDto.name);

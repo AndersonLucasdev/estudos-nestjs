@@ -19,7 +19,6 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
-  
   @IsOptional()
   Bio?: string;
 
@@ -27,7 +26,6 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  
   @MinLength(6, {
     message: 'A senha deve ter pelo menos 6 caracteres.',
   })
@@ -38,7 +36,6 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  
   @IsOptional()
   phone?: string;
 
@@ -47,12 +44,10 @@ export class CreateUserDto {
   birthDate?: Date;
 
   @IsString()
-  
   @IsOptional()
   profilePhoto?: string;
 
   @IsDate()
-  
   @IsOptional()
   creationDate?: Date;
 
@@ -60,5 +55,4 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Gender)
   gender?: Gender;
-
 }

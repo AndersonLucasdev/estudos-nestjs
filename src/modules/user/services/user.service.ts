@@ -9,45 +9,64 @@ import { User } from '@prisma/client';
 import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import * as bcrypt from 'bcrypt';
-import { TrimSpaces, CapitalFirstLetter } from 'src/utils/helpers';
+import { TrimSpaces } from 'src/utils/helpers';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async GetUserById(id: number): Promise<User | null> {
+  async GetUserById(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
     return user;
   }
 
   async GetAllUsers(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany();
+    if (!users || users.length === 0) {
+      throw new NotFoundException('Não existem usuários cadastrados.');
+    }
+    return users;
   }
 
   async CreateUser(data: CreateUserDto): Promise<User> {
-    try {
-      const { email, password } = data;
+    const { email, username, password } = data;
 
-      // Trim do campo de e-mail
-      const trimmedEmail = TrimSpaces(email);
+    // Trim do campo de e-mail e do username
+    const trimmedEmail = TrimSpaces(email);
+    const trimmedUsername = TrimSpaces(username);
 
-      // Criar um hash da senha antes de salvar no banco de dados
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const user = await this.prisma.user.create({
-        data: { ...data, email: trimmedEmail, password: hashedPassword },
-      });
-
-      return user;
-    } catch (error) {
-      console.log('Erro ao criar usuário:', error);
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-      throw new BadRequestException(
-        'Erro ao criar usuário. Verifique os dados enviados.',
-      );
+    // Verificar se o email já está em uso
+    const existingUserEmail = await this.prisma.user.findFirst({
+      where: { email: trimmedEmail },
+    });
+    if (existingUserEmail) {
+      throw new ConflictException('O e-mail já está em uso.');
     }
+
+    // Verificar se o username já está em uso
+    const existingUserName = await this.prisma.user.findFirst({
+      where: { username: trimmedUsername },
+    });
+    if (existingUserName) {
+      throw new ConflictException('O username já está em uso.');
+    }
+
+    // Criar um hash da senha antes de salvar no banco de dados
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await this.prisma.user.create({
+      data: {
+        ...data,
+        email: trimmedEmail,
+        username: trimmedUsername,
+        password: hashedPassword,
+      },
+    });
+
+    return user;
   }
 
   async DeleteUser(id: number): Promise<User> {
