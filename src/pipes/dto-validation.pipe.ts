@@ -1,3 +1,40 @@
+// import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+// import { plainToClass } from 'class-transformer';
+// import { validate } from 'class-validator';
+// import { BadRequestException } from '@nestjs/common';
+
+// @Injectable()
+// export class DtoValidationPipe implements PipeTransform<any> {
+//   async transform(value: any, metadata: ArgumentMetadata) {
+//     const { metatype } = metadata;
+//     if (!metatype || !this.toValidate(metatype)) {
+//       return value;
+//     }
+
+//     const object = plainToClass(metatype, value);
+//     const errors = await validate(object);
+
+//     if (errors.length > 0) {
+//       const errorMessage = this.buildErrorMessage(errors);
+//       throw new BadRequestException(errorMessage);
+//     }
+
+//     return value;
+//   }
+
+//   private toValidate(metatype: Function): boolean {
+//     const types: Function[] = [String, Boolean, Number, Array, Object];
+//     return !types.includes(metatype);
+//   }
+
+//   private buildErrorMessage(errors: any[]): string {
+//     const errorMessage = errors
+//       .map((error) => Object.values(error.constraints).join(', '))
+//       .join(' ');
+//     return errorMessage;
+//   }
+// }
+
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -15,8 +52,7 @@ export class DtoValidationPipe implements PipeTransform<any> {
     const errors = await validate(object);
 
     if (errors.length > 0) {
-      const errorMessage = this.buildErrorMessage(errors);
-      throw new BadRequestException(errorMessage);
+      throw new BadRequestException(this.buildErrorMessage(errors));
     }
 
     return value;
@@ -28,9 +64,46 @@ export class DtoValidationPipe implements PipeTransform<any> {
   }
 
   private buildErrorMessage(errors: any[]): string {
-    const errorMessage = errors
-      .map((error) => Object.values(error.constraints).join(', '))
-      .join(', ');
-    return errorMessage;
-  }
+  return errors
+    .map((error) => Object.values(error.constraints).join(''))
+    .filter((message) => message.trim().length > 0) // Filtrar mensagens vazias
+    .join(' ');
 }
+}
+
+
+// import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+// import { plainToClass } from 'class-transformer';
+// import { validate } from 'class-validator';
+// import { BadRequestException } from '@nestjs/common';
+
+// @Injectable()
+// export class DtoValidationPipe implements PipeTransform<any> {
+//   async transform(value: any, metadata: ArgumentMetadata) {
+//     const { metatype } = metadata;
+//     if (!metatype || !this.toValidate(metatype)) {
+//       return value;
+//     }
+
+//     const object = plainToClass(metatype, value);
+//     const errors = await validate(object);
+
+//     if (errors.length > 0) {
+//       throw new BadRequestException(this.buildErrorMessage(errors));
+//     }
+
+//     return value;
+//   }
+
+//   private toValidate(metatype: Function): boolean {
+//     const types: Function[] = [String, Boolean, Number, Array, Object];
+//     return !types.includes(metatype);
+//   }
+
+//   private buildErrorMessage(errors: any[]): string {
+//     return errors
+//       .map((error) => Object.values(error.constraints).join(''))
+//       .filter((message) => message.trim().length > 0) // Filtrar mensagens vazias
+//       .join(', ');
+//   }
+// }
