@@ -15,6 +15,14 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async GetUserByEmail(email: string) {
+    return this.prisma.user.findFirst({ where: { email } });
+  }
+
+  async GetUserByUsername(username: string) {
+    return this.prisma.user.findFirst({ where: { username } });
+  }
+  
   async GetUserById(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
