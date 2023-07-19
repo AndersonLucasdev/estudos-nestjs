@@ -27,9 +27,9 @@ export class DtoValidationPipe implements PipeTransform<any> {
   }
 
   private buildErrorMessage(errors: any[]): string {
-  return errors
-    .map((error) => Object.values(error.constraints).join(''))
-    .filter((message) => message.trim().length > 0) // Filtrar mensagens vazias
-    .join(' ');
-}
+    return errors
+      .map((error) => Object.values(error.constraints).join(''))
+      .filter((message) => message.trim().length > 0) // Filtrar mensagens vazias
+      .join(' ');
+  }
 }
