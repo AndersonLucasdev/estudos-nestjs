@@ -3,6 +3,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { PostController } from '../controllers/post.controller';
 import { PostService } from '../service/post.service';
 import { ValidationUserMiddleware } from 'src/middlewares/validation-user.middleware';
+import { ValidationPostMiddleware } from 'src/middlewares/validation-post.middleware';
 
 @Module({
   imports: [PrismaModule],
@@ -12,10 +13,10 @@ import { ValidationUserMiddleware } from 'src/middlewares/validation-user.middle
 export class PostModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(ValidationUserMiddleware)
+      .apply(ValidationPostMiddleware)
       .forRoutes(
-        { path: 'users', method: RequestMethod.POST },
-        { path: 'users', method: RequestMethod.PATCH },
+        { path: 'posts', method: RequestMethod.POST },
+        { path: 'posts', method: RequestMethod.PATCH },
       );
   }
 }
