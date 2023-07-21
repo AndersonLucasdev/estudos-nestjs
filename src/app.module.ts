@@ -7,10 +7,11 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './commom/filters/exception.filter';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { PostModule } from './modules/post/modules/post.module';
 
 
 @Module({
-  imports: [PrismaModule, UserModule],
+  imports: [PrismaModule, UserModule, PostModule],
   controllers: [AppController],
   providers: [AppService,
     {

@@ -15,30 +15,6 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async GetUserByEmail(email: string) {
-    return this.prisma.user.findFirst({ where: { email } });
-  }
-
-  async GetUserByUsername(username: string) {
-    return this.prisma.user.findFirst({ where: { username } });
-  }
-
-  async GetUserById(id: number): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
-    }
-    return user;
-  }
-
-  async GetAllUsers(): Promise<User[]> {
-    const users = await this.prisma.user.findMany();
-    if (!users || users.length === 0) {
-      throw new NotFoundException('Não existem usuários cadastrados.');
-    }
-    return users;
-  }
-
   async CreateUser(data: CreateUserDto): Promise<User> {
     const { email, username, password } = data;
 
@@ -76,6 +52,32 @@ export class UserService {
 
     return user;
   }
+
+  async GetAllUsers(): Promise<User[]> {
+    const users = await this.prisma.user.findMany();
+    if (!users || users.length === 0) {
+      throw new NotFoundException('Não existem usuários cadastrados.');
+    }
+    return users;
+  }
+
+  async GetUserById(id: number): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+    return user;
+  }
+
+  async GetUserByEmail(email: string) {
+    return this.prisma.user.findFirst({ where: { email } });
+  }
+
+  async GetUserByUsername(username: string) {
+    return this.prisma.user.findFirst({ where: { username } });
+  }
+
+  
 
   async DeleteUser(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
