@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'your_secret_key', // Coloque sua chave secreta aqui (pode ser qualquer string)
+      secretOrKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OSIsIm5hbWUiOiJMdWNhIiwicm9sZSI6ImFkbWluIiwiZXhwIjoyNCwiaWF0IjoxNTE2MjM5MDIyfQ.XsC1wZmh6D_Aq0id05hhI43EaCiLbmgsTnHKVhHuX0E", // Coloque sua chave secreta aqui (pode ser qualquer string)
     });
   }
 

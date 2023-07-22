@@ -8,8 +8,8 @@ import { JwtStrategy } from '../strategies/local.strategy';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'your_secret_key', // Coloque sua chave secreta aqui (a mesma usada na estratégia JWT)
-      signOptions: { expiresIn: '1d' }, // Defina o tempo de expiração do token
+      secret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OSIsIm5hbWUiOiJMdWNhIiwicm9sZSI6ImFkbWluIiwiZXhwIjoyNCwiaWF0IjoxNTE2MjM5MDIyfQ.XsC1wZmh6D_Aq0id05hhI43EaCiLbmgsTnHKVhHuX0E", // Coloque sua chave secreta aqui (a mesma usada na estratégia JWT)
+      signOptions: { expiresIn: '24h' }, // Defina o tempo de expiração do token
     }),
   ],
   providers: [AuthService, JwtStrategy],
