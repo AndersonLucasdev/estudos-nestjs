@@ -16,6 +16,7 @@ export class PatchPostDto {
   userId: number;
 
   @IsString()
+  @IsOptional()
   image: string;
 
   @IsString()
@@ -23,6 +24,7 @@ export class PatchPostDto {
   description?: string;
 
   @IsBoolean()
+  @IsOptional()
   disableComments: boolean;
 
   @IsInt()

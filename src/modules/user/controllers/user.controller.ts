@@ -27,8 +27,13 @@ export class UserController {
 
   @Post()
   @UsePipes(new DtoValidationPipe())
-  async createUser(@Body() createUserDto: CreateUserDto) {
+  async createUser(@Body() createUserDto: CreateUserDto, @Body('confirmPassword') confirmPassword: string) {
     const formattedUserData = formatUserData(createUserDto);
+
+    if (createUserDto.password !== confirmPassword) {
+      throw new BadRequestException('As senhas não coincidem.');
+    }
+    
     const user = await this.userService.CreateUser(formattedUserData);
     return { message: 'Usuário criado com sucesso!', user };
   }
