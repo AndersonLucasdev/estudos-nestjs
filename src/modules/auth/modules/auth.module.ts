@@ -3,16 +3,21 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from '../services/auth.service';
 import { JwtStrategy } from '../strategies/local.strategy';
+import { AuthController } from '../controllers/auth.controller';
+import { UserService } from 'src/modules/user/services/user.service';
+import { UserController } from 'src/modules/user/controllers/user.controller';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [
+  imports: [PrismaModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OSIsIm5hbWUiOiJMdWNhIiwicm9sZSI6ImFkbWluIiwiZXhwIjoyNCwiaWF0IjoxNTE2MjM5MDIyfQ.XsC1wZmh6D_Aq0id05hhI43EaCiLbmgsTnHKVhHuX0E", // Coloque sua chave secreta aqui (a mesma usada na estratégia JWT)
-      signOptions: { expiresIn: '24h' }, // Defina o tempo de expiração do token
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [UserService, AuthService, JwtStrategy],
+  controllers: [UserController, AuthController],
   exports: [AuthService],
 })
 export class AuthModule {}

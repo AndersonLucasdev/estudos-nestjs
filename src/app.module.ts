@@ -8,10 +8,11 @@ import { AllExceptionsFilter } from './commom/filters/exception.filter';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
+import { AuthModule } from './modules/auth/modules/auth.module';
 
 
 @Module({
-  imports: [PrismaModule, UserModule, PostModule],
+  imports: [PrismaModule, UserModule, PostModule, AuthModule],
   controllers: [AppController],
   providers: [AppService,
     {

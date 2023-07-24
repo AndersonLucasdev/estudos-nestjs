@@ -1,11 +1,13 @@
-import { Controller, Post, HttpCode, HttpStatus, UnauthorizedException, Body } from "@nestjs/common"; // Adicione "Body" ao import
+import { Controller, Post, HttpCode, HttpStatus, UnauthorizedException, UseGuards, Body } from "@nestjs/common"; // Adicione "Body" ao import
 import { AuthService } from "../services/auth.service";
+import { LocalAuthGuard } from "../guards/local-auth.guard";
 
-@Controller() 
+@Controller('auth') 
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Post('login')
+    @Post()
+    // @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
     async login(@Body() loginData: { username: string, password: string }) {
         const user = await this.authService.validateUser(loginData.username, loginData.password);
