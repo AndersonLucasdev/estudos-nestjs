@@ -24,7 +24,4 @@ export class CreatePostDto {
 
   @IsBoolean()
   disableComments: boolean;
-
-  @IsInt()
-  likes: number;
 }

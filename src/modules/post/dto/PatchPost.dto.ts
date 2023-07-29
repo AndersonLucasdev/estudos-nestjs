@@ -26,7 +26,4 @@ export class PatchPostDto {
   @IsBoolean()
   @IsOptional()
   disableComments: boolean;
-
-  @IsInt()
-  likes: number;
 }
