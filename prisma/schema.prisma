@@ -1,202 +1,86 @@
-datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// model User {
-//   id           Int       @id @default(autoincrement())
-//   username     String    @db.VarChar(50)
-//   name         String    @db.VarChar(100)
-//   email        String    @db.VarChar(100)
-//   password     String    @db.VarChar(255)
-//   phone        String?   @db.VarChar(20)
-//   creationDate DateTime  @default(now()) @db.Timestamp
-//   gender       Gender?
-//   birthDate    DateTime? @db.Date
-//   profilePhoto String?   @db.Text
-
-//   // Relacionamentos com outras tabelas
-//   posts        Post[]
-//   comments     Comment[]
-//   commentLikes CommentLike[]
-//   postLikes    PostLike[]
-//   following     UserFollowing[] @relation("Following")
-//   followers     UserFollowers[] @relation("UserFollowers")
-//   UserFollowing UserFollowing[]
-//   UserFollowers UserFollowers[]
-// }
-
-// // Definição da tabela "Post"
-// model Post {
-//   id              Int     @id @default(autoincrement())
-//   userId          Int
-//   image           String? @db.Text
-//   description     String  @db.Text
-//   disableComments Boolean @default(false) @db.Boolean
-//   likes           Int     @default(0)
-
-//   // Relacionamento com a tabela "User"
-//   user      User       @relation(fields: [userId], references: [id])
-//   comments  Comment[]
-//   postLikes PostLike[]
-// }
-
-// // Definição da tabela "Comment"
-// model Comment {
-//   id      Int    @id @default(autoincrement())
-//   postId  Int
-//   userId  Int
-//   content String @db.Text
-//   likes   Int    @default(0)
-
-//   // Relacionamentos com as tabelas "Post" e "User"
-//   post         Post          @relation(fields: [postId], references: [id])
-//   user         User          @relation(fields: [userId], references: [id])
-//   commentLikes CommentLike[]
-// }
-
-// // Definição da tabela "CommentLike"
-// model CommentLike {
-//   id        Int @id @default(autoincrement())
-//   commentId Int
-//   userId    Int
-
-//   // Relacionamentos com as tabelas "Comment" e "User"
-//   comment Comment @relation(fields: [commentId], references: [id])
-//   user    User    @relation(fields: [userId], references: [id])
-// }
-
-// // Definição da tabela "PostLike"
-// model PostLike {
-//   id     Int @id @default(autoincrement())
-//   postId Int
-//   userId Int
-
-//   // Relacionamentos com as tabelas "Post" e "User"
-//   post Post @relation(fields: [postId], references: [id])
-//   user User @relation(fields: [userId], references: [id])
-// }
-
-// model UserFollowing {
-//   id          Int @id @default(autoincrement())
-//   userId      Int
-//   followingId Int
-
-//   // Relacionamentos com a tabela "User"
-//   user      User @relation(fields: [userId], references: [id])
-//   following User @relation("Following", fields: [followingId], references: [id])
-// }
-
-// // Definição da tabela "UserFollowers"
-// model UserFollowers {
-//   id         Int @id @default(autoincrement())
-//   userId     Int
-//   followerId Int
-
-//   // Relacionamentos com a tabela "User"
-//   user     User @relation(fields: [userId], references: [id])
-//   follower User @relation("UserFollowers", fields: [followerId], references: [id])
-// }
-
-// // Definição do enum "Gender"
-// enum Gender {
-//   MALE
-//   FEMALE
-//   OTHER
-// }
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+}
 
 model User {
-  id             Int       @id @default(autoincrement())
-  username       String    @db.VarChar(50)
-  name           String    @db.VarChar(100)
-  Bio            String?   @db.Text
-  email          String    @db.VarChar(100)
-  password       String    @db.VarChar(60)
-  phone          String?   @db.VarChar(20)
-  creationDate   DateTime  @default(now()) @db.Timestamp
-  lastUpdateDate DateTime  @updatedAt
+  id             Int             @id @default(autoincrement())
+  username       String          @db.VarChar(50)
+  name           String          @db.VarChar(100)
+  Bio            String?
+  email          String          @db.VarChar(100)
+  password       String          @db.VarChar(60)
+  phone          String?         @db.VarChar(20)
+  creationDate   DateTime        @default(now()) @db.Timestamp(6)
+  lastUpdateDate DateTime        @updatedAt
   gender         Gender?
-  birthDate      DateTime? @db.Date
-  profilePhoto   String?   @db.Text
-
-  // Relacionamentos com outras tabelas
-  posts        Post[]
-  comments     Comment[]
-  commentLikes CommentLike[]
-  postLikes    PostLike[]
-  followers    UserFollowers[] @relation("UserFollowers")
-  following    UserFollowers[] @relation("Following")
+  birthDate      DateTime?       @db.Date
+  profilePhoto   String?
+  comments       Comment[]
+  commentLikes   CommentLike[]
+  posts          Post[]
+  postLikes      PostLike[]
+  following      UserFollowers[] @relation("Following")
+  followers      UserFollowers[] @relation("UserFollowers")
 }
 
-// Definição da tabela "Post"
 model Post {
-  id              Int     @id @default(autoincrement())
+  id              Int        @id @default(autoincrement())
   userId          Int
-  image           String? @db.Text
-  description     String  @db.Text
-  disableComments Boolean @default(false) @db.Boolean
-  likes           Int     @default(0)
-
-  // Relacionamento com a tabela "User"
-  user      User       @relation(fields: [userId], references: [id])
-  comments  Comment[]
-  postLikes PostLike[]
+  image           String?
+  description     String
+  creationDate    DateTime   @default(now()) @db.Timestamp(6)
+  disableComments Boolean    @default(false)
+  likes           Int        @default(0)
+  comments        Comment[]
+  user            User       @relation(fields: [userId], references: [id])
+  postLikes       PostLike[]
 }
 
-// Definição da tabela "Comment"
 model Comment {
-  id      Int    @id @default(autoincrement())
-  postId  Int
-  userId  Int
-  content String @db.Text
-  likes   Int    @default(0)
-
-  // Relacionamentos com as tabelas "Post" e "User"
+  id           Int           @id @default(autoincrement())
+  postId       Int
+  userId       Int
+  content      String
+  creationDate DateTime      @default(now()) @db.Timestamp(6)
+  likes        Int           @default(0)
   post         Post          @relation(fields: [postId], references: [id])
   user         User          @relation(fields: [userId], references: [id])
   commentLikes CommentLike[]
 }
 
-// Definição da tabela "CommentLike"
 model CommentLike {
-  id        Int @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   commentId Int
   userId    Int
-
-  // Relacionamentos com as tabelas "Comment" e "User"
-  comment Comment @relation(fields: [commentId], references: [id])
-  user    User    @relation(fields: [userId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 }
 
-// Definição da tabela "PostLike"
 model PostLike {
-  id     Int @id @default(autoincrement())
+  id     Int  @id @default(autoincrement())
   postId Int
   userId Int
-
-  // Relacionamentos com as tabelas "Post" e "User"
-  post Post @relation(fields: [postId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  post   Post @relation(fields: [postId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 }
 
 model UserFollowers {
-  id            Int @id @default(autoincrement())
+  id            Int  @id @default(autoincrement())
   userId        Int
   relatedUserId Int
-
-  user        User @relation("UserFollowers", fields: [userId], references: [id])
-  relatedUser User @relation("Following", fields: [relatedUserId], references: [id])
+  relatedUser   User @relation("Following", fields: [relatedUserId], references: [id])
+  user          User @relation("UserFollowers", fields: [userId], references: [id])
 
   @@unique([userId, relatedUserId])
 }
 
-// Definição do enum "Gender"
 enum Gender {
   MALE
   FEMALE

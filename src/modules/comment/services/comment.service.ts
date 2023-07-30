@@ -38,6 +38,40 @@ export class CommentService {
     return comments;
   }
 
+  async GetRecentComments(limit: number): Promise<Comment[]> {
+    const comments = await this.prisma.comment.findMany({
+      orderBy: { creationDate: 'desc' },
+      take: limit,
+    });
+
+    if (comments.length === 0) {
+      throw new NotFoundException('Comentários não encontrados.');
+    }
+
+    return comments;
+  }
+
+  async GetPopularComments(limit: number): Promise<Comment[]> {
+    const comments = await this.prisma.comment.findMany({
+      orderBy: { likes: 'desc' },
+      take: limit,
+    });
+
+    if (comments.length === 0) {
+      throw new NotFoundException('Comentários não encontrados.');
+    }
+
+    return comments;
+  }
+
+  async CountPostComments(postId: number): Promise<number> {
+    const count = await this.prisma.comment.count({
+      where: { postId: postId },
+    });
+
+    return count;
+  }
+
   // async GetAllPosts(): Promise<Comment[]> {
   //   const posts = await this.prisma.comment.findMany();
   //   if (!posts || posts.length === 0) {

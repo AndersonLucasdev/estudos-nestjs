@@ -10,7 +10,7 @@ CREATE TABLE "User" (
     "email" VARCHAR(100) NOT NULL,
     "password" VARCHAR(60) NOT NULL,
     "phone" VARCHAR(20),
-    "creationDate" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastUpdateDate" TIMESTAMP(3) NOT NULL,
     "gender" "Gender",
     "birthDate" DATE,
@@ -25,6 +25,7 @@ CREATE TABLE "Post" (
     "userId" INTEGER NOT NULL,
     "image" TEXT,
     "description" TEXT NOT NULL,
+    "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "disableComments" BOOLEAN NOT NULL DEFAULT false,
     "likes" INTEGER NOT NULL DEFAULT 0,
 
@@ -37,6 +38,7 @@ CREATE TABLE "Comment" (
     "postId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
+    "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "likes" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
@@ -94,7 +96,7 @@ ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_postId_fkey" FOREIGN KEY ("postI
 ALTER TABLE "PostLike" ADD CONSTRAINT "PostLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserFollowers" ADD CONSTRAINT "UserFollowers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserFollowers" ADD CONSTRAINT "UserFollowers_relatedUserId_fkey" FOREIGN KEY ("relatedUserId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserFollowers" ADD CONSTRAINT "UserFollowers_relatedUserId_fkey" FOREIGN KEY ("relatedUserId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserFollowers" ADD CONSTRAINT "UserFollowers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
