@@ -23,6 +23,19 @@ import { PatchCommentDto } from '../dto/PatchComment.dto';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @Get(':id')
+  async getCommentById(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const comment = await this.commentService.getCommentById(id);
+      return comment;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Comentário não encontrado.');
+      }
+      throw error;
+    }
+  }
+
   @Get('posts/:postId')
   async getAllPostComments(@Param('id', ParseIntPipe) id: number) {
     try {

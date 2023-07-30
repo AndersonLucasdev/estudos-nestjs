@@ -14,6 +14,18 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getCommentById(commentId: number): Promise<Comment> {
+    const comment = await this.prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+
+    return comment;
+  }
+
   async GetAllPostComments(postId: number): Promise<Comment[]> {
     const comments = await this.prisma.comment.findMany({
       where: { postId: postId },
@@ -72,11 +84,4 @@ export class CommentService {
     return count;
   }
 
-  // async GetAllPosts(): Promise<Comment[]> {
-  //   const posts = await this.prisma.comment.findMany();
-  //   if (!posts || posts.length === 0) {
-  //     throw new NotFoundException('Não existem posts publicados.');
-  //   }
-  //   return posts;
-  // }
 }
