@@ -31,7 +31,7 @@ export class CommentService {
       where: { postId: postId },
     });
 
-    if (comments.length === 0) {
+    if (!comments) {
       throw new NotFoundException('Comentários não encontrados.');
     }
 
@@ -43,7 +43,7 @@ export class CommentService {
       where: { userId: userId },
     });
 
-    if (comments.length === 0) {
+    if (!comments) {
       throw new NotFoundException('Usúario não tem comentário(s) encontrado(s).');
     }
 
@@ -56,7 +56,7 @@ export class CommentService {
       take: limit,
     });
 
-    if (comments.length === 0) {
+    if (!comments) {
       throw new NotFoundException('Comentários não encontrados.');
     }
 
@@ -69,7 +69,7 @@ export class CommentService {
       take: limit,
     });
 
-    if (comments.length === 0) {
+    if (!comments) {
       throw new NotFoundException('Comentários não encontrados.');
     }
 

@@ -24,7 +24,7 @@ export class PostService {
   
     async GetAllPosts(): Promise<Post[]> {
       const posts = await this.prisma.post.findMany();
-      if (!posts || posts.length === 0) {
+      if (!posts) {
         throw new NotFoundException('Não existem posts publicados.');
       }
       return posts;
