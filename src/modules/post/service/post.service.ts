@@ -14,6 +14,7 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // Método para obter todos os posts
   async GetAllPosts(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany();
     if (!posts) {
@@ -22,6 +23,7 @@ export class PostService {
     return posts;
   }
 
+  // Método para obter um post específico pelo ID
   async GetPostById(id: number): Promise<Post> {
     const post = await this.prisma.post.findUnique({ where: { id } });
     if (!post) {
@@ -30,6 +32,7 @@ export class PostService {
     return post;
   }
 
+  // Método para obter posts de um usuário específico pelo ID do usuário
   async GetPostsByUserId(userId: number): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({ where: { userId } });
     if (!posts) {
@@ -38,6 +41,7 @@ export class PostService {
     return posts;
   }
 
+  // Método para obter todos os posts ordenados por data de criação (mais recente primeiro)
   async GetPostsSortedByCreatedAt(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { creationDate: 'desc' },
@@ -48,6 +52,7 @@ export class PostService {
     return posts;
   }
 
+  // Método para obter todos os posts ordenados por popularidade (mais curtidas primeiro)
   async GetPostsSortedByLikes(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { likes: 'desc' },
@@ -58,6 +63,7 @@ export class PostService {
     return posts;
   }
 
+  // Método para obter os posts mais populares com base no número de curtidas
   async GetPopularPosts(limit: number): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { likes: 'desc' },
@@ -69,6 +75,7 @@ export class PostService {
     return posts;
   }
 
+  // Método para obter os posts mais populares nos últimos 5 dias
   async GetPopularPostsLastFiveDays(limit: number): Promise<Post[]> {
     const currentDate = new Date();
     const fiveDaysAgo = new Date();

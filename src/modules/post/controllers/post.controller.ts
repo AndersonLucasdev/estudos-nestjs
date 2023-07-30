@@ -19,11 +19,11 @@ import { CreatePostDto } from '../dto/CreatePost.dto';
 import { PatchPostDto } from '../dto/PatchPost.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 
-
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  // Método para obter todos os posts
   @Get()
   async getAllPosts() {
     try {
@@ -34,6 +34,7 @@ export class PostController {
     }
   }
 
+  // Método para obter um post específico pelo ID
   @Get(':id')
   async getPostById(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.GetPostById(id);
@@ -43,6 +44,7 @@ export class PostController {
     return { post };
   }
 
+  // Método para obter posts de um usuário específico pelo ID do usuário
   @Get('user/:userId')
   async getPostsByUserId(@Param('userId', ParseIntPipe) userId: number) {
     try {
@@ -53,6 +55,7 @@ export class PostController {
     }
   }
 
+  // Método para obter todos os posts ordenados por data de criação (mais recente primeiro)
   @Get('sorted/created')
   async getPostsSortedByCreatedAt() {
     try {
@@ -63,6 +66,7 @@ export class PostController {
     }
   }
 
+  // Método para obter todos os posts ordenados por popularidade (mais curtidas primeiro)
   @Get('sorted/popular')
   async getPostsSortedByLikes() {
     try {
@@ -72,16 +76,31 @@ export class PostController {
       throw new NotFoundException('Não existem posts publicados.');
     }
   }
-  
-  @Get('popular/last-five-days')
-  async getPopularPostsLastFiveDays() {
-    const limit = 10; // Defina aqui a quantidade de posts mais populares a serem retornados
+
+  // Método para obter os posts mais populares com base no número de curtidas
+  @Get('popular/:limit')
+  async getPopularPosts(@Param('limit', ParseIntPipe) limit: number) {
     try {
-      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(limit);
+      const popularPosts = await this.postService.GetPopularPosts(limit);
       return { popularPosts };
     } catch (error) {
-      throw new NotFoundException('Não existem posts populares nos últimos 5 dias.');
+      throw new NotFoundException('Não existem posts populares.');
     }
   }
 
+  // Método para obter os posts mais populares nos últimos 5 dias
+  @Get('popular/last-five-days')
+  async getPopularPostsLastFiveDays() {
+    const limit = 5;
+    try {
+      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(
+        limit,
+      );
+      return { popularPosts };
+    } catch (error) {
+      throw new NotFoundException(
+        'Não existem posts populares nos últimos 5 dias.',
+      );
+    }
+  }
 }
