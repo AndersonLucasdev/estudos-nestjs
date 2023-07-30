@@ -75,14 +75,7 @@ export class UserController {
 
   @Post()
   @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
-  async createUser(
-    @Body() createUserDto: CreateUserDto,
-    @Body('confirmPassword') confirmPassword: string,
-  ) {
-    if (createUserDto.password !== confirmPassword) {
-      throw new BadRequestException('As senhas não coincidem.');
-    }
-
+  async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.CreateUser(createUserDto);
     return { message: 'Usuário criado com sucesso!', user };
   }
@@ -129,7 +122,14 @@ export class UserController {
       }
 
       if (patchUserDto.password) {
-        patchUserDto.password = await bcrypt.hash(patchUserDto.password, 10);
+        const trimmedPassword = patchUserDto.password.trim();
+        const trimmedConfirmPassword = patchUserDto.confirmPassword.trim();
+
+        if (trimmedPassword !== trimmedConfirmPassword) {
+          throw new BadRequestException('As senhas não coincidem.');
+        }
+
+        patchUserDto.password = await bcrypt.hash(trimmedPassword, 10);
       }
 
       const updatedUser = await this.userService.PatchUser(id, patchUserDto);

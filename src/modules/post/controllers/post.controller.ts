@@ -120,4 +120,37 @@ export class PostController {
     const post = await this.postService.DeletePost(id);
     return { message: 'Post removido com sucesso!', post };
   }
+
+  @Patch(':id')
+  @UsePipes(new DtoValidationPipe())
+  async patchUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchPostDto: PatchPostDto,
+  ) {
+    try {
+      const existingUser = await this.postService.GetPostById(id);
+
+      if (!existingUser) {
+        throw new NotFoundException('Usuário não encontrado');
+      }
+
+      if (patchPostDto.description) {
+        const trimmedDescription = patchPostDto.description.trim();
+      }
+
+      if (patchPostDto.disableComments) {
+        const disableComments = patchPostDto.disableComments
+      }
+
+      if (patchPostDto.image) {
+        const image = patchPostDto.image
+      }
+
+      const updatedPost = await this.postService.PatchPost(id, patchPostDto);
+
+      return { message: 'Post atualizado com sucesso!', post: updatedPost };
+    } catch (error) {
+      return { error: 'Erro ao atualizar post. ' + error.message };
+    }
+  }
 }

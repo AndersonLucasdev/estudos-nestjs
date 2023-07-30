@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "Bio" TEXT,
     "email" VARCHAR(100) NOT NULL,
     "password" VARCHAR(60) NOT NULL,
+    "confirmPassword" VARCHAR(60) NOT NULL,
     "phone" VARCHAR(20),
     "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastUpdateDate" TIMESTAMP(3) NOT NULL,

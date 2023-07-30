@@ -107,7 +107,7 @@ export class UserService {
   }
 
   async CreateUser(data: CreateUserDto): Promise<User> {
-    const { email, username, password } = data;
+    const { email, username, password, confirmPassword } = data;
 
     // Trim do campo de e-mail e do username
     const trimmedEmail = TrimSpaces(email);
@@ -130,7 +130,13 @@ export class UserService {
     }
 
     // Criar um hash da senha antes de salvar no banco de dados
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const passwordtrimmed = password.trim()
+    const confirmPasswordTrimmed = confirmPassword.trim()
+    if (passwordtrimmed !== confirmPasswordTrimmed) {
+      throw new BadRequestException('As senhas não coincidem.');
+    }
+
+    const hashedPassword = await bcrypt.hash(passwordtrimmed, 10);
 
     const user = await this.prisma.user.create({
       data: {
@@ -156,24 +162,23 @@ export class UserService {
 
   async PatchUser(id: number, data: PatchUserDto): Promise<User> {
     const existingUser = await this.prisma.user.findUnique({ where: { id } });
-
     if (!existingUser) {
       throw new NotFoundException('Usuário não encontrado');
     }
-
+  
     const { password } = data;
-
+  
     const updatedData: Partial<PatchUserDto> = {};
-
+  
     if (password) {
-      updatedData.password = await bcrypt.hash(password, 10);
+      updatedData.password = await bcrypt.hash(password.trim(), 10);
     }
-
+  
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updatedData,
     });
-
+  
     return updatedUser;
   }
 }

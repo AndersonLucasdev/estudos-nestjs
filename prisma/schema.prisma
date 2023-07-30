@@ -10,24 +10,25 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  username       String          @db.VarChar(50)
-  name           String          @db.VarChar(100)
-  Bio            String?
-  email          String          @db.VarChar(100)
-  password       String          @db.VarChar(60)
-  phone          String?         @db.VarChar(20)
-  creationDate   DateTime        @default(now()) @db.Timestamp(6)
-  lastUpdateDate DateTime        @updatedAt
-  gender         Gender?
-  birthDate      DateTime?       @db.Date
-  profilePhoto   String?
-  comments       Comment[]
-  commentLikes   CommentLike[]
-  posts          Post[]
-  postLikes      PostLike[]
-  following      UserFollowers[] @relation("Following")
-  followers      UserFollowers[] @relation("UserFollowers")
+  id              Int             @id @default(autoincrement())
+  username        String          @db.VarChar(50)
+  name            String          @db.VarChar(100)
+  Bio             String?
+  email           String          @db.VarChar(100)
+  password        String          @db.VarChar(60)
+  confirmPassword String          @db.VarChar(60)
+  phone           String?         @db.VarChar(20)
+  creationDate    DateTime        @default(now()) @db.Timestamp(6)
+  lastUpdateDate  DateTime        @updatedAt
+  gender          Gender?
+  birthDate       DateTime?       @db.Date
+  profilePhoto    String?
+  comments        Comment[]
+  commentLikes    CommentLike[]
+  posts           Post[]
+  postLikes       PostLike[]
+  following       UserFollowers[] @relation("Following")
+  followers       UserFollowers[] @relation("UserFollowers")
 }
 
 model Post {

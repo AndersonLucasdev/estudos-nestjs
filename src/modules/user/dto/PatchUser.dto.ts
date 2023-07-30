@@ -2,6 +2,7 @@ import {
   IsString,
   IsEmail,
   Matches,
+  Equals,
   MinLength,
   IsOptional,
   IsDate,
@@ -37,6 +38,10 @@ export class PatchUserDto {
   })
   @IsOptional()
   password?: string;
+
+  @IsString()
+  @IsOptional()
+  confirmPassword: string;
 
   @IsString()
   @IsOptional()

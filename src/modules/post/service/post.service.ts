@@ -126,4 +126,19 @@ export class PostService {
     await this.prisma.post.delete({ where: { id } });
     return post;
   }
+
+  async PatchPost(id: number, data: PatchPostDto): Promise<Post> {
+    const existingPost = await this.prisma.post.findUnique({ where: { id } });
+
+    if (!existingPost) {
+      throw new NotFoundException('Post não encontrado');
+    }
+
+    const updatedPost = await this.prisma.post.update({
+      where: { id },
+      data: data,
+    });
+
+    return updatedPost;
+  }
 }

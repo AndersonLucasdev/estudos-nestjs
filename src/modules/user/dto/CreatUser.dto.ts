@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsDate,
   IsEnum,
+  Equals,
   MinLength,
   Matches,
   IsOptional,
@@ -34,6 +35,9 @@ export class CreateUserDto {
       'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.',
   })
   password: string;
+
+  @IsString()
+  confirmPassword: string;
 
   @IsString()
   @IsOptional()

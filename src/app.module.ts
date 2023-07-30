@@ -15,18 +15,17 @@ import { AuthModule } from './modules/auth/modules/auth.module';
   imports: [PrismaModule, UserModule, PostModule, AuthModule],
   controllers: [AppController],
   providers: [AppService,
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    }
   ],
 })
 export class AppModule {}
 
 
-
+// {
+//   provide: APP_FILTER,
+//   useClass: AllExceptionsFilter,
+// },
+// {
+//   provide: APP_INTERCEPTOR,
+//   useClass: LoggingInterceptor,
+// }
 
