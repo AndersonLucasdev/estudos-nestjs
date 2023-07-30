@@ -4,6 +4,7 @@ import {
   Post,
   Patch,
   Delete,
+  Query,
   Body,
   Param,
   ParseIntPipe,
@@ -25,20 +26,6 @@ import * as bcrypt from 'bcrypt';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
-  async createUser(
-    @Body() createUserDto: CreateUserDto,
-    @Body('confirmPassword') confirmPassword: string,
-  ) {
-    if (createUserDto.password !== confirmPassword) {
-      throw new BadRequestException('As senhas não coincidem.');
-    }
-
-    const user = await this.userService.CreateUser(createUserDto);
-    return { message: 'Usuário criado com sucesso!', user };
-  }
-
   @Get()
   async getAllUsers() {
     try {
@@ -56,6 +43,44 @@ export class UserController {
       throw new NotFoundException('Usuário não encontrado.');
     }
     return { user };
+  }
+
+  @Get('by-username')
+  async getUserByUsername(@Query('username') username: string) {
+    const user = await this.userService.GetUserByUsername(username);
+    return user;
+  }
+
+  @Get('by-username')
+  async getUsersByUsername(@Query('username') username: string) {
+    const users = await this.userService.GetUsersByUsername(username);
+    return users;
+  }
+
+  @Get('most-likes')
+  async getUsersWithMostLikes() {
+    const users = await this.userService.GetUsersWithMostLikes();
+    return users;
+  }
+
+  @Get('recent-activity')
+  async getUsersWithRecentActivity(@Query('days') days: number) {
+    const users = await this.userService.GetUsersWithRecentActivity(days);
+    return users;
+  }
+
+  @Post()
+  @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+    @Body('confirmPassword') confirmPassword: string,
+  ) {
+    if (createUserDto.password !== confirmPassword) {
+      throw new BadRequestException('As senhas não coincidem.');
+    }
+
+    const user = await this.userService.CreateUser(createUserDto);
+    return { message: 'Usuário criado com sucesso!', user };
   }
 
   @Patch(':id')
