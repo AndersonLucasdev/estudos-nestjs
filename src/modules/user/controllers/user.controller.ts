@@ -45,24 +45,28 @@ export class UserController {
     return { user };
   }
 
+  // Method to get the user with that name
   @Get('by-username')
   async getUserByUsername(@Query('username') username: string) {
     const user = await this.userService.GetUserByUsername(username);
     return user;
   }
 
+  // Method to find multiple people with that part of the name
   @Get('by-username')
   async getUsersByUsername(@Query('username') username: string) {
     const users = await this.userService.GetUsersByUsername(username);
     return users;
   }
 
+  // Method to get users with more likes
   @Get('most-likes')
   async getUsersWithMostLikes() {
     const users = await this.userService.GetUsersWithMostLikes();
     return users;
   }
 
+  //method to get users with latest updates
   @Get('recent-activity')
   async getUsersWithRecentActivity(@Query('days') days: number) {
     const users = await this.userService.GetUsersWithRecentActivity(days);

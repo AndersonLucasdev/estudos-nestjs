@@ -23,7 +23,7 @@ import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  // Método para obter todos os posts
+  // Method to get all posts
   @Get()
   async getAllPosts() {
     try {
@@ -34,7 +34,7 @@ export class PostController {
     }
   }
 
-  // Método para obter um post específico pelo ID
+  // Method to get a specific post by ID
   @Get(':id')
   async getPostById(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.GetPostById(id);
@@ -44,7 +44,7 @@ export class PostController {
     return { post };
   }
 
-  // Método para obter posts de um usuário específico pelo ID do usuário
+  // Method to get posts from a specific user by user ID
   @Get('user/:userId')
   async getPostsByUserId(@Param('userId', ParseIntPipe) userId: number) {
     try {
@@ -55,7 +55,7 @@ export class PostController {
     }
   }
 
-  // Método para obter todos os posts ordenados por data de criação (mais recente primeiro)
+  // Method to get all posts sorted by creation date (newest first)
   @Get('sorted/created')
   async getPostsSortedByCreatedAt() {
     try {
@@ -66,7 +66,7 @@ export class PostController {
     }
   }
 
-  // Método para obter todos os posts ordenados por popularidade (mais curtidas primeiro)
+  // Method to get all posts sorted by popularity (most likes first)
   @Get('sorted/popular')
   async getPostsSortedByLikes() {
     try {
@@ -77,7 +77,7 @@ export class PostController {
     }
   }
 
-  // Método para obter os posts mais populares com base no número de curtidas
+  // Method to get the most popular posts based on the number of likes
   @Get('popular/:limit')
   async getPopularPosts(@Param('limit', ParseIntPipe) limit: number) {
     try {
@@ -88,7 +88,7 @@ export class PostController {
     }
   }
 
-  // Método para obter os posts mais populares nos últimos 5 dias
+  // Method to get the most popular posts in the last 5 days
   @Get('popular/last-five-days')
   async getPopularPostsLastFiveDays() {
     const limit = 5;
@@ -104,14 +104,16 @@ export class PostController {
     }
   }
 
-  @Post(':id')
-  @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
+  // Method to create post with userID
+  @Post(':userId')
+  @UsePipes(new DtoValidationPipe())
   async createPost(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() createPostDto: CreatePostDto
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() createPostDto: CreatePostDto,
   ) {
-
-    const user = await this.postService.CreatePost(id, createPostDto);
-    return { message: 'Usuário criado com sucesso!', user };
+    const post = await this.postService.CreatePost(userId, createPostDto);
+    return { message: 'Post criado com sucesso!', post };
   }
+
+
 }

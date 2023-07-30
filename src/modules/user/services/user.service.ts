@@ -15,7 +15,6 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  
   async GetAllUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();
     if (!users || users.length === 0) {
@@ -31,16 +30,17 @@ export class UserService {
     }
     return user;
   }
-  
+
   async GetUserByEmail(email: string) {
     return this.prisma.user.findFirst({ where: { email } });
   }
-  
+
+  // Method to get the user with that name
   async GetUserByUsername(username: string) {
     return this.prisma.user.findFirst({ where: { username } });
   }
 
-  // metodo para encontrar varias pessoas com aquela parte do nome
+  // Method to find multiple people with that part of the name
   async GetUsersByUsername(username: string) {
     const user = this.prisma.user.findMany({
       where: {
@@ -56,6 +56,7 @@ export class UserService {
     return user;
   }
 
+  // Method to get users with more likes
   async GetUsersWithMostLikes() {
     const usersWithMostLikes = await this.prisma.user.findMany({
       select: {
@@ -80,12 +81,15 @@ export class UserService {
     });
 
     if (!usersWithMostLikes || usersWithMostLikes.length === 0) {
-      throw new NotFoundException('Não existem usuários com likes registrados.');
+      throw new NotFoundException(
+        'Não existem usuários com likes registrados.',
+      );
     }
 
     return usersWithMostLikes;
   }
 
+  //method to get users with latest updates
   async GetUsersWithRecentActivity(days: number): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       where: {
@@ -95,7 +99,9 @@ export class UserService {
       },
     });
     if (!users) {
-      throw new NotFoundException('Não existem usuários com atividade recente.');
+      throw new NotFoundException(
+        'Não existem usuários com atividade recente.',
+      );
     }
     return users;
   }
