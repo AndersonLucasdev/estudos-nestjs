@@ -42,4 +42,46 @@ export class PostController {
     }
     return { post };
   }
+
+  @Get('user/:userId')
+  async getPostsByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    try {
+      const posts = await this.postService.GetPostsByUserId(userId);
+      return { posts };
+    } catch (error) {
+      throw new NotFoundException('Não existem posts para este usuário.');
+    }
+  }
+
+  @Get('sorted/created')
+  async getPostsSortedByCreatedAt() {
+    try {
+      const posts = await this.postService.GetPostsSortedByCreatedAt();
+      return { posts };
+    } catch (error) {
+      throw new NotFoundException('Não existem posts publicados.');
+    }
+  }
+
+  @Get('sorted/popular')
+  async getPostsSortedByLikes() {
+    try {
+      const posts = await this.postService.GetPostsSortedByLikes();
+      return { posts };
+    } catch (error) {
+      throw new NotFoundException('Não existem posts publicados.');
+    }
+  }
+  
+  @Get('popular/last-five-days')
+  async getPopularPostsLastFiveDays() {
+    const limit = 10; // Defina aqui a quantidade de posts mais populares a serem retornados
+    try {
+      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(limit);
+      return { popularPosts };
+    } catch (error) {
+      throw new NotFoundException('Não existem posts populares nos últimos 5 dias.');
+    }
+  }
+
 }
