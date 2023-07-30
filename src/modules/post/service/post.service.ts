@@ -102,7 +102,6 @@ export class PostService {
     return posts;
   }
 
-
   async CreatePost(userId: number, data: CreatePostDto): Promise<Post> {
     const { description } = data;
 
@@ -115,6 +114,16 @@ export class PostService {
       },
     });
 
+    return post;
+  }
+
+  async DeletePost(id: number): Promise<Post> {
+    const post = await this.prisma.post.findUnique({ where: { id } });
+    if (!post) {
+      throw new NotFoundException('Post não encontrado.');
+    }
+
+    await this.prisma.post.delete({ where: { id } });
     return post;
   }
 }

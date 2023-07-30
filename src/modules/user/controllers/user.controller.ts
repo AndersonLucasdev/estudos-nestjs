@@ -87,6 +87,12 @@ export class UserController {
     return { message: 'Usuário criado com sucesso!', user };
   }
 
+  @Delete(':id')
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.userService.DeleteUser(id);
+    return { message: 'Usuário removido com sucesso!', user };
+  }
+
   @Patch(':id')
   @UsePipes(new DtoValidationPipe())
   async patchUser(
@@ -132,11 +138,5 @@ export class UserController {
     } catch (error) {
       return { error: 'Erro ao atualizar usuário. ' + error.message };
     }
-  }
-
-  @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.userService.DeleteUser(id);
-    return { message: 'Usuário removido com sucesso!', user };
   }
 }

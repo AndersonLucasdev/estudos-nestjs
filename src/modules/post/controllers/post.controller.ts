@@ -115,5 +115,9 @@ export class PostController {
     return { message: 'Post criado com sucesso!', post };
   }
 
-
+  @Delete(':id')
+  async deletePost(@Param('id', ParseIntPipe) id: number) {
+    const post = await this.postService.DeletePost(id);
+    return { message: 'Post removido com sucesso!', post };
+  }
 }
