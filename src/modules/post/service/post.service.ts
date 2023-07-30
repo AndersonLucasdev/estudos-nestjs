@@ -17,7 +17,7 @@ export class PostService {
     async GetPostById(id: number): Promise<Post> {
       const post = await this.prisma.post.findUnique({ where: { id } });
       if (!post) {
-        throw new NotFoundException('Usuário não encontrado.');
+        throw new NotFoundException('Post não encontrado.');
       }
       return post;
     }

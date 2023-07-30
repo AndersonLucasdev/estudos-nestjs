@@ -22,22 +22,22 @@ import { PatchCommentDto } from '../dto/PatchComment.dto';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Get()
-  async getAllPosts() {
+  @Get(':id')
+  async getAllPostComments(@Param('id', ParseIntPipe) id: number) {
     try {
-      const post = await this.commentService.GetAllPosts();
-      return { post };
+      const comments = await this.commentService.GetAllPostComments(id);
+      return { comments }; // Use o nome "comments" em vez de "post" para ser consistente
     } catch (error) {
-      throw new NotFoundException('Não existem posts.');
+      throw new NotFoundException('Não existem comentários para o post.');
     }
   }
 
-//   @Get(':id')
-//   async getPostById(@Param('id', ParseIntPipe) id: number) {
-//     const post = await this.commentService.GetPostById(id);
-//     if (!post) {
-//       throw new NotFoundException('Post não encontrado.');
-//     }
-//     return { post };
-//   }
+  // @Get(':id')
+  // async getPostById(@Param('id', ParseIntPipe) id: number) {
+  //   const post = await this.commentService.GetPostById(id);
+  //   if (!post) {
+  //     throw new NotFoundException('Post não encontrado.');
+  //   }
+  //   return { post };
+  // }
 }
