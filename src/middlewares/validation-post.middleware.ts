@@ -7,7 +7,9 @@ export class ValidationPostMiddleware implements NestMiddleware {
     // Realize a validação dos dados de entrada
     const { image, description, disableComments } = req.body;
 
-    
+    if (!image) {
+      throw new BadRequestException('Campos obrigatórios estão faltando');
+    }
     next();
   }
 }

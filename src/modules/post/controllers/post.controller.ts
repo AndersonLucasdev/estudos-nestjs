@@ -103,4 +103,15 @@ export class PostController {
       );
     }
   }
+
+  @Post(':id')
+  @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
+  async createPost(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createPostDto: CreatePostDto
+  ) {
+
+    const user = await this.postService.CreatePost(id, createPostDto);
+    return { message: 'Usuário criado com sucesso!', user };
+  }
 }

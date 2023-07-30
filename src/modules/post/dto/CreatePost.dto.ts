@@ -16,7 +16,7 @@ export class CreatePostDto {
   userId: number;
 
   @IsString()
-  image?: string;
+  image: string;
 
   @IsString()
   @IsOptional()

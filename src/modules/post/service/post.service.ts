@@ -101,4 +101,20 @@ export class PostService {
 
     return posts;
   }
+
+
+  async CreatePost(userId: number, data: CreatePostDto): Promise<Post> {
+    const { description } = data;
+
+    const descriptiontrimed = TrimSpaces(description);
+    const post = await this.prisma.post.create({
+      data: {
+        ...data,
+        description: descriptiontrimed,
+        userId: userId
+      },
+    });
+
+    return post;
+  }
 }
