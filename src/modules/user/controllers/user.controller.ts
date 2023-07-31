@@ -55,7 +55,7 @@ export class UserController {
   }
 
   // Method to find multiple people with that part of the name
-  @Get('by-username')
+  @Get('by-username/multiple')
   async getUsersByUsername(@Query('username') username: string) {
     const users = await this.userService.GetUsersByUsername(username);
     return users;
