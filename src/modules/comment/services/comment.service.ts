@@ -110,5 +110,16 @@ export class CommentService {
     return comment;
   }
 
+  // Method to delete a comment by its ID
+  async DeleteComment(id: number): Promise<Comment> {
+    const comment = await this.prisma.comment.findUnique({ where: { id } });
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+
+    await this.prisma.comment.delete({ where: { id } });
+    return comment;
+  }
+
   
 }

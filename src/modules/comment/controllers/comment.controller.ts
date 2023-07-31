@@ -105,5 +105,10 @@ export class CommentController {
     return { message: 'Comentário criado com sucesso!', comment };
   }
 
-  
+  // Endpoint to delete a comment by its ID
+  @Delete(':id')
+  async deleteComment(@Param('id', ParseIntPipe) id: number) {
+    const comment = await this.commentService.DeleteComment(id);
+    return { message: 'Comentário removido com sucesso!', comment };
+  }
 }
