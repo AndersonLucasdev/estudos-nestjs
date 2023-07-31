@@ -23,7 +23,7 @@ import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  // Method to get all posts
+  // Endpoint to get all posts
   @Get()
   async getAllPosts() {
     try {
@@ -34,7 +34,7 @@ export class PostController {
     }
   }
 
-  // Method to get a specific post by ID
+  // Endpoint to get a specific post by ID
   @Get(':id')
   async getPostById(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.GetPostById(id);
@@ -44,7 +44,7 @@ export class PostController {
     return { post };
   }
 
-  // Method to get posts from a specific user by user ID
+  // Endpoint to get posts from a specific user by user ID
   @Get('user/:userId')
   async getPostsByUserId(@Param('userId', ParseIntPipe) userId: number) {
     try {
@@ -55,7 +55,7 @@ export class PostController {
     }
   }
 
-  // Method to get all posts sorted by creation date (newest first)
+  // Endpoint to get all posts sorted by creation date (newest first)
   @Get('sorted/created')
   async getPostsSortedByCreatedAt() {
     try {
@@ -66,7 +66,7 @@ export class PostController {
     }
   }
 
-  // Method to get all posts sorted by popularity (most likes first)
+  // Endpoint to get all posts sorted by popularity (most likes first)
   @Get('sorted/popular')
   async getPostsSortedByLikes() {
     try {
@@ -77,7 +77,7 @@ export class PostController {
     }
   }
 
-  // Method to get the most popular posts based on the number of likes
+  // Endpoint to get the most popular posts based on the number of likes
   @Get('popular/:limit')
   async getPopularPosts(@Param('limit', ParseIntPipe) limit: number) {
     try {
@@ -88,7 +88,7 @@ export class PostController {
     }
   }
 
-  // Method to get the most popular posts in the last 5 days
+  // Endpoint to get the most popular posts in the last 5 days
   @Get('popular/last-five-days')
   async getPopularPostsLastFiveDays() {
     const limit = 5;
@@ -104,7 +104,7 @@ export class PostController {
     }
   }
 
-  // Method to create post with userID
+  // Endpoint to create a post with userID
   @Post(':userId')
   @UsePipes(new DtoValidationPipe())
   async createPost(
@@ -115,12 +115,14 @@ export class PostController {
     return { message: 'Post criado com sucesso!', post };
   }
 
+  // Endpoint to delete a post by its ID
   @Delete(':id')
   async deletePost(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.DeletePost(id);
     return { message: 'Post removido com sucesso!', post };
   }
 
+  // Endpoint to update a post by its ID
   @Patch(':id')
   @UsePipes(new DtoValidationPipe())
   async patchUser(
@@ -131,7 +133,7 @@ export class PostController {
       const existingUser = await this.postService.GetPostById(id);
 
       if (!existingUser) {
-        throw new NotFoundException('Usuário não encontrado');
+        throw new NotFoundException('Usuário não encontrado.');
       }
 
       if (patchPostDto.description) {
@@ -139,11 +141,11 @@ export class PostController {
       }
 
       if (patchPostDto.disableComments) {
-        const disableComments = patchPostDto.disableComments
+        const disableComments = patchPostDto.disableComments;
       }
 
       if (patchPostDto.image) {
-        const image = patchPostDto.image
+        const image = patchPostDto.image;
       }
 
       const updatedPost = await this.postService.PatchPost(id, patchPostDto);

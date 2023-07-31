@@ -23,6 +23,7 @@ import { PatchCommentDto } from '../dto/PatchComment.dto';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  // Endpoint to get a comment by its ID
   @Get(':id')
   async getCommentById(@Param('id', ParseIntPipe) id: number) {
     try {
@@ -36,16 +37,18 @@ export class CommentController {
     }
   }
 
+  // Endpoint to get all comments for a specific post
   @Get('posts/:postId')
   async getAllPostComments(@Param('id', ParseIntPipe) id: number) {
     try {
       const comments = await this.commentService.GetAllPostComments(id);
-      return { comments }; // Use o nome "comments" em vez de "post" para ser consistente
+      return { comments }; // Use the name "comments" instead of "post" for consistency
     } catch (error) {
       throw new NotFoundException('Não existem comentários para o post.');
     }
   }
 
+  // Endpoint to get all comments made by a specific user
   @Get('users/:userId')
   async getAllUserComments(@Param('id', ParseIntPipe) id: number) {
     try {
@@ -56,6 +59,7 @@ export class CommentController {
     }
   }
 
+  // Endpoint to get the most recent comments up to a specified limit
   @Get('recent')
   async getRecentComments(@Query('limit', ParseIntPipe) limit: number) {
     try {
@@ -66,6 +70,7 @@ export class CommentController {
     }
   }
 
+  // Endpoint to get the most popular comments based on the number of likes up to a specified limit
   @Get('popular')
   async getPopularComments(@Query('limit', ParseIntPipe) limit: number) {
     try {
@@ -76,6 +81,7 @@ export class CommentController {
     }
   }
 
+  // Endpoint to count the number of comments for a specific post
   @Get('count/:postId')
   async countPostComments(@Param('postId', ParseIntPipe) postId: number) {
     try {
@@ -85,5 +91,4 @@ export class CommentController {
       throw new NotFoundException('Comentários não encontrados.');
     }
   }
-
 }

@@ -130,8 +130,8 @@ export class UserService {
     }
 
     // Criar um hash da senha antes de salvar no banco de dados
-    const passwordtrimmed = password.trim()
-    const confirmPasswordTrimmed = confirmPassword.trim()
+    const passwordtrimmed = password.trim();
+    const confirmPasswordTrimmed = confirmPassword.trim();
     if (passwordtrimmed !== confirmPasswordTrimmed) {
       throw new BadRequestException('As senhas não coincidem.');
     }
@@ -165,20 +165,20 @@ export class UserService {
     if (!existingUser) {
       throw new NotFoundException('Usuário não encontrado');
     }
-  
+
     const { password } = data;
-  
+
     const updatedData: Partial<PatchUserDto> = {};
-  
+
     if (password) {
       updatedData.password = await bcrypt.hash(password.trim(), 10);
     }
-  
+
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updatedData,
     });
-  
+
     return updatedUser;
   }
 }

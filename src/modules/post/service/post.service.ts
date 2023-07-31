@@ -14,7 +14,7 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Método para obter todos os posts
+  // Method to get all posts
   async GetAllPosts(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany();
     if (!posts) {
@@ -23,7 +23,7 @@ export class PostService {
     return posts;
   }
 
-  // Método para obter um post específico pelo ID
+  // Method to get a specific post by ID
   async GetPostById(id: number): Promise<Post> {
     const post = await this.prisma.post.findUnique({ where: { id } });
     if (!post) {
@@ -32,7 +32,7 @@ export class PostService {
     return post;
   }
 
-  // Método para obter posts de um usuário específico pelo ID do usuário
+  // Method to get posts by a specific user ID
   async GetPostsByUserId(userId: number): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({ where: { userId } });
     if (!posts) {
@@ -41,7 +41,7 @@ export class PostService {
     return posts;
   }
 
-  // Método para obter todos os posts ordenados por data de criação (mais recente primeiro)
+  // Method to get all posts sorted by creation date (most recent first)
   async GetPostsSortedByCreatedAt(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { creationDate: 'desc' },
@@ -52,7 +52,7 @@ export class PostService {
     return posts;
   }
 
-  // Método para obter todos os posts ordenados por popularidade (mais curtidas primeiro)
+  // Method to get all posts sorted by popularity (most likes first)
   async GetPostsSortedByLikes(): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { likes: 'desc' },
@@ -63,7 +63,7 @@ export class PostService {
     return posts;
   }
 
-  // Método para obter os posts mais populares com base no número de curtidas
+  // Method to get the most popular posts based on the number of likes
   async GetPopularPosts(limit: number): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       orderBy: { likes: 'desc' },
@@ -75,7 +75,7 @@ export class PostService {
     return posts;
   }
 
-  // Método para obter os posts mais populares nos últimos 5 dias
+  // Method to get the most popular posts in the last 5 days
   async GetPopularPostsLastFiveDays(limit: number): Promise<Post[]> {
     const currentDate = new Date();
     const fiveDaysAgo = new Date();
@@ -84,13 +84,13 @@ export class PostService {
     const posts = await this.prisma.post.findMany({
       where: {
         creationDate: {
-          gte: fiveDaysAgo, // Filtra os posts com data maior ou igual a fiveDaysAgo
+          gte: fiveDaysAgo, // Filters the posts with date greater than or equal to fiveDaysAgo
         },
       },
       orderBy: {
-        likes: 'desc', // Ordena os posts pelo número de curtidas em ordem decrescente
+        likes: 'desc', // Sorts the posts by the number of likes in descending order
       },
-      take: limit, // Limita o número de resultados retornados
+      take: limit, // Limits the number of results returned
     });
 
     if (!posts) {
@@ -102,21 +102,23 @@ export class PostService {
     return posts;
   }
 
+  // Method to create a new post
   async CreatePost(userId: number, data: CreatePostDto): Promise<Post> {
     const { description } = data;
 
-    const descriptiontrimed = TrimSpaces(description);
+    const descriptionTrimmed = TrimSpaces(description);
     const post = await this.prisma.post.create({
       data: {
         ...data,
-        description: descriptiontrimed,
-        userId: userId
+        description: descriptionTrimmed,
+        userId: userId,
       },
     });
 
     return post;
   }
 
+  // Method to delete a post by its ID
   async DeletePost(id: number): Promise<Post> {
     const post = await this.prisma.post.findUnique({ where: { id } });
     if (!post) {
@@ -127,11 +129,12 @@ export class PostService {
     return post;
   }
 
+  // Method to update a post by its ID
   async PatchPost(id: number, data: PatchPostDto): Promise<Post> {
     const existingPost = await this.prisma.post.findUnique({ where: { id } });
 
     if (!existingPost) {
-      throw new NotFoundException('Post não encontrado');
+      throw new NotFoundException('Post não encontrado.');
     }
 
     const updatedPost = await this.prisma.post.update({
