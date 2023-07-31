@@ -18,6 +18,7 @@ import {
 import { CommentService } from '../services/comment.service';
 import { CreateCommentDto } from '../dto/CreateComment.dto';
 import { PatchCommentDto } from '../dto/PatchComment.dto';
+import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 
 @Controller('comments')
 export class CommentController {
@@ -91,4 +92,18 @@ export class CommentController {
       throw new NotFoundException('Comentários não encontrados.');
     }
   }
+
+  // Endpoint to create a comment with userID and postID
+  @Post(':userId')
+  @UsePipes(new DtoValidationPipe())
+  async createPost(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('postId', ParseIntPipe) postId: number,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
+    const comment = await this.commentService.CreateComment(userId, postId, createCommentDto);
+    return { message: 'Comentário criado com sucesso!', comment };
+  }
+
+  
 }

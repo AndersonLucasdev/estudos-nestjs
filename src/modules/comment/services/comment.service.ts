@@ -89,4 +89,26 @@ export class CommentService {
 
     return count;
   }
+
+  async CreateComment(
+    userId: number,
+    postId: number,
+    data: CreateCommentDto,
+  ): Promise<Comment> {
+    const { content } = data;
+
+    const contentTrimmed = TrimSpaces(content);
+    const comment = await this.prisma.comment.create({
+      data: {
+        ...data,
+        content: contentTrimmed,
+        userId: userId,
+        postId: postId,
+      },
+    });
+
+    return comment;
+  }
+
+  
 }
