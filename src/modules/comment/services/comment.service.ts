@@ -121,5 +121,19 @@ export class CommentService {
     return comment;
   }
 
-  
+  // Method to update a comment by its ID
+  async PatchComment(id: number, data: PatchCommentDto): Promise<Comment> {
+    const existingComment = await this.prisma.comment.findUnique({ where: { id } });
+
+    if (!existingComment) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
+
+    const updatedComment = await this.prisma.comment.update({
+      where: { id },
+      data: data,
+    });
+
+    return updatedComment;
+  }
 }

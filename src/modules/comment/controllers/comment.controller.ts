@@ -111,4 +111,29 @@ export class CommentController {
     const comment = await this.commentService.DeleteComment(id);
     return { message: 'Comentário removido com sucesso!', comment };
   }
+
+  // Endpoint to update a comment by its ID
+  @Patch(':id')
+  @UsePipes(new DtoValidationPipe())
+  async patchComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchCommentDto: PatchCommentDto,
+  ) {
+    try {
+
+      if (patchCommentDto.content) {
+        const trimmedcontent = patchCommentDto.content.trim();
+
+        if (trimmedcontent.length === 0) {
+          throw new NotFoundException('O comentário não pode ser vazio.');
+        }
+      }
+
+      const updatedComment = await this.commentService.PatchComment(id, patchCommentDto);
+
+      return { message: 'Comentário atualizado com sucesso!', comment: updatedComment };
+    } catch (error) {
+      return { error: 'Erro ao atualizar comentário. ' + error.message };
+    }
+  }
 }

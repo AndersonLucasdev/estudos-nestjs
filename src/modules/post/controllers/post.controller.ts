@@ -125,7 +125,7 @@ export class PostController {
   // Endpoint to update a post by its ID
   @Patch(':id')
   @UsePipes(new DtoValidationPipe())
-  async patchUser(
+  async patchPost(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchPostDto: PatchPostDto,
   ) {
