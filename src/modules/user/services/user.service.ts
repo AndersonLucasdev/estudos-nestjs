@@ -15,6 +15,7 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // Method to get all users
   async GetAllUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();
     if (!users || users.length === 0) {
@@ -23,6 +24,7 @@ export class UserService {
     return users;
   }
 
+  // Method to get a user by ID
   async GetUserById(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
@@ -31,6 +33,7 @@ export class UserService {
     return user;
   }
 
+  // Method to get a user by email
   async GetUserByEmail(email: string) {
     return this.prisma.user.findFirst({ where: { email } });
   }
@@ -106,6 +109,7 @@ export class UserService {
     return users;
   }
 
+  // Method to create a new user
   async CreateUser(data: CreateUserDto): Promise<User> {
     const { email, username, password, confirmPassword } = data;
 
@@ -150,6 +154,7 @@ export class UserService {
     return user;
   }
 
+  // Method to delete a user by ID
   async DeleteUser(id: number): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
@@ -160,6 +165,7 @@ export class UserService {
     return user;
   }
 
+  // Method to update a user by ID
   async PatchUser(id: number, data: PatchUserDto): Promise<User> {
     const existingUser = await this.prisma.user.findUnique({ where: { id } });
     if (!existingUser) {

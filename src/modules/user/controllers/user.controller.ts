@@ -26,6 +26,7 @@ import * as bcrypt from 'bcrypt';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // Endpoint to get all users
   @Get()
   async getAllUsers() {
     try {
@@ -36,6 +37,7 @@ export class UserController {
     }
   }
 
+  // Endpoint to get a user by ID
   @Get(':id')
   async getUserById(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.GetUserById(id);
@@ -73,6 +75,7 @@ export class UserController {
     return users;
   }
 
+  // Endpoint to create a new user
   @Post()
   @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
   async createUser(@Body() createUserDto: CreateUserDto) {
@@ -80,12 +83,14 @@ export class UserController {
     return { message: 'Usuário criado com sucesso!', user };
   }
 
+  // Endpoint to delete a user by ID
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.DeleteUser(id);
     return { message: 'Usuário removido com sucesso!', user };
   }
 
+  // Endpoint to update a user by ID
   @Patch(':id')
   @UsePipes(new DtoValidationPipe())
   async patchUser(
