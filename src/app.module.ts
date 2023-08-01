@@ -9,10 +9,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
 import { AuthModule } from './modules/auth/modules/auth.module';
-
+import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, PostModule, AuthModule],
+  imports: [PrismaModule, UserModule, PostModule, AuthModule, CommentLikeModule],
   controllers: [AppController],
   providers: [AppService,
   ],
