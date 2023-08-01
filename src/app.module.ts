@@ -15,17 +15,18 @@ import { CommentLikeModule } from './modules/commentlike/modules/comment-like.mo
   imports: [PrismaModule, UserModule, PostModule, AuthModule, CommentLikeModule],
   controllers: [AppController],
   providers: [AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    }
   ],
 })
 export class AppModule {}
 
 
-// {
-//   provide: APP_FILTER,
-//   useClass: AllExceptionsFilter,
-// },
-// {
-//   provide: APP_INTERCEPTOR,
-//   useClass: LoggingInterceptor,
-// }
+
 
