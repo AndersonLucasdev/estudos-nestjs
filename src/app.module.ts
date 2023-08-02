@@ -10,11 +10,19 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
 import { AuthModule } from './modules/auth/modules/auth.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
-
+import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 @Module({
-  imports: [PrismaModule, UserModule, PostModule, AuthModule, CommentLikeModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    PostModule,
+    AuthModule,
+    CommentLikeModule,
+    PostLikeModule,
+  ],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [
+    AppService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
@@ -22,11 +30,7 @@ import { CommentLikeModule } from './modules/commentlike/modules/comment-like.mo
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
-    }
+    },
   ],
 })
 export class AppModule {}
-
-
-
-
