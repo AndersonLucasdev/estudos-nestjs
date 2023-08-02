@@ -66,6 +66,7 @@ export class CommentLikeService {
     return commentlike;
   }
 
+  // Method to remove likes on specific comment
   async RemoveLikeOnComment(
     userId: number,
     commentId: number,
