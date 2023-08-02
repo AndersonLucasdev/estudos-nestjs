@@ -2,7 +2,6 @@ import {MiddlewareConsumer, Module, NestModule, RequestMethod} from '@nestjs/com
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { CommentLikeController } from '../controllers/comment-like.controller';
 import { CommentLikeService } from '../services/comment-like.service';
-import { ValidationCommentMiddleware } from 'src/middlewares/validation-comment.middleware';
 
 @Module({
   imports: [PrismaModule],
