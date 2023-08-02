@@ -25,41 +25,18 @@ import * as bcrypt from 'bcrypt';
 export class CommentLikeController {
   constructor(private readonly commentLikeService: CommentLikeService) {}
 
-//   // Endpoint to get all users
-//   @Get()
-//   async getAllUsers() {
-//     try {
-//       const user = await this.commentLikeService.GetAllUsers();
-//       return { user };
-//     } catch (error) {
-//       throw new NotFoundException('Não existem usuários.');
-//     }
-//   }
+  @Get(':commentId/likes')
+  async getLikesInComment(@Param('commentId') commentId: number): Promise<number> {
+    return this.commentLikeService.AccountLikesInComment(commentId);
+  }
 
-//   // Endpoint to get a user by ID
-//   @Get(':id')
-//   async getUserById(@Param('id', ParseIntPipe) id: number) {
-//     const user = await this.commentLikeService.GetUserById(id);
-//     if (!user) {
-//       throw new NotFoundException('Usuário não encontrado.');
-//     }
-//     return { user };
-//   }
+  @Post(':commentId/likes')
+  async likeComment(@Param('commentId') commentId: number, @Body('userId') userId: number) {
+    return this.commentLikeService.LikeComments(userId, commentId);
+  }
 
-//   // Method to get the user with that name
-
-//   // Endpoint to create a new user
-//   @Post()
-//   @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
-//   async createUser(@Body() createUserDto: CreateUserDto) {
-//     const user = await this.userService.CreateUser(createUserDto);
-//     return { message: 'Usuário criado com sucesso!', user };
-//   }
-
-//   // Endpoint to delete a user by ID
-//   @Delete(':id')
-//   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-//     const user = await this.userService.DeleteUser(id);
-//     return { message: 'Usuário removido com sucesso!', user };
-//   }
+  @Delete(':commentId/likes/:userId')
+  async removeLikeFromComment(@Param('commentId') commentId: number, @Param('userId') userId: number) {
+    return this.commentLikeService.RemoveLikeOnComment(userId, commentId);
+  }
 }

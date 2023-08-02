@@ -13,7 +13,7 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class CommentLikeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Method to get a comment by its ID
+  // Method to get Account Likes In Comment
   async AccountLikesInComment(commentId: number): Promise<number> {
     // const comment = await this.prisma.comment.findMany({
     //   where: { id: commentId },
@@ -27,61 +27,61 @@ export class CommentLikeService {
     // }
 
     // return
-    
-      // const comment = await this.prisma.comment.findMany({
-      //   where: { id: commentId },
-      //   include: {
-      //     commentLikes: true,
-      //   },
-      // });
-  
-      // if (!comment) {
-      //   throw new NotFoundException('Comentário não encontrado.');
-      // }
-  
-      // return
-      const comment = await this.prisma.comment.findUnique({
-        where: { id: commentId },
-        include: {
-          commentLikes: true,
-        },
-      });
-  
-      if (!comment) {
-        throw new NotFoundException('Comentário não encontrado.');
-      }
-  
-      return comment.commentLikes.length;
+
+    // const comment = await this.prisma.comment.findMany({
+    //   where: { id: commentId },
+    //   include: {
+    //     commentLikes: true,
+    //   },
+    // });
+
+    // if (!comment) {
+    //   throw new NotFoundException('Comentário não encontrado.');
+    // }
+
+    // return
+    const comment = await this.prisma.comment.findUnique({
+      where: { id: commentId },
+      include: {
+        commentLikes: true,
+      },
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comentário não encontrado.');
     }
 
-    // // Calcula a contagem total de curtidas no comentário
-    // const totalLikes = comment.likes.length;
-
-    // // Adicionamos o total de curtidas como uma propriedade no objeto retornado
-    // return { ...comment, totalLikes };
+    return comment.commentLikes.length;
   }
 
-//   // Method to get all comments for a specific post
-//   async GetAllPostComments(postId: number): Promise<Comment[]> {
-//     const comments = await this.prisma.comment.findMany({
-//       where: { postId: postId },
-//     });
+  // Method to like comments
+  async LikeComments(userId: number, commentId: number): Promise<CommentLike> {
+    const commentlike = await this.prisma.commentLike.create({
+      data: {
+        userId: userId,
+        commentId: commentId,
+      },
+    });
 
-//     if (!comments) {
-//       throw new NotFoundException('Comments not found.');
-//     }
+    return commentlike;
+  }
 
-//     return comments;
-//   }
+  async RemoveLikeOnComment(
+    userId: number,
+    commentId: number,
+  ): Promise<CommentLike> {
+    const deletedCommentLike = await this.prisma.commentLike.deleteMany({
+      where: {
+        userId: userId,
+        commentId: commentId,
+      },
+    });
 
-//   // Method to delete a comment by its ID
-//   async DeleteComment(id: number): Promise<Comment> {
-//     const comment = await this.prisma.comment.findUnique({ where: { id } });
-//     if (!comment) {
-//       throw new NotFoundException('Comentário não encontrado.');
-//     }
+    if (deletedCommentLike.count === 0) {
+      throw new NotFoundException('Comentário não encontrado.');
+    }
 
-//     await this.prisma.comment.delete({ where: { id } });
-//     return comment;
-//   }
+    return deletedCommentLike[0];
+  }
 
+}
