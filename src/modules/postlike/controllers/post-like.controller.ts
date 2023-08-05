@@ -25,22 +25,5 @@ import {
   export class PostLikeController {
     constructor(private readonly postLikeService: PostLikeService) {}
   
-    // // EndPoint Returns the number of likes on a specific comment
-    // @Get(':commentId/likes')
-    // async getLikesInComment(@Param('commentId') commentId: number): Promise<number> {
-    //   return this.postLikeService.AccountLikesInComment(commentId);
-    // }
-  
-    // // EndPoint Adds a like to a specific comment based on the provided user ID
-    // @Post(':commentId/likes')
-    // async likeComment(@Param('commentId') commentId: number, @Body('userId') userId: number) {
-    //   return this.postLikeService.LikeComments(userId, commentId);
-    // }
-  
-    // // EndPoint Unlikes a specific comment based on the provided user and comment IDs
-    // @Delete(':commentId/likes/:userId')
-    // async removeLikeFromComment(@Param('commentId') commentId: number, @Param('userId') userId: number) {
-    //   return this.postLikeService.RemoveLikeOnComment(userId, commentId);
-    // }
   }
   
