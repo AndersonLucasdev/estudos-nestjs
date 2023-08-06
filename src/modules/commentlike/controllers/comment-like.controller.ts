@@ -21,7 +21,7 @@ import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
 import * as bcrypt from 'bcrypt';
 
-@Controller('users')
+@Controller('comment-like')
 export class CommentLikeController {
   constructor(private readonly commentLikeService: CommentLikeService) {}
 

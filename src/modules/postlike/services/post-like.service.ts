@@ -14,13 +14,13 @@ export class PostLikeService {
   constructor(private readonly prisma: PrismaService) {}
 
   // Recupera todos os likes
-  async getAllLikes(): Promise<PostLike[]> {
+  async GetAllLikes(): Promise<PostLike[]> {
     const likes = await this.prisma.postLike.findMany();
     return likes;
   }
 
   // Recupera um like por ID
-  async getLikeById(likeId: number): Promise<PostLike | null> {
+  async GetLikeById(likeId: number): Promise<PostLike | null> {
     const like = await this.prisma.postLike.findUnique({
       where: { id: likeId },
     });
@@ -33,7 +33,7 @@ export class PostLikeService {
   }
 
   // Recupera todos os likes de um post específico
-  async getLikesForPost(postId: number): Promise<PostLike[]> {
+  async GetLikesForPost(postId: number): Promise<PostLike[]> {
     const likes = await this.prisma.postLike.findMany({
       where: { postId },
     });
@@ -42,7 +42,7 @@ export class PostLikeService {
   }
 
   // Recupera todos os likes de um usuário específico
-  async getLikesForUser(userId: number): Promise<PostLike[]> {
+  async GetLikesForUser(userId: number): Promise<PostLike[]> {
     const likes = await this.prisma.postLike.findMany({
       where: { userId },
     });
@@ -51,7 +51,7 @@ export class PostLikeService {
   }
 
   // Conta o número total de likes em um post específico
-  async countLikesForPost(postId: number): Promise<number> {
+  async CountLikesForPost(postId: number): Promise<number> {
     const likesCount = await this.prisma.postLike.count({
       where: { postId },
     });
@@ -60,7 +60,7 @@ export class PostLikeService {
   }
 
   // Recupera todos os likes de um usuário
-  async getLikesByUser(userId: number): Promise<PostLike[]> {
+  async GetLikesByUser(userId: number): Promise<PostLike[]> {
     return this.prisma.postLike.findMany({
       where: { userId },
       include: { post: true },
@@ -68,7 +68,7 @@ export class PostLikeService {
   }
 
   // Recupera todos os likes com informações detalhadas do usuário e post
-  async getAllLikesWithDetails(): Promise<PostLike[]> {
+  async GetAllLikesWithDetails(): Promise<PostLike[]> {
     return this.prisma.postLike.findMany({
       include: {
         user: true,
@@ -78,7 +78,7 @@ export class PostLikeService {
   }
 
   // Recupera todos os likes de um usuário em um determinado período
-  async getLikesForUserInPeriod(
+  async GetLikesForUserInPeriod(
     userId: number,
     startDate: Date,
     endDate: Date,
@@ -97,7 +97,7 @@ export class PostLikeService {
   }
 
   // Retorna todos os usuários que deram like em um post e cujo nome contém a parte fornecida
-  async getUsersWhoLikedPostWithPartialName(
+  async GetUsersWhoLikedPostWithPartialName(
     postId: number,
     partialName: string,
   ): Promise<PostLike[]> {
@@ -114,7 +114,7 @@ export class PostLikeService {
   }
 
   // Cria um novo like para um post e um usuário específico
-  async createLike(userId: number, postId: number): Promise<PostLike> {
+  async CreateLike(userId: number, postId: number): Promise<PostLike> {
     const newLike = await this.prisma.postLike.create({
       data: {
         userId,
@@ -126,7 +126,7 @@ export class PostLikeService {
   }
 
   // Remove o like de um usuário em um post específico
-  async removeLike(userId: number, postId: number): Promise<PostLike> {
+  async RemoveLike(userId: number, postId: number): Promise<PostLike> {
     const deletedPostLike = await this.prisma.postLike.deleteMany({
       where: {
         userId: userId,
