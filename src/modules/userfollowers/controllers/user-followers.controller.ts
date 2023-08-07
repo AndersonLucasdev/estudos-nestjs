@@ -17,10 +17,6 @@ import {
 } from '@nestjs/common';
 import { UserFollowersService } from '../services/user-followers.service';
 
-import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
-import { formatUserData } from 'src/utils/FormartUserData';
-import * as bcrypt from 'bcrypt';
-
 @Controller('comment-like')
 export class UserFollowersController {
   constructor(private readonly userFollowersService: UserFollowersService) {}
@@ -54,4 +50,22 @@ export class UserFollowersController {
     const commonFollowers = await this.userFollowersService.ListCommonFollowers(user1Id, user2Id);
     return commonFollowers;
   }
+
+  @Post(':followerId/follow/:followedId')
+  async followUser(
+    @Param('followerId') followerId: number,
+    @Param('followedId') followedId: number,
+  ) {
+    const follow = await this.userFollowersService.CreateFollowers(followerId, followedId);
+    return follow;
+  }
+
+  @Delete(':followerId/unfollow/:followedId')
+  async unfollowUser(
+    @Param('followerId') followerId: number,
+    @Param('followedId') followedId: number,
+  ) {
+    const unfollow = await this.userFollowersService.Unfollow(followerId, followedId);
+    return unfollow;
+  }  
 }

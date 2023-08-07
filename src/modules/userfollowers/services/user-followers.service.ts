@@ -1,5 +1,8 @@
 import {
   Injectable,
+  Post,
+  Param,
+  Delete,
   NotFoundException,
   BadRequestException,
   ConflictException,
@@ -58,9 +61,39 @@ export class UserFollowersService {
         },
       },
     });
-  
+
     return commonFollowers;
   }
 
-  
+  async CreateFollowers(
+    userId: number,
+    relatedUserId: number,
+  ): Promise<UserFollowers> {
+    const follow = await this.prisma.userFollowers.create({
+      data: {
+        userId: userId,
+        relatedUserId: relatedUserId,
+      },
+    });
+
+    return follow;
+  }
+
+  async Unfollow(
+    userId: number,
+    relatedUserId: number,
+  ): Promise<UserFollowers> {
+    const unfollowed = await this.prisma.userFollowers.deleteMany({
+      where: {
+        userId: userId,
+        relatedUserId: relatedUserId,
+      },
+    });
+
+    if (unfollowed.count === 0) {
+      throw new NotFoundException('Seguidor não encontrado.');
+    }
+
+    return unfollowed[0];
+  }
 }
