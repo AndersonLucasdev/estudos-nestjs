@@ -15,8 +15,7 @@ import {
   BadRequestException,
   HttpException,
 } from '@nestjs/common';
-import { CommentLikeService } from '../services/comment-like.service';
-import { CreateCommentLikeDto } from '../dto/CreateCommentLike.dto';
+import { UserFollowersService } from '../services/followers.service';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
 import * as bcrypt from 'bcrypt';
