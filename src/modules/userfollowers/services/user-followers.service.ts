@@ -15,6 +15,7 @@ import { TrimSpaces } from 'src/utils/helpers';
 export class UserFollowersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // Method: Check if a user is following another user
   async CheckIfFollowing(
     followerId: number,
     followedId: number,
@@ -29,6 +30,7 @@ export class UserFollowersService {
     return userFollow !== null;
   }
 
+  // Method: Count the number of followers for a specific user
   async CountFollowers(userId: number): Promise<number> {
     const followersCount = await this.prisma.userFollowers.count({
       where: { relatedUserId: userId },
@@ -37,6 +39,7 @@ export class UserFollowersService {
     return followersCount;
   }
 
+  // Method: Count the number of users a specific user is following
   async CountFollowing(userId: number): Promise<number> {
     const followingCount = await this.prisma.userFollowers.count({
       where: { userId: userId },
@@ -45,6 +48,7 @@ export class UserFollowersService {
     return followingCount;
   }
 
+  // Method: List common followers between two users
   async ListCommonFollowers(user1Id: number, user2Id: number) {
     const commonFollowers = await this.prisma.userFollowers.findMany({
       where: {
@@ -65,6 +69,7 @@ export class UserFollowersService {
     return commonFollowers;
   }
 
+  // Method: Create a new follow relationship between users
   async CreateFollowers(
     userId: number,
     relatedUserId: number,
@@ -79,6 +84,7 @@ export class UserFollowersService {
     return follow;
   }
 
+  // Method: Unfollow a user by deleting the follow relationship
   async Unfollow(
     userId: number,
     relatedUserId: number,
