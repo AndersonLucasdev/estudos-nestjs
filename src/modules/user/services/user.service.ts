@@ -92,7 +92,7 @@ export class UserService {
     return usersWithMostLikes;
   }
 
-  //method to get users with latest updates
+  // Method to get users with latest updates
   async GetUsersWithRecentActivity(days: number): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       where: {
@@ -107,6 +107,30 @@ export class UserService {
       );
     }
     return users;
+  }
+
+  // Method to get list followers especif user
+  async ListFollowers(userId: number): Promise<User[]> {
+    const followers = await this.prisma.userFollowers.findMany({
+      where: { relatedUserId: userId },
+      select: {
+        user: true,
+      },
+    });
+
+    return followers.map((follower) => follower.user);
+  }
+
+  // Method to get list following especif user
+  async ListFollowing(userId: number): Promise<User[]> {
+    const following = await this.prisma.userFollowers.findMany({
+      where: { userId: userId },
+      select: {
+        relatedUser: true,
+      },
+    });
+
+    return following.map((followedUser) => followedUser.relatedUser);
   }
 
   // Method to create a new user

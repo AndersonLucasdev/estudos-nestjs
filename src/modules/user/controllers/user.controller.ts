@@ -47,32 +47,46 @@ export class UserController {
     return { user };
   }
 
-  // Method to get the user with that name
+  // EndPoint to get the user with that name
   @Get('by-username')
   async getUserByUsername(@Query('username') username: string) {
     const user = await this.userService.GetUserByUsername(username);
     return user;
   }
 
-  // Method to find multiple people with that part of the name
+  // EndPoint to find multiple people with that part of the name
   @Get('by-username/multiple')
   async getUsersByUsername(@Query('username') username: string) {
     const users = await this.userService.GetUsersByUsername(username);
     return users;
   }
 
-  // Method to get users with more likes
+  // EndPoint to get users with more likes
   @Get('most-likes')
   async getUsersWithMostLikes() {
     const users = await this.userService.GetUsersWithMostLikes();
     return users;
   }
 
-  //method to get users with latest updates
+  // EndPoint to get users with latest updates
   @Get('recent-activity')
   async getUsersWithRecentActivity(@Query('days') days: number) {
     const users = await this.userService.GetUsersWithRecentActivity(days);
     return users;
+  }
+
+  // EndPoint get followers by userid
+  @Get(':userId/followers')
+  async listFollowers(@Param('userId') userId: number) {
+    const followers = await this.userService.ListFollowers(userId);
+    return followers;
+  }
+
+  // EndPoint get follings by userid
+  @Get(':userId/following')
+  async listFollowing(@Param('userId') userId: number) {
+    const following = await this.userService.ListFollowing(userId);
+    return following;
   }
 
   // Endpoint to create a new user
