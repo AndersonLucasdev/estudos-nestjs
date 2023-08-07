@@ -22,7 +22,7 @@ import { formatUserData } from 'src/utils/FormartUserData';
 import * as bcrypt from 'bcrypt';
 
 @Controller('comment-like')
-export class CommentLikeController {
+export class UserFollowersController {
   constructor(private readonly userFollowersService: UserFollowersService) {}
 
 }
