@@ -12,6 +12,8 @@ import { AuthModule } from './modules/auth/modules/auth.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
 import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
+import { MessageModule } from './modules/message/modules/message.module';
+
 @Module({
   imports: [
     PrismaModule,
@@ -20,7 +22,8 @@ import { UserFollowersModule } from './modules/userfollowers/modules/user-follow
     AuthModule,
     CommentLikeModule,
     PostLikeModule,
-    UserFollowersModule
+    UserFollowersModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [
