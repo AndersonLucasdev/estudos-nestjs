@@ -29,6 +29,10 @@ model User {
   postLikes       PostLike[]
   following       UserFollowers[] @relation("Following")
   followers       UserFollowers[] @relation("UserFollowers")
+  sentMessages    Message[]       @relation("SentMessages")
+  receivedMessages Message[]       @relation("ReceivedMessages")
+  notifications   Notification[]
+  activities      UserActivity[]
 }
 
 model Post {
@@ -80,6 +84,34 @@ model UserFollowers {
   user          User @relation("UserFollowers", fields: [userId], references: [id])
 
   @@unique([userId, relatedUserId])
+}
+
+model Message {
+  id           Int       @id @default(autoincrement())
+  senderId     Int
+  recipientId  Int
+  content      String
+  creationDate DateTime  @default(now()) @db.Timestamp(6)
+  sender       User      @relation("SentMessages", fields: [senderId], references: [id])
+  recipient    User      @relation("ReceivedMessages", fields: [recipientId], references: [id])
+}
+
+model Notification {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  message      String
+  creationDate DateTime  @default(now()) @db.Timestamp(6)
+  user         User      @relation(fields: [userId], references: [id])
+}
+
+model UserActivity {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  activityType String
+  entityId     Int
+  creationDate DateTime  @default(now()) @db.Timestamp(6)
+  user         User      @relation(fields: [userId], references: [id])
+  
 }
 
 enum Gender {
