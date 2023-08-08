@@ -10,29 +10,29 @@ datasource db {
 }
 
 model User {
-  id              Int             @id @default(autoincrement())
-  username        String          @db.VarChar(50)
-  name            String          @db.VarChar(100)
-  Bio             String?
-  email           String          @db.VarChar(100)
-  password        String          @db.VarChar(60)
-  confirmPassword String          @db.VarChar(60)
-  phone           String?         @db.VarChar(20)
-  creationDate    DateTime        @default(now()) @db.Timestamp(6)
-  lastUpdateDate  DateTime        @updatedAt
-  gender          Gender?
-  birthDate       DateTime?       @db.Date
-  profilePhoto    String?
-  comments        Comment[]
-  commentLikes    CommentLike[]
-  posts           Post[]
-  postLikes       PostLike[]
-  following       UserFollowers[] @relation("Following")
-  followers       UserFollowers[] @relation("UserFollowers")
-  sentMessages    Message[]       @relation("SentMessages")
+  id               Int             @id @default(autoincrement())
+  username         String          @db.VarChar(50)
+  name             String          @db.VarChar(100)
+  Bio              String?
+  email            String          @db.VarChar(100)
+  password         String          @db.VarChar(60)
+  confirmPassword  String          @db.VarChar(60)
+  phone            String?         @db.VarChar(20)
+  creationDate     DateTime        @default(now()) @db.Timestamp(6)
+  lastUpdateDate   DateTime        @updatedAt
+  gender           Gender?
+  birthDate        DateTime?       @db.Date
+  profilePhoto     String?
+  comments         Comment[]
+  commentLikes     CommentLike[]
+  posts            Post[]
+  postLikes        PostLike[]
+  following        UserFollowers[] @relation("Following")
+  followers        UserFollowers[] @relation("UserFollowers")
+  sentMessages     Message[]       @relation("SentMessages")
   receivedMessages Message[]       @relation("ReceivedMessages")
-  notifications   Notification[]
-  activities      UserActivity[]
+  notifications    Notification[]
+  activities       UserActivity[]
 }
 
 model Post {
@@ -87,31 +87,31 @@ model UserFollowers {
 }
 
 model Message {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   senderId     Int
   recipientId  Int
   content      String
-  creationDate DateTime  @default(now()) @db.Timestamp(6)
-  sender       User      @relation("SentMessages", fields: [senderId], references: [id])
-  recipient    User      @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  creationDate DateTime @default(now()) @db.Timestamp(6)
+  sender       User     @relation("SentMessages", fields: [senderId], references: [id])
+  recipient    User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
 }
 
 model Notification {
-  id           Int       @id @default(autoincrement())
+  id           Int              @id @default(autoincrement())
   userId       Int
   message      String
-  creationDate DateTime  @default(now()) @db.Timestamp(6)
-  user         User      @relation(fields: [userId], references: [id])
+  creationDate DateTime         @default(now()) @db.Timestamp(6)
+  user         User             @relation(fields: [userId], references: [id])
+  type         NotificationType
 }
 
 model UserActivity {
-  id           Int       @id @default(autoincrement())
+  id           Int              @id @default(autoincrement())
   userId       Int
-  activityType String
+  activityType UserActivityType
   entityId     Int
-  creationDate DateTime  @default(now()) @db.Timestamp(6)
-  user         User      @relation(fields: [userId], references: [id])
-  
+  creationDate DateTime         @default(now()) @db.Timestamp(6)
+  user         User             @relation(fields: [userId], references: [id])
 }
 
 enum NotificationType {
