@@ -114,6 +114,18 @@ model UserActivity {
   
 }
 
+enum NotificationType {
+  LIKE
+  COMMENT
+  FRIEND_REQUEST
+}
+
+enum UserActivityType {
+  POST_CREATED
+  COMMENT_ADDED
+  FRIEND_REQUEST_SENT
+}
+
 enum Gender {
   MALE
   FEMALE
