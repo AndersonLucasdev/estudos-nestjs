@@ -14,7 +14,8 @@ export class MessageService {
   constructor(private readonly prisma: PrismaService) {}
 
   //   // Method to get a comment by its ID
-  //   async getCommentById(commentId: number): Promise<Message> {
+  //   async 
+CatchMessagesBetweenTwoUsers(commentId: number): Promise<Message> {
   //     const comment = await this.prisma.message.findUnique({
   //       where: { id: commentId },
   //     });
