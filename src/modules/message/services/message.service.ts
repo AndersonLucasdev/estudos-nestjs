@@ -9,65 +9,103 @@ import { Message } from '@prisma/client';
 import { CreateMessageDto } from '../dto/CreateMessage.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 
+
 @Injectable()
 export class MessageService {
   constructor(private readonly prisma: PrismaService) {}
 
-  //   // Method to get a comment by its ID
-  //   async 
-CatchMessagesBetweenTwoUsers(commentId: number): Promise<Message> {
-  //     const comment = await this.prisma.message.findUnique({
-  //       where: { id: commentId },
-  //     });
+  // async sendMessage(createMessageDto: CreateMessageDto): Promise<Message> {
+  //   const { senderId, recipientId, content } = createMessageDto;
 
-  //     if (!comment) {
-  //       throw new NotFoundException('Comment not found.');
-  //     }
+  //   // Create the message in the database
+  //   const newMessage = await this.prisma.message.create({
+  //     data: {
+  //       sender: { connect: { id: senderId } },
+  //       recipient: { connect: { id: recipientId } },
+  //       content: TrimSpaces(content),
+  //     },
+  //   });
 
-  //     return comment;
+  //   return newMessage;
+  // }
+
+  // async deleteMessage(messageId: number): Promise<void> {
+  //   const message = await this.prisma.message.findUnique({
+  //     where: { id: messageId },
+  //   });
+
+  //   if (!message) {
+  //     throw new NotFoundException(`Message with ID ${messageId} not found`);
   //   }
 
-  //   // Method to get all comments for a specific post
-  //   async GetAllPostComments(postId: number): Promise<Message[]> {
-  //     const comments = await this.prisma.message.findMany({
-  //       where: { postId: postId },
-  //     });
+  //   // Delete the message
+  //   await this.prisma.message.delete({
+  //     where: { id: messageId },
+  //   });
+  // }
 
-  //     if (!comments) {
-  //       throw new NotFoundException('Comments not found.');
-  //     }
+  // async updateMessage(messageId: number, content: string): Promise<Message> {
+  //   const existingMessage = await this.prisma.message.findUnique({
+  //     where: { id: messageId },
+  //   });
 
-  //     return comments;
+  //   if (!existingMessage) {
+  //     throw new NotFoundException(`Message with ID ${messageId} not found`);
   //   }
 
-  //   async CreateComment(
-  //     userId: number,
-  //     postId: number,
-  //     data: CreateMessageDto,
-  //   ): Promise<Message> {
-  //     const { content } = data;
+  //   // Update the message's content
+  //   const updatedMessage = await this.prisma.message.update({
+  //     where: { id: messageId },
+  //     data: { content: TrimSpaces(content) },
+  //   });
 
-  //     const contentTrimmed = TrimSpaces(content);
-  //     const comment = await this.prisma.message.create({
-  //       data: {
-  //         ...data,
-  //         content: contentTrimmed,
-  //         userId: userId,
-  //         postId: postId,
+  //   return updatedMessage;
+  // }
+
+  // async getUserConversations(userId: number): Promise<Conversation[]> {
+  //   const userConversations = await this.prisma.user.findUnique({
+  //     where: { id: userId },
+  //     include: {
+  //       conversations: {
+  //         include: {
+  //           participants: true,
+  //           messages: true,
+  //         },
   //       },
-  //     });
+  //     },
+  //   });
 
-  //     return comment;
-  //   }
+  //   return userConversations.conversations;
+  // }
 
-  //   // Method to delete a comment by its ID
-  //   async DeleteComment(id: number): Promise<Message> {
-  //     const comment = await this.prisma.message.findUnique({ where: { id } });
-  //     if (!comment) {
-  //       throw new NotFoundException('Comentário não encontrado.');
-  //     }
+  // async getAllMessagesInConversation(conversationId: number): Promise<Message[]> {
+  //   const messages = await this.prisma.conversation.findUnique({
+  //     where: { id: conversationId },
+  //     include: {
+  //       messages: {
+  //         include: {
+  //           sender: true,
+  //           recipient: true,
+  //         },
+  //       },
+  //     },
+  //   });
 
-  //     await this.prisma.comment.delete({ where: { id } });
-  //     return comment;
-  //   }
+  //   return messages.messages;
+  // }
+
+  // async getUserMessagesInConversation(userId: number, conversationId: number): Promise<Message[]> {
+  //   const userMessages = await this.prisma.message.findMany({
+  //     where: {
+  //       senderId: userId,
+  //       conversationId,
+  //     },
+  //     include: {
+  //       sender: true,
+  //       recipient: true,
+  //     },
+  //   });
+
+  //   return userMessages;
+  // }
 }
