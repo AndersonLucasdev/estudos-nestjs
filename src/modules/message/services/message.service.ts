@@ -9,7 +9,6 @@ import { Message } from '@prisma/client';
 import { CreateMessageDto } from '../dto/CreateMessage.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 
-
 @Injectable()
 export class MessageService {
   constructor(private readonly prisma: PrismaService) {}
