@@ -9,6 +9,7 @@ import { Message } from '@prisma/client';
 import { CreateMessageDto } from '../dto/CreateMessage.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 import { Conversation } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
@@ -25,6 +26,24 @@ export class MessageService {
         content: TrimSpaces(content),
       },
     });
+
+    // Enviar notificação em tempo real para o destinatário
+    const recipient: User = await this.prisma.user.findUnique({
+      where: { id: recipientId },
+    });
+    if (recipient) {
+      const ws = recipient.websocket; 
+
+      if (ws) {
+        const notification = {
+          type: 'new_message',
+          message: 'Você recebeu uma nova mensagem!',
+        };
+
+        // Enviar a notificação em JSON para o destinatário
+        ws.send(JSON.stringify(notification));
+      }
+    }
 
     return newMessage;
   }
@@ -107,5 +126,46 @@ export class MessageService {
     });
 
     return userMessages;
+  }
+
+  // Implementação de Respostas Diretas
+  async replyToMessage(messageId: number, content: string): Promise<Message> {
+    const parentMessage: Message = await this.prisma.message.findUnique({
+      where: { id: messageId },
+    });
+
+    if (!parentMessage) {
+      throw new NotFoundException(`Parent message with ID ${messageId} not found`);
+    }
+
+    const replyMessage: Message = await this.prisma.message.create({
+      data: {
+        sender: { connect: { id: parentMessage.recipientId } },
+        recipient: { connect: { id: parentMessage.senderId } },
+        content: TrimSpaces(content),
+        conversation: { connect: { id: parentMessage.conversationId } },
+      },
+    });
+
+    return replyMessage;
+  }
+
+  // Implementação de Filtrar Conversas Mais Recentes
+  async getRecentConversations(userId: number): Promise<Conversation[]> {
+    const userConversations = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        conversations: {
+          include: {
+            participants: true,
+            messages: {
+              orderBy: { creationDate: 'desc' }, // Ordenar mensagens por data decrescente
+            },
+          },
+        },
+      },
+    });
+
+    return userConversations.conversations;
   }
 }
