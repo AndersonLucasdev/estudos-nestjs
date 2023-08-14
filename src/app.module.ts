@@ -13,6 +13,8 @@ import { CommentLikeModule } from './modules/commentlike/modules/comment-like.mo
 import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
+import { WebSocketModule } from './modules/websocket/websocket.module';
+
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { MessageModule } from './modules/message/modules/message.module';
     CommentLikeModule,
     PostLikeModule,
     UserFollowersModule,
-    MessageModule,
+    MessageModule
   ],
   controllers: [AppController],
   providers: [
@@ -39,3 +41,5 @@ import { MessageModule } from './modules/message/modules/message.module';
   ],
 })
 export class AppModule {}
+
+

@@ -7,9 +7,10 @@ import {
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { MessageController } from '../controllers/message.controller';
 import { MessageService } from '../services/message.service';
+import { WebSocketModule } from 'src/modules/websocket/websocket.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, WebSocketModule],
   controllers: [MessageController],
   providers: [MessageService],
 })
