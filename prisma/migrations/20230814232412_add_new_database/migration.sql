@@ -22,6 +22,7 @@ CREATE TABLE "User" (
     "gender" "Gender",
     "birthDate" DATE,
     "profilePhoto" TEXT,
+    "connectionId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

@@ -10,11 +10,14 @@ import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
+import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
-
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly webSocketService: WebSocketService,
+  ) {}
   // Method to get all users
   async GetAllUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany();
@@ -175,6 +178,8 @@ export class UserService {
       },
     });
 
+    this.webSocketService.addUserConnection(user.id, user.connectionId);
+
     return user;
   }
 
@@ -184,6 +189,9 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
     }
+  
+    // Remover a conexão WebSocket ao excluir o usuário
+    this.webSocketService.removeUserConnection(id);
 
     await this.prisma.user.delete({ where: { id } });
     return user;

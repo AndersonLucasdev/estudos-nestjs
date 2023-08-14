@@ -59,4 +59,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Gender)
   gender?: Gender;
+
+  @IsString()
+  @IsOptional()
+  connectionId?: string;
 }

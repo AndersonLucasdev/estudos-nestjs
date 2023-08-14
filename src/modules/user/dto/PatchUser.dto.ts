@@ -63,4 +63,8 @@ export class PatchUserDto {
   @IsOptional()
   @IsEnum(Gender)
   gender?: Gender;
+
+  @IsString()
+  @IsOptional()
+  connectionId?: string; // Novo campo adicionado
 }

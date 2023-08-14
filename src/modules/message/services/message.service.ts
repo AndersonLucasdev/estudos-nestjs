@@ -10,41 +10,42 @@ import { CreateMessageDto } from '../dto/CreateMessage.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 import { Conversation } from '@prisma/client';
 import { User } from '@prisma/client';
+import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class MessageService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly webSocketService: WebSocketService, // Injete o WebSocketService
+  ) {}
 
   async sendMessage(createMessageDto: CreateMessageDto): Promise<Message> {
     const { senderId, recipientId, content } = createMessageDto;
-
-    // Create the message in the database
+  
     const newMessage = await this.prisma.message.create({
       data: {
         sender: { connect: { id: senderId } },
-        recipient: { connect: { id: recipientId } },
-        content: TrimSpaces(content),
+        recipient: { connect: { id: recipientId } }, // Adicione o destinatário aqui
+        content: content, // Adicione o conteúdo aqui
       },
     });
-
-    // Enviar notificação em tempo real para o destinatário
+  
     const recipient: User = await this.prisma.user.findUnique({
       where: { id: recipientId },
     });
     if (recipient) {
-      const ws = recipient.websocket; 
-
-      if (ws) {
-        const notification = {
-          type: 'new_message',
-          message: 'Você recebeu uma nova mensagem!',
-        };
-
-        // Enviar a notificação em JSON para o destinatário
-        ws.send(JSON.stringify(notification));
-      }
+      // Adicione a conexão WebSocket do destinatário ao WebSocketService
+      this.webSocketService.addUserConnection(recipient.id, recipient.connectionId); // Suponha que você tenha o campo connectionId no modelo User
+  
+      const notification = {
+        type: 'new_message',
+        message: 'Você recebeu uma nova mensagem!',
+      };
+  
+      // Enviar a notificação em tempo real para o destinatário
+      this.webSocketService.sendNotificationToUser(recipient.id, notification);
     }
-
+  
     return newMessage;
   }
 
