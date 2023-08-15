@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
+@Injectable()
 @WebSocketGateway()
 export class WebSocketService implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -10,13 +11,13 @@ export class WebSocketService implements OnGatewayConnection, OnGatewayDisconnec
   private readonly connections: Record<number, string> = {};
 
   handleConnection(client: Socket) {
-    const userId = this.getUserIdFromClient(client); // Obtenha a ID do usuário associada a este cliente
+    const userId = this.getUserIdFromClient(client); 
     this.connections[userId] = client.id;
     console.log(`Usuário ${userId} conectado`);
   }
 
   handleDisconnect(client: Socket) {
-    const userId = this.getUserIdFromClient(client); // Obtenha a ID do usuário associada a este cliente
+    const userId = this.getUserIdFromClient(client);
     delete this.connections[userId];
     console.log(`Usuário ${userId} desconectado`);
   }

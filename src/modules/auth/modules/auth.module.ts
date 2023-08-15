@@ -7,9 +7,11 @@ import { AuthController } from '../controllers/auth.controller';
 import { UserService } from 'src/modules/user/services/user.service';
 import { UserController } from 'src/modules/user/controllers/user.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { WebSocketModule } from 'src/modules/websocket/websocket.module';
 
 @Module({
   imports: [PrismaModule,
+    WebSocketModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
