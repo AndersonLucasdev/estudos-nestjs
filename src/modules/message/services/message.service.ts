@@ -18,7 +18,8 @@ export class MessageService {
     private readonly prisma: PrismaService,
     private readonly webSocketService: WebSocketService, // Injete o WebSocketService
   ) {}
-
+  
+  // Method
   async sendMessage(createMessageDto: CreateMessageDto): Promise<Message> {
     const { senderId, recipientId, content } = createMessageDto;
   
