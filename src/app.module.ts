@@ -14,7 +14,7 @@ import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
 import { WebSocketModule } from './modules/websocket/websocket.module';
-
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [
@@ -25,7 +25,10 @@ import { WebSocketModule } from './modules/websocket/websocket.module';
     CommentLikeModule,
     PostLikeModule,
     UserFollowersModule,
-    MessageModule
+    MessageModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
   ],
   controllers: [AppController],
   providers: [
