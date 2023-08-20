@@ -14,7 +14,9 @@ import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
 import { WebSocketModule } from './modules/websocket/websocket.module';
-import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLModule  } from '@nestjs/graphql';
+import { AppResolver } from './app.resolver';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -26,12 +28,14 @@ import { GraphQLModule } from '@nestjs/graphql';
     PostLikeModule,
     UserFollowersModule,
     MessageModule,
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
       autoSchemaFile: true,
     }),
   ],
   controllers: [AppController],
   providers: [
+    AppResolver,
     AppService,
     {
       provide: APP_FILTER,
