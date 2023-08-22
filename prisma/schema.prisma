@@ -102,6 +102,7 @@ model Message {
 
 model Conversation {
   id           Int       @id @default(autoincrement())
+  name         String
   messages     Message[]
   participants User[]    @relation("UserConversations")
 }

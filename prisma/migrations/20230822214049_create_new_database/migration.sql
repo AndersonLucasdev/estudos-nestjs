@@ -94,6 +94,7 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "Conversation" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "Conversation_pkey" PRIMARY KEY ("id")
 );
