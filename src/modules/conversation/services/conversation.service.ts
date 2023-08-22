@@ -148,7 +148,34 @@ export class ConversationService {
     return updatedConversation;
   }
 
+  async removeParticipantsFromConversation(conversationId: number, participants: number[]): Promise<Conversation> {
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: { participants: true },
+    });
   
+    if (!conversation) {
+      throw new NotFoundException('Conversation not found.');
+    }
+  
+    const existingParticipantIds = conversation.participants.map(participant => participant.id);
+    const participantsToRemoveIds = participants.filter(id => existingParticipantIds.includes(id));
+  
+    const updatedConversation = await this.prisma.conversation.update({
+      where: { id: conversationId },
+      data: {
+        participants: {
+          disconnect: participantsToRemoveIds.map(id => ({ id })),
+        },
+      },
+      include: {
+        participants: true,
+        messages: true,
+      },
+    });
+  
+    return updatedConversation;
+  }
 
   async createConversation(userId: number, createConversationDto: CreateConversationDto): Promise<Conversation> {
     const { participants, groupName } = createConversationDto;
