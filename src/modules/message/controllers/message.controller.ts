@@ -27,7 +27,9 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Post()
-  async sendMessage(@Body() createMessageDto: CreateMessageDto): Promise<Message> {
+  async sendMessage(
+    @Body() createMessageDto: CreateMessageDto,
+  ): Promise<Message> {
     return this.messageService.sendMessage(createMessageDto);
   }
 
@@ -41,16 +43,16 @@ export class MessageController {
     @Param('id') messageId: number,
     @Body() updateMessageDto: PatchMessageDto,
   ): Promise<Message> {
-    return this.messageService.updateMessage(messageId, updateMessageDto.content);
-  }
-
-  @Get(':userId/conversations')
-  async getUserConversations(@Param('userId') userId: number): Promise<Conversation[]> {
-    return this.messageService.getUserConversations(userId);
+    return this.messageService.updateMessage(
+      messageId,
+      updateMessageDto.content,
+    );
   }
 
   @Get('conversations/:conversationId/messages')
-  async getAllMessagesInConversation(@Param('conversationId') conversationId: number): Promise<Message[]> {
+  async getAllMessagesInConversation(
+    @Param('conversationId') conversationId: number,
+  ): Promise<Message[]> {
     return this.messageService.getAllMessagesInConversation(conversationId);
   }
 
@@ -59,7 +61,10 @@ export class MessageController {
     @Param('userId') userId: number,
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
-    return this.messageService.getUserMessagesInConversation(userId, conversationId);
+    return this.messageService.getUserMessagesInConversation(
+      userId,
+      conversationId,
+    );
   }
 
   @Post('reply/:messageId')
@@ -67,12 +72,9 @@ export class MessageController {
     @Param('messageId') messageId: number,
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
-    return this.messageService.replyToMessage(messageId, createMessageDto.content);
-  }
-
-  @Get(':userId/recent-conversations')
-  async getRecentConversations(@Param('userId') userId: number): Promise<Conversation[]> {
-    return this.messageService.getRecentConversations(userId);
+    return this.messageService.replyToMessage(
+      messageId,
+      createMessageDto.content,
+    );
   }
 }
-
