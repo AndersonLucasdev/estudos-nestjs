@@ -19,15 +19,5 @@ describe('App', () => {
     await app.close();
   });
 
-//   it('should create a task', async () => {
-//     const task = { title: 'Test Task' };
-    
-//     const response = await request(app.getHttpServer())
-//       .post('/tasks')
-//       .send(task)
-//       .expect(201);
-
-//     expect(response.body.title).toBe(task.title);
-//   });
-
+  
 });
