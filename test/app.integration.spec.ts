@@ -26,5 +26,12 @@ describe('App', () => {
       .expect('Hello, World!');
   });
 
+  it('should handle 404 errors gracefully', () => {
+    return request(app.getHttpServer())
+      .get('/nonexistent-route')
+      .expect(HttpStatus.NOT_FOUND)
+      .expect({ statusCode: HttpStatus.NOT_FOUND, message: 'Rota não encontrada!' });
+  });
+
   
 });
