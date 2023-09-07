@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 
 describe('App', () => {
@@ -17,6 +17,13 @@ describe('App', () => {
 
   afterAll(async () => {
     await app.close();
+  });
+
+  it('should return "Hello, World!" from the root endpoint', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(HttpStatus.OK)
+      .expect('Hello, World!');
   });
 
   
