@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/modules/user.module';
@@ -14,9 +14,11 @@ import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
 import { WebSocketModule } from './modules/websocket/websocket.module';
-import { GraphQLModule  } from '@nestjs/graphql';
+import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -47,6 +49,20 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  async configure(consumer: MiddlewareConsumer) {
+    const app = await NestFactory.create(AppModule);
 
+    const config = new DocumentBuilder()
+      .setTitle('API Bubble')
+      .setDescription('API of a social network')
+      .setVersion('1.0')
+      .addTag('API')
+      .build();
 
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+
+    consumer.apply().forRoutes({ path: 'api', method: RequestMethod.ALL });
+  }
+}
