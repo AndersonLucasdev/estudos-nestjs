@@ -11,6 +11,8 @@ import { PatchUserDto } from '../dto/PatchUser.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
+import Follower from '../interface/follower.interface';
+
 
 @Injectable()
 export class UserService {
@@ -113,15 +115,18 @@ export class UserService {
   }
 
   // Method to get list followers especif user
-  async ListFollowers(userId: number): Promise<User[]> {
-    const followers = await this.prisma.userFollowers.findMany({
+  async ListFollowers(userId: number): Promise<Follower[]> {
+    const followersData = await this.prisma.userFollowers.findMany({
       where: { relatedUserId: userId },
-      select: {
-        user: true,
-      },
     });
-
-    return followers.map((follower) => follower.user);
+  
+    const followers: Follower[] = followersData.map((followerData) => ({
+      id: followerData.id,
+      userId: followerData.userId,
+      relatedUserId: followerData.relatedUserId,
+    }));
+  
+    return followers;
   }
 
   // Method to get list following especif user
@@ -189,7 +194,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
     }
-  
+
     // Remover a conexão WebSocket ao excluir o usuário
     this.webSocketService.removeUserConnection(id);
 
