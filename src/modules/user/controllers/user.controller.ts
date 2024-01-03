@@ -20,14 +20,19 @@ import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+
 import * as bcrypt from 'bcrypt';
 
+@ApiTags('User')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // Endpoint to get all users
   @Get()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'List of users obtained successfully.' })
   async getAllUsers() {
     try {
       const user = await this.userService.GetAllUsers();
@@ -39,6 +44,10 @@ export class UserController {
 
   // Endpoint to get a user by ID
   @Get(':id')
+  @ApiOperation({ summary: 'Get a user by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'User found successfully.' })
+  @ApiResponse({ status: 404, description: 'User not found.' })
   async getUserById(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.GetUserById(id);
     if (!user) {
@@ -49,6 +58,9 @@ export class UserController {
 
   // EndPoint to get the user with that name
   @Get('by-username')
+  @ApiOperation({ summary: 'Get a user by username' })
+  @ApiQuery({ name: 'username', description: 'Username', type: String })
+  @ApiResponse({ status: 200, description: 'User found successfully.' })
   async getUserByUsername(@Query('username') username: string) {
     const user = await this.userService.GetUserByUsername(username);
     return user;
@@ -91,6 +103,9 @@ export class UserController {
 
   // Endpoint to create a new user
   @Post()
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, description: 'User created successfully.' })
   @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.CreateUser(createUserDto);
