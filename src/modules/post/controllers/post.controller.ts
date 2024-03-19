@@ -18,6 +18,7 @@ import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/CreatePost.dto';
 import { PatchPostDto } from '../dto/PatchPost.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
 @Controller('posts')
 export class PostController {
@@ -25,82 +26,95 @@ export class PostController {
 
   // Endpoint to get all posts
   @Get()
+  @ApiOperation({ summary: 'Get all posts' })
+  @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getAllPosts() {
     try {
       const post = await this.postService.GetAllPosts();
       return { post };
     } catch (error) {
-      throw new NotFoundException('Não existem posts.');
+      throw new NotFoundException('No posts found.');
     }
   }
 
   // Endpoint to get a specific post by ID
   @Get(':id')
+  @ApiOperation({ summary: 'Get a specific post by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the post', type: Number })
+  @ApiResponse({ status: 200, description: 'Post obtained successfully.' })
   async getPostById(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.GetPostById(id);
     if (!post) {
-      throw new NotFoundException('Post não encontrado.');
+      throw new NotFoundException('Post not found.');
     }
     return { post };
   }
 
   // Endpoint to get posts from a specific user by user ID
   @Get('user/:userId')
+  @ApiOperation({ summary: 'Get posts from a specific user by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getPostsByUserId(@Param('userId', ParseIntPipe) userId: number) {
     try {
       const posts = await this.postService.GetPostsByUserId(userId);
       return { posts };
     } catch (error) {
-      throw new NotFoundException('Não existem posts para este usuário.');
+      throw new NotFoundException('No posts found for this user.');
     }
   }
 
   // Endpoint to get all posts sorted by creation date (newest first)
   @Get('sorted/created')
+  @ApiOperation({ summary: 'Get all posts sorted by creation date (newest first)' })
+  @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getPostsSortedByCreatedAt() {
     try {
       const posts = await this.postService.GetPostsSortedByCreatedAt();
       return { posts };
     } catch (error) {
-      throw new NotFoundException('Não existem posts publicados.');
+      throw new NotFoundException('No published posts.');
     }
   }
 
   // Endpoint to get all posts sorted by popularity (most likes first)
   @Get('sorted/popular')
+  @ApiOperation({ summary: 'Get all posts sorted by popularity (most likes first)' })
+  @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getPostsSortedByLikes() {
     try {
       const posts = await this.postService.GetPostsSortedByLikes();
       return { posts };
     } catch (error) {
-      throw new NotFoundException('Não existem posts publicados.');
+      throw new NotFoundException('No published posts.');
     }
   }
 
   // Endpoint to get the most popular posts based on the number of likes
   @Get('popular/:limit')
+  @ApiOperation({ summary: 'Get the most popular posts based on the number of likes' })
+  @ApiParam({ name: 'limit', description: 'Maximum number of popular posts to retrieve', type: Number })
+  @ApiResponse({ status: 200, description: 'Popular posts obtained successfully.' })
   async getPopularPosts(@Param('limit', ParseIntPipe) limit: number) {
     try {
       const popularPosts = await this.postService.GetPopularPosts(limit);
       return { popularPosts };
     } catch (error) {
-      throw new NotFoundException('Não existem posts populares.');
+      throw new NotFoundException('No popular posts found.');
     }
   }
 
   // Endpoint to get the most popular posts in the last 5 days
   @Get('popular/last-five-days')
+  @ApiOperation({ summary: 'Get the most popular posts in the last 5 days' })
+  @ApiResponse({ status: 200, description: 'Popular posts obtained successfully.' })
   async getPopularPostsLastFiveDays() {
     const limit = 5;
     try {
-      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(
-        limit,
-      );
+      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(limit);
       return { popularPosts };
     } catch (error) {
-      throw new NotFoundException(
-        'Não existem posts populares nos últimos 5 dias.',
-      );
+      throw new NotFoundException('No popular posts in the last 5 days.');
     }
   }
 
