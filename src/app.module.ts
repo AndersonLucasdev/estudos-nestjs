@@ -19,6 +19,7 @@ import { AppResolver } from './app.resolver';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
