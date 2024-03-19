@@ -120,6 +120,10 @@ export class PostController {
 
   // Endpoint to create a post with userID
   @Post(':userId')
+  @ApiOperation({ summary: 'Create a post with userID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user creating the post', type: Number })
+  @ApiBody({ type: CreatePostDto })
+  @ApiResponse({ status: 201, description: 'Post created successfully.' })
   @UsePipes(new DtoValidationPipe())
   async createPost(
     @Param('userId', ParseIntPipe) userId: number,
