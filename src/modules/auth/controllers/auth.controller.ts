@@ -20,9 +20,12 @@ import {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
   // @UseGuards(LocalAuthGuard)
+  @Post()
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, description: 'Login successful' })
+  @ApiBadRequestResponse({ description: 'Invalid username or password' })
+  @ApiUnauthorizedResponse({ description: 'Invalid username or password' })
   async login(@Body() loginData: { username: string; password: string }) {
     const user = await this.authService.validateUser(
       loginData.username,
