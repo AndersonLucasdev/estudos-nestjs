@@ -21,6 +21,13 @@ import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { Message } from '@prisma/client';
 import { Conversation } from '@prisma/client';
 import { PatchMessageDto } from '../dto/PatchMessage.dto';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 
 @Controller('messages')
 export class MessageController {
