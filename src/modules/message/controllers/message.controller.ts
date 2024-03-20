@@ -34,6 +34,9 @@ export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Send a message' })
+  @ApiBody({ type: CreateMessageDto })
+  @ApiResponse({ status: 201, description: 'Message sent successfully.', type: CreateMessageDto })
   async sendMessage(
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
@@ -41,11 +44,18 @@ export class MessageController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a message by its ID' })
+  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
+  @ApiResponse({ status: 200, description: 'Message deleted successfully.' })
   async deleteMessage(@Param('id') messageId: number): Promise<void> {
     return this.messageService.deleteMessage(messageId);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a message by its ID' })
+  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
+  @ApiBody({ type: PatchMessageDto })
+  @ApiResponse({ status: 200, description: 'Message updated successfully.', type: CreateMessageDto })
   async updateMessage(
     @Param('id') messageId: number,
     @Body() updateMessageDto: PatchMessageDto,
@@ -64,6 +74,9 @@ export class MessageController {
   }
 
   @Get(':userId/conversations/:conversationId/messages')
+  @ApiOperation({ summary: 'Get messages of a user in a conversation' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiParam({ name: 'conversationId', description: 'ID of the conversation', type: Number })
   async getUserMessagesInConversation(
     @Param('userId') userId: number,
     @Param('conversationId') conversationId: number,
@@ -75,6 +88,10 @@ export class MessageController {
   }
 
   @Post('reply/:messageId')
+  @ApiOperation({ summary: 'Reply to a message' })
+  @ApiParam({ name: 'messageId', description: 'ID of the message', type: Number })
+  @ApiBody({ type: CreateMessageDto })
+  @ApiResponse({ status: 201, description: 'Message replied successfully.', type: CreateMessageDto })
   async replyToMessage(
     @Param('messageId') messageId: number,
     @Body() createMessageDto: CreateMessageDto,
