@@ -19,6 +19,12 @@ import { CommentService } from '../services/comment.service';
 import { CreateCommentDto } from '../dto/CreateComment.dto';
 import { PatchCommentDto } from '../dto/PatchComment.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
+import {
+  ApiTags,
+  ApiResponse,
+  ApiBadRequestResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('comments')
 export class CommentController {
