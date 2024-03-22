@@ -20,6 +20,12 @@ import { CreateCommentLikeDto } from '../dto/CreateCommentLike.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
 import * as bcrypt from 'bcrypt';
+import {
+  ApiTags,
+  ApiResponse,
+  ApiNotFoundResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 
 @Controller('comment-like')
 export class CommentLikeController {
