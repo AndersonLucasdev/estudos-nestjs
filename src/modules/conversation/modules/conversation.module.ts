@@ -8,4 +8,4 @@ import { ConversationService } from '../services/conversation.service';
   controllers: [ConversationController],
   providers: [ConversationService],
 })
-export class CommentLikeModule {}
+export class ConversationModule {}

@@ -16,6 +16,7 @@ import { MessageModule } from './modules/message/modules/message.module';
 import { WebSocketModule } from './modules/websocket/websocket.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
+import { ConversationModule } from './modules/conversation/modules/conversation.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
@@ -30,6 +31,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     CommentLikeModule,
     PostLikeModule,
     UserFollowersModule,
+    ConversationModule,
     MessageModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
