@@ -1,27 +1,24 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Patch,
-    Delete,
-    Query,
-    Body,
-    Param,
-    ParseIntPipe,
-    UsePipes,
-    NotFoundException,
-    HttpStatus,
-    ConflictException,
-    BadRequestException,
-    HttpException,
-  } from '@nestjs/common';
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Query,
+  Body,
+  Param,
+  ParseIntPipe,
+  UsePipes,
+  NotFoundException,
+  HttpStatus,
+  ConflictException,
+  BadRequestException,
+  HttpException,
+} from '@nestjs/common';
+import { CreateConversationDto } from '../dto/CreateConversation.dto';
+import { ConversationService } from '../services/conversation.service';
 
-// @Get(':userId/conversations')
-//   async getUserConversations(@Param('userId') userId: number): Promise<Conversation[]> {
-//     return this.messageService.getUserConversations(userId);
-//   }
-
-//   @Get(':userId/recent-conversations')
-//   async getRecentConversations(@Param('userId') userId: number): Promise<Conversation[]> {
-//     return this.messageService.getRecentConversations(userId);
-//   }
+@Controller('comment-like')
+export class ConversationController {
+  constructor(private readonly conversationService: ConversationService) {}
+}
