@@ -24,4 +24,24 @@ import { PatchNotificationDto } from '../dto/PatchNotification.dto';
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
+
+  @Get('/:userId')
+  async getNotificationsByUserId(@Param('userId') userId: number): Promise<Notification[]> {
+    return this.notificationService.getNotificationsByUserId(userId);
+  }
+
+  @Get('/:id')
+  async getNotificationById(@Param('id') id: number): Promise<Notification> {
+    return this.notificationService.getNotificationById(id);
+  }
+
+  @Post()
+  async createNotification(@Body() createNotificationDto: CreateNotificationDto): Promise<Notification> {
+    return this.notificationService.createNotification(createNotificationDto);
+  }
+
+  @Delete('/:id')
+  async deleteNotification(@Param('id') id: number): Promise<void> {
+    return this.notificationService.deleteNotification(id);
+  }
 }
