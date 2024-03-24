@@ -16,4 +16,61 @@ export class NotificationService {
     private readonly prisma: PrismaService,
     private readonly webSocketService: WebSocketService,
   ) {}
+
+  async getNotificationsByUserId(userId: number): Promise<Notification[]> {
+    const notifications = await this.prisma.notification.findMany({
+      where: { userId },
+    });
+    return notifications;
+  }
+
+  async getNotificationById(id: number): Promise<Notification> {
+    const notification = await this.prisma.notification.findUnique({
+      where: { id },
+    });
+    if (!notification) {
+      throw new NotFoundException(`Notificação com o id ${id} não encontrada.`);
+    }
+    return notification;
+  }
+
+  async createNotification(
+    createNotificationDto: CreateNotificationDto,
+  ): Promise<Notification> {
+    try {
+      const notification = await this.prisma.notification.create({
+        data: createNotificationDto,
+      });
+      return notification;
+    } catch (error) {
+      throw new ConflictException('Erro ao criar notificação.');
+    }
+  }
+
+  async updateNotification(
+    id: number,
+    updateNotificationDto: CreateNotificationDto,
+  ): Promise<Notification> {
+    try {
+      const notification = await this.prisma.notification.update({
+        where: { id },
+        data: updateNotificationDto,
+      });
+      return notification;
+    } catch (error) {
+      throw new NotFoundException(`Notificação com o id ${id} não encontrada.`);
+    }
+  }
+
+  async deleteNotification(id: number): Promise<void> {
+    const notification = await this.prisma.notification.findUnique({
+      where: { id },
+    });
+    if (!notification) {
+      throw new NotFoundException(`Notificação com o id ${id} não encontrada.`);
+    }
+    await this.prisma.notification.delete({
+      where: { id },
+    });
+  }
 }
