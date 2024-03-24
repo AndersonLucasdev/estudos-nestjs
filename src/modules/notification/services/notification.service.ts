@@ -5,7 +5,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-//   import { CreateMessageDto } from '../dto/CreateMessage.dto';
+import { CreateNotificationDto } from '../dto/CreateNotification.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 import { Notification } from '@prisma/client';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
