@@ -20,6 +20,7 @@ import { CreateNotificationDto } from '../dto/CreateNotification.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { Notification } from '@prisma/client';
 import { PatchNotificationDto } from '../dto/PatchNotification.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
 @Controller('notifications')
 export class NotificationController {
