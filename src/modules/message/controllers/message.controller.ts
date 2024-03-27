@@ -67,6 +67,9 @@ export class MessageController {
   }
 
   @Get('conversations/:conversationId/messages')
+  @ApiOperation({ summary: 'Get all messages of a user in a conversation' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiParam({ name: 'conversationId', description: 'ID of the conversation', type: Number })
   async getAllMessagesInConversation(
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
