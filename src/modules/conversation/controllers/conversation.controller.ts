@@ -24,42 +24,68 @@ export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Get('user/:userId/conversations')
-  async getUserConversations(@Param('userId', ParseIntPipe) userId: number): Promise<Conversation[]> {
+  async getUserConversations(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Conversation[]> {
     try {
-      const userConversations = await this.conversationService.getUserConversations(userId);
+      const userConversations =
+        await this.conversationService.getUserConversations(userId);
       return userConversations;
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @Get('user/:userId/recent-conversations')
-  async getRecentConversations(@Param('userId', ParseIntPipe) userId: number): Promise<Conversation[]> {
+  async getRecentConversations(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Conversation[]> {
     try {
-      const recentConversations = await this.conversationService.getRecentConversations(userId);
+      const recentConversations =
+        await this.conversationService.getRecentConversations(userId);
       return recentConversations;
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @Get('user/:userId/common-group-conversations')
-  async searchConversationsByCommonGroups(@Param('userId', ParseIntPipe) userId: number): Promise<Conversation[]> {
+  async searchConversationsByCommonGroups(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Conversation[]> {
     try {
-      const commonGroupConversations = await this.conversationService.searchConversationsByCommonGroups(userId);
+      const commonGroupConversations =
+        await this.conversationService.searchConversationsByCommonGroups(
+          userId,
+        );
       return commonGroupConversations;
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   @Get('search')
-  async searchConversationsByNamePart(@Query('namePart') namePart: string): Promise<Conversation[]> {
+  async searchConversationsByNamePart(
+    @Query('namePart') namePart: string,
+  ): Promise<Conversation[]> {
     try {
-      const conversations = await this.conversationService.searchConversationsByNamePart(namePart);
+      const conversations =
+        await this.conversationService.searchConversationsByNamePart(namePart);
       return conversations;
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -69,13 +95,20 @@ export class ConversationController {
     @Body('participants', ParseIntPipe) participants: number[],
   ) {
     try {
-      const updatedConversation = await this.conversationService.addParticipantsToConversation(id, participants);
+      const updatedConversation =
+        await this.conversationService.addParticipantsToConversation(
+          id,
+          participants,
+        );
       return {
         message: 'Participants added successfully',
         conversation: updatedConversation,
       };
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -85,26 +118,42 @@ export class ConversationController {
     @Body('participants', ParseIntPipe) participants: number[],
   ) {
     try {
-      const updatedConversation = await this.conversationService.removeParticipantsFromConversation(id, participants);
+      const updatedConversation =
+        await this.conversationService.removeParticipantsFromConversation(
+          id,
+          participants,
+        );
       return {
         message: 'Participants removed successfully',
         conversation: updatedConversation,
       };
     } catch (error) {
-      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  // @Post()
-  // async createConversation(@Body() createConversationDto: CreateConversationDto) {
-  //   try {
-  //     const conversation = await this.conversationService.createConversation(createConversationDto);
-  //     return {
-  //       message: 'Conversation created successfully',
-  //       conversation,
-  //     };
-  //   } catch (error) {
-  //     throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
-  //   }
-  // }
+  @Post(':userId')
+  async createConversation(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() createConversationDto: CreateConversationDto,
+  ) {
+    try {
+      const conversation = await this.conversationService.createConversation(
+        userId,
+        createConversationDto,
+      );
+      return {
+        message: 'Conversation created successfully',
+        conversation,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
