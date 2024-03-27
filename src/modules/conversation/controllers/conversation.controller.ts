@@ -156,4 +156,19 @@ export class ConversationController {
       );
     }
   }
+
+  @Delete(':id')
+  async deleteConversation(@Param('id', ParseIntPipe) id: number) {
+    try {
+      await this.conversationService.deleteConversation(id);
+      return {
+        message: 'Conversation deleted successfully',
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
