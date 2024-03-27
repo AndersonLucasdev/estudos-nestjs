@@ -62,4 +62,49 @@ export class ConversationController {
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Patch(':id/add-participants')
+  async addParticipantsToConversation(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('participants', ParseIntPipe) participants: number[],
+  ) {
+    try {
+      const updatedConversation = await this.conversationService.addParticipantsToConversation(id, participants);
+      return {
+        message: 'Participants added successfully',
+        conversation: updatedConversation,
+      };
+    } catch (error) {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Patch(':id/remove-participants')
+  async removeParticipantsFromConversation(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('participants', ParseIntPipe) participants: number[],
+  ) {
+    try {
+      const updatedConversation = await this.conversationService.removeParticipantsFromConversation(id, participants);
+      return {
+        message: 'Participants removed successfully',
+        conversation: updatedConversation,
+      };
+    } catch (error) {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  // @Post()
+  // async createConversation(@Body() createConversationDto: CreateConversationDto) {
+  //   try {
+  //     const conversation = await this.conversationService.createConversation(createConversationDto);
+  //     return {
+  //       message: 'Conversation created successfully',
+  //       conversation,
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  // }
 }
