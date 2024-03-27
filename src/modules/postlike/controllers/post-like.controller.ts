@@ -28,7 +28,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 
-@ApiTags('Post Likes')
+@ApiTags('Post Like')
 @Controller('post-like')
 export class PostLikeController {
   constructor(private readonly postLikeService: PostLikeService) {}

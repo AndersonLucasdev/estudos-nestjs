@@ -27,6 +27,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
+@ApiTags('Comment Like')
 @Controller('comment-like')
 export class CommentLikeController {
   constructor(private readonly commentLikeService: CommentLikeService) {}
