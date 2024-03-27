@@ -20,7 +20,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from 
 
 
 @ApiTags('User Followers')
-@Controller('comment-like')
+@Controller('userfollower')
 export class UserFollowersController {
   constructor(private readonly userFollowersService: UserFollowersService) {}
 

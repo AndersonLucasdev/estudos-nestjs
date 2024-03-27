@@ -18,8 +18,16 @@ import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/CreatePost.dto';
 import { PatchPostDto } from '../dto/PatchPost.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 
+@ApiTags('posts')
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
@@ -66,7 +74,9 @@ export class PostController {
 
   // Endpoint to get all posts sorted by creation date (newest first)
   @Get('sorted/created')
-  @ApiOperation({ summary: 'Get all posts sorted by creation date (newest first)' })
+  @ApiOperation({
+    summary: 'Get all posts sorted by creation date (newest first)',
+  })
   @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getPostsSortedByCreatedAt() {
     try {
@@ -79,7 +89,9 @@ export class PostController {
 
   // Endpoint to get all posts sorted by popularity (most likes first)
   @Get('sorted/popular')
-  @ApiOperation({ summary: 'Get all posts sorted by popularity (most likes first)' })
+  @ApiOperation({
+    summary: 'Get all posts sorted by popularity (most likes first)',
+  })
   @ApiResponse({ status: 200, description: 'Posts obtained successfully.' })
   async getPostsSortedByLikes() {
     try {
@@ -92,9 +104,18 @@ export class PostController {
 
   // Endpoint to get the most popular posts based on the number of likes
   @Get('popular/:limit')
-  @ApiOperation({ summary: 'Get the most popular posts based on the number of likes' })
-  @ApiParam({ name: 'limit', description: 'Maximum number of popular posts to retrieve', type: Number })
-  @ApiResponse({ status: 200, description: 'Popular posts obtained successfully.' })
+  @ApiOperation({
+    summary: 'Get the most popular posts based on the number of likes',
+  })
+  @ApiParam({
+    name: 'limit',
+    description: 'Maximum number of popular posts to retrieve',
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Popular posts obtained successfully.',
+  })
   async getPopularPosts(@Param('limit', ParseIntPipe) limit: number) {
     try {
       const popularPosts = await this.postService.GetPopularPosts(limit);
@@ -107,11 +128,16 @@ export class PostController {
   // Endpoint to get the most popular posts in the last 5 days
   @Get('popular/last-five-days')
   @ApiOperation({ summary: 'Get the most popular posts in the last 5 days' })
-  @ApiResponse({ status: 200, description: 'Popular posts obtained successfully.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Popular posts obtained successfully.',
+  })
   async getPopularPostsLastFiveDays() {
     const limit = 5;
     try {
-      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(limit);
+      const popularPosts = await this.postService.GetPopularPostsLastFiveDays(
+        limit,
+      );
       return { popularPosts };
     } catch (error) {
       throw new NotFoundException('No popular posts in the last 5 days.');
@@ -121,7 +147,11 @@ export class PostController {
   // Endpoint to create a post with userID
   @Post(':userId')
   @ApiOperation({ summary: 'Create a post with userID' })
-  @ApiParam({ name: 'userId', description: 'ID of the user creating the post', type: Number })
+  @ApiParam({
+    name: 'userId',
+    description: 'ID of the user creating the post',
+    type: Number,
+  })
   @ApiBody({ type: CreatePostDto })
   @ApiResponse({ status: 201, description: 'Post created successfully.' })
   @UsePipes(new DtoValidationPipe())
@@ -135,6 +165,9 @@ export class PostController {
 
   // Endpoint to delete a post by its ID
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a post by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the post', type: Number })
+  @ApiResponse({ status: 200, description: 'Post removed successfully.' })
   async deletePost(@Param('id', ParseIntPipe) id: number) {
     const post = await this.postService.DeletePost(id);
     return { message: 'Post removido com sucesso!', post };
@@ -142,6 +175,13 @@ export class PostController {
 
   // Endpoint to update a post by its ID
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a post by ID' })
+  @ApiParam({ name: 'id', description: 'Post of the user', type: Number })
+  @ApiBody({ type: PatchPostDto })
+  @ApiResponse({ status: 200, description: 'Post updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Post not found.' })
+  @ApiResponse({ status: 409, description: 'Conflict while updating post.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
   @UsePipes(new DtoValidationPipe())
   async patchPost(
     @Param('id', ParseIntPipe) id: number,
