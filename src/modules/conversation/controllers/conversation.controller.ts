@@ -32,4 +32,34 @@ export class ConversationController {
       throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @Get('user/:userId/recent-conversations')
+  async getRecentConversations(@Param('userId', ParseIntPipe) userId: number): Promise<Conversation[]> {
+    try {
+      const recentConversations = await this.conversationService.getRecentConversations(userId);
+      return recentConversations;
+    } catch (error) {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('user/:userId/common-group-conversations')
+  async searchConversationsByCommonGroups(@Param('userId', ParseIntPipe) userId: number): Promise<Conversation[]> {
+    try {
+      const commonGroupConversations = await this.conversationService.searchConversationsByCommonGroups(userId);
+      return commonGroupConversations;
+    } catch (error) {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('search')
+  async searchConversationsByNamePart(@Query('namePart') namePart: string): Promise<Conversation[]> {
+    try {
+      const conversations = await this.conversationService.searchConversationsByNamePart(namePart);
+      return conversations;
+    } catch (error) {
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
