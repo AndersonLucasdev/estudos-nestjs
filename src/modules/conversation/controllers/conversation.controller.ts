@@ -63,7 +63,7 @@ export class ConversationController {
 
   @ApiParam({ name: 'userId', description: 'User ID' })
   @Get('user/:userId/common-group-conversations')
-  @ApiResponse({ status: 200, description: 'Returns common group conversations of the user', type: [Conversation] })
+  @ApiResponse({ status: 200, description: 'Returns common group conversations of the user', type: [CreateConversationDto] })
   async searchConversationsByCommonGroups(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -83,7 +83,7 @@ export class ConversationController {
 
   @ApiQuery({ name: 'namePart', description: 'Name part to search in conversations' })
   @Get('search')
-  @ApiResponse({ status: 200, description: 'Returns conversations matching the search query', type: [Conversation] })
+  @ApiResponse({ status: 200, description: 'Returns conversations matching the search query', type: [CreateConversationDto] })
   async searchConversationsByNamePart(
     @Query('namePart') namePart: string,
   ): Promise<Conversation[]> {
