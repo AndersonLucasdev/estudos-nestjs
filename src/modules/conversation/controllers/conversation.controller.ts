@@ -26,6 +26,8 @@ export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Get('user/:userId/conversations')
+  @ApiParam({ name: 'userId', description: 'User ID' })
+  @ApiResponse({ status: 200, description: 'Returns user conversations', type: [CreateConversationDto] })
   async getUserConversations(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
