@@ -43,7 +43,9 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'userId', description: 'User ID' })
   @Get('user/:userId/recent-conversations')
+  @ApiResponse({ status: 200, description: 'Returns recent conversations of the user', type: [CreateConversationDto] })
   async getRecentConversations(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -59,7 +61,9 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'userId', description: 'User ID' })
   @Get('user/:userId/common-group-conversations')
+  @ApiResponse({ status: 200, description: 'Returns common group conversations of the user', type: [Conversation] })
   async searchConversationsByCommonGroups(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -77,7 +81,9 @@ export class ConversationController {
     }
   }
 
+  @ApiQuery({ name: 'namePart', description: 'Name part to search in conversations' })
   @Get('search')
+  @ApiResponse({ status: 200, description: 'Returns conversations matching the search query', type: [Conversation] })
   async searchConversationsByNamePart(
     @Query('namePart') namePart: string,
   ): Promise<Conversation[]> {
@@ -93,7 +99,10 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @Patch(':id/add-participants')
+  @ApiBody({ type: [Number], description: 'Array of participant IDs' })
+  @ApiResponse({ status: 200, description: 'Participants added successfully' })
   async addParticipantsToConversation(
     @Param('id', ParseIntPipe) id: number,
     @Body('participants', ParseIntPipe) participants: number[],
@@ -116,7 +125,10 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @Patch(':id/remove-participants')
+  @ApiBody({ type: [Number], description: 'Array of participant IDs' })
+  @ApiResponse({ status: 200, description: 'Participants removed successfully' })
   async removeParticipantsFromConversation(
     @Param('id', ParseIntPipe) id: number,
     @Body('participants', ParseIntPipe) participants: number[],
@@ -139,7 +151,10 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'userId', description: 'User ID' })
   @Post(':userId')
+  @ApiBody({ type: CreateConversationDto, description: 'Details for creating a new conversation' })
+  @ApiResponse({ status: 200, description: 'Conversation created successfully' })
   async createConversation(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createConversationDto: CreateConversationDto,
@@ -161,7 +176,9 @@ export class ConversationController {
     }
   }
 
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @Delete(':id')
+  @ApiResponse({ status: 200, description: 'Conversation deleted successfully' })
   async deleteConversation(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.conversationService.deleteConversation(id);
