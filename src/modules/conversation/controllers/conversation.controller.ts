@@ -18,8 +18,10 @@ import {
 import { CreateConversationDto } from '../dto/CreateConversation.dto';
 import { ConversationService } from '../services/conversation.service';
 import { Conversation } from '@prisma/client';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
-@Controller('comment-like')
+@ApiTags('Conversation')
+@Controller('coversation')
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 

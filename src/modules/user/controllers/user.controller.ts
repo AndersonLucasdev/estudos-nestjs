@@ -21,7 +21,6 @@ import { PatchUserDto } from '../dto/PatchUser.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
-
 import * as bcrypt from 'bcrypt';
 
 @ApiTags('User')

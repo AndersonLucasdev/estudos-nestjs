@@ -22,7 +22,7 @@ import { Notification } from '@prisma/client';
 import { PatchNotificationDto } from '../dto/PatchNotification.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
-@ApiTags('notifications')
+@ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
