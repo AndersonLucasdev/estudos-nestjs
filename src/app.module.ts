@@ -17,6 +17,7 @@ import { WebSocketModule } from './modules/websocket/websocket.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
 import { ConversationModule } from './modules/conversation/modules/conversation.module';
+import { NotificationModule } from './modules/notification/modules/notification.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
@@ -29,6 +30,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     PostModule,
     AuthModule,
     CommentLikeModule,
+    NotificationModule,
     PostLikeModule,
     UserFollowersModule,
     ConversationModule,
