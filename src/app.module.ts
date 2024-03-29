@@ -10,6 +10,7 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
 import { AuthModule } from './modules/auth/modules/auth.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
+import { CommentModule } from './modules/comment/modules/comment.module';
 import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
@@ -29,6 +30,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     UserModule,
     PostModule,
     AuthModule,
+    CommentModule,
     CommentLikeModule,
     NotificationModule,
     PostLikeModule,

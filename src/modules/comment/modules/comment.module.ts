@@ -9,7 +9,7 @@ import { ValidationCommentMiddleware } from 'src/middlewares/validation-comment.
   controllers: [CommentController],
   providers: [CommentService],
 })
-export class PostModule implements NestModule {
+export class CommentModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ValidationCommentMiddleware)
