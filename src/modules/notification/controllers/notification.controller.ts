@@ -43,6 +43,36 @@ export class NotificationController {
     return await this.notificationService.getNotificationById(id);
   }
 
+  @Patch(':id/mark-as-read')
+  async markNotificationAsRead(@Param('id') id: number): Promise<Notification> {
+    try {
+      return await this.notificationService.markNotificationAsRead(id);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Get('user/:userId/unread-count')
+  async countUnreadNotifications(@Param('userId') userId: number): Promise<number> {
+    try {
+      return await this.notificationService.countUnreadNotifications(userId);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Get('user/:userId/recent/:limit')
+  async getRecentNotifications(
+    @Param('userId') userId: number,
+    @Param('limit') limit: number,
+  ): Promise<Notification[]> {
+    try {
+      return await this.notificationService.getRecentNotifications(userId, limit);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a new notification' })
   @ApiBody({ type: CreateNotificationDto })
