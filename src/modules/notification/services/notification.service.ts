@@ -9,6 +9,7 @@ import { CreateNotificationDto } from '../dto/CreateNotification.dto';
 import { TrimSpaces } from 'src/utils/helpers';
 import { Notification } from '@prisma/client';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
+import { NotificationType } from '@prisma/client';
 
 @Injectable()
 export class NotificationService {
@@ -16,6 +17,13 @@ export class NotificationService {
     private readonly prisma: PrismaService,
     private readonly webSocketService: WebSocketService,
   ) {}
+
+  async getNotificationsByType(userId: number, type: NotificationType): Promise<Notification[]> {
+    const notifications = await this.prisma.notification.findMany({
+      where: { userId, type },
+    });
+    return notifications;
+  }
 
   async getNotificationsByUserId(userId: number): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
