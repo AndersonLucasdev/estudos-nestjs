@@ -40,7 +40,7 @@ export class CommentLikeController {
   async getLikesInComment(
     @Param('commentId') commentId: number,
   ): Promise<number> {
-    return this.commentLikeService.AccountLikesInComment(commentId);
+    return await this.commentLikeService.AccountLikesInComment(commentId);
   }
 
   // EndPoint Adds a like to a specific comment based on the provided user ID
@@ -52,7 +52,7 @@ export class CommentLikeController {
     @Param('commentId') commentId: number,
     @Body('userId') userId: number,
   ) {
-    return this.commentLikeService.LikeComments(userId, commentId);
+    return await this.commentLikeService.LikeComments(userId, commentId);
   }
 
   // EndPoint Unlikes a specific comment based on the provided user and comment IDs
@@ -65,6 +65,6 @@ export class CommentLikeController {
     @Param('commentId') commentId: number,
     @Param('userId') userId: number,
   ) {
-    return this.commentLikeService.RemoveLikeOnComment(userId, commentId);
+    return await this.commentLikeService.RemoveLikeOnComment(userId, commentId);
   }
 }

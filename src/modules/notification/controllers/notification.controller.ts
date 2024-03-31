@@ -32,7 +32,7 @@ export class NotificationController {
   @ApiParam({ name: 'userId', description: 'User ID', type: Number })
   @ApiResponse({ status: 200, description: 'Returns notifications for the specified user' })
   async getNotificationsByUserId(@Param('userId') userId: number): Promise<Notification[]> {
-    return this.notificationService.getNotificationsByUserId(userId);
+    return await this.notificationService.getNotificationsByUserId(userId);
   }
 
   @Get('/:id')
@@ -40,7 +40,7 @@ export class NotificationController {
   @ApiParam({ name: 'id', description: 'Notification ID', type: Number })
   @ApiResponse({ status: 200, description: 'Returns the notification with the specified ID' })
   async getNotificationById(@Param('id') id: number): Promise<Notification> {
-    return this.notificationService.getNotificationById(id);
+    return await this.notificationService.getNotificationById(id);
   }
 
   @Post()
@@ -48,7 +48,7 @@ export class NotificationController {
   @ApiBody({ type: CreateNotificationDto })
   @ApiResponse({ status: 201, description: 'Returns the newly created notification' })
   async createNotification(@Body() createNotificationDto: CreateNotificationDto): Promise<Notification> {
-    return this.notificationService.createNotification(createNotificationDto);
+    return await this.notificationService.createNotification(createNotificationDto);
   }
 
   @Delete('/:id')
@@ -56,6 +56,6 @@ export class NotificationController {
   @ApiParam({ name: 'id', description: 'Notification ID', type: Number })
   @ApiResponse({ status: 204, description: 'Notification successfully deleted' })
   async deleteNotification(@Param('id') id: number): Promise<void> {
-    return this.notificationService.deleteNotification(id);
+    return await this.notificationService.deleteNotification(id);
   }
 }

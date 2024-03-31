@@ -41,7 +41,7 @@ export class MessageController {
   async sendMessage(
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
-    return this.messageService.sendMessage(createMessageDto);
+    return await this.messageService.sendMessage(createMessageDto);
   }
 
   @Delete(':id')
@@ -49,7 +49,7 @@ export class MessageController {
   @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
   @ApiResponse({ status: 200, description: 'Message deleted successfully.' })
   async deleteMessage(@Param('id') messageId: number): Promise<void> {
-    return this.messageService.deleteMessage(messageId);
+    return await this.messageService.deleteMessage(messageId);
   }
 
   @Patch(':id')
@@ -61,7 +61,7 @@ export class MessageController {
     @Param('id') messageId: number,
     @Body() updateMessageDto: PatchMessageDto,
   ): Promise<Message> {
-    return this.messageService.updateMessage(
+    return await this.messageService.updateMessage(
       messageId,
       updateMessageDto.content,
     );
@@ -74,7 +74,7 @@ export class MessageController {
   async getAllMessagesInConversation(
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
-    return this.messageService.getAllMessagesInConversation(conversationId);
+    return await this.messageService.getAllMessagesInConversation(conversationId);
   }
 
   @Get(':userId/conversations/:conversationId/messages')
@@ -85,7 +85,7 @@ export class MessageController {
     @Param('userId') userId: number,
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
-    return this.messageService.getUserMessagesInConversation(
+    return await this.messageService.getUserMessagesInConversation(
       userId,
       conversationId,
     );
@@ -100,7 +100,7 @@ export class MessageController {
     @Param('messageId') messageId: number,
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
-    return this.messageService.replyToMessage(
+    return await this.messageService.replyToMessage(
       messageId,
       createMessageDto.content,
     );

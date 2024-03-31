@@ -38,7 +38,7 @@ export class PostLikeController {
   @ApiOperation({ summary: 'Get all likes' })
   @ApiResponse({ status: 200, description: 'Likes obtained successfully.' })
   async getAllLikes() {
-    return this.postLikeService.GetAllLikes();
+    return await this.postLikeService.GetAllLikes();
   }
 
   // EndPoint: Get like by ID
@@ -47,7 +47,7 @@ export class PostLikeController {
   @ApiParam({ name: 'likeId', description: 'ID of the like', type: Number })
   @ApiResponse({ status: 200, description: 'Like obtained successfully.' })
   async getLikeById(@Param('likeId') likeId: number) {
-    return this.postLikeService.GetLikeById(likeId);
+    return await this.postLikeService.GetLikeById(likeId);
   }
 
   // EndPoint: Get all likes with details (user and post information included)
@@ -60,7 +60,7 @@ export class PostLikeController {
     description: 'Likes with details obtained successfully.',
   })
   async getAllLikesWithDetails() {
-    return this.postLikeService.GetAllLikesWithDetails();
+    return await this.postLikeService.GetAllLikesWithDetails();
   }
 
   // EndPoint: Get all likes for a specific post
@@ -72,7 +72,7 @@ export class PostLikeController {
     description: 'Likes for the post obtained successfully.',
   })
   async getLikesForPost(@Param('postId') postId: number) {
-    return this.postLikeService.GetLikesForPost(postId);
+    return await this.postLikeService.GetLikesForPost(postId);
   }
 
   // EndPoint: Get all likes for a specific user
@@ -84,7 +84,7 @@ export class PostLikeController {
     description: 'Likes for the user obtained successfully.',
   })
   async getLikesForUser(@Param('userId') userId: number) {
-    return this.postLikeService.GetLikesForUser(userId);
+    return await this.postLikeService.GetLikesForUser(userId);
   }
 
   // EndPoint: Count total likes for a specific post
@@ -96,7 +96,7 @@ export class PostLikeController {
     description: 'Likes count for the post obtained successfully.',
   })
   async countLikesForPost(@Param('postId') postId: number) {
-    return this.postLikeService.CountLikesForPost(postId);
+    return await this.postLikeService.CountLikesForPost(postId);
   }
 
   // EndPoint: Get all likes by user
@@ -140,7 +140,7 @@ export class PostLikeController {
     @Query('startDate') startDate: Date,
     @Query('endDate') endDate: Date,
   ) {
-    return this.postLikeService.GetLikesForUserInPeriod(
+    return await this.postLikeService.GetLikesForUserInPeriod(
       userId,
       startDate,
       endDate,
@@ -167,7 +167,7 @@ export class PostLikeController {
     @Param('postId') postId: number,
     @Query('partialName') partialName: string,
   ) {
-    return this.postLikeService.GetUsersWhoLikedPostWithPartialName(
+    return await this.postLikeService.GetUsersWhoLikedPostWithPartialName(
       postId,
       partialName,
     );
@@ -180,7 +180,7 @@ export class PostLikeController {
   @ApiResponse({ status: 201, description: 'Like created successfully.' })
   async createLike(@Body() createLikeDto: CreatePostLikeDto) {
     const { userId, postId } = createLikeDto;
-    return this.postLikeService.CreateLike(userId, postId);
+    return await this.postLikeService.CreateLike(userId, postId);
   }
 
   // EndPoint: Remove a like made by a specific user for a specific post
@@ -195,6 +195,6 @@ export class PostLikeController {
     @Param('userId') userId: number,
     @Param('postId') postId: number,
   ) {
-    return this.postLikeService.RemoveLike(userId, postId);
+    return await this.postLikeService.RemoveLike(userId, postId);
   }
 }
