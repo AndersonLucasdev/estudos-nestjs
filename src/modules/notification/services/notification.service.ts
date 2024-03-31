@@ -25,6 +25,17 @@ export class NotificationService {
     return notifications;
   }
 
+  // async markNotificationAsRead(id: number): Promise<Notification> {
+  //   const notification = await this.getNotificationById(id);
+  //   if (!notification.read) {
+  //     return this.prisma.notification.update({
+  //       where: { id },
+  //       data: { read: true },
+  //     });
+  //   }
+  //   return notification;
+  // }
+
   async getNotificationsByUserId(userId: number): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
       where: { userId },

@@ -114,6 +114,7 @@ model Notification {
   creationDate DateTime         @default(now()) @db.Timestamp(6)
   user         User             @relation(fields: [userId], references: [id])
   type         NotificationType
+  read         Boolean          @default(false)
 }
 
 model UserActivity {
