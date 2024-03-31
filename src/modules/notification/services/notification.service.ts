@@ -46,6 +46,15 @@ export class NotificationService {
     return unreadNotifications;
   }
 
+  async getRecentNotifications(userId: number, limit: number): Promise<Notification[]> {
+    const recentNotifications = await this.prisma.notification.findMany({
+      where: { userId },
+      orderBy: { creationDate: 'desc' },
+      take: limit,
+    });
+    return recentNotifications;
+  }
+
   async getNotificationsByUserId(userId: number): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
       where: { userId },
