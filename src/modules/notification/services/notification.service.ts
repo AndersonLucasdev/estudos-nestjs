@@ -18,23 +18,33 @@ export class NotificationService {
     private readonly webSocketService: WebSocketService,
   ) {}
 
-  async getNotificationsByType(userId: number, type: NotificationType): Promise<Notification[]> {
+  async getNotificationsByType(
+    userId: number,
+    type: NotificationType,
+  ): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
       where: { userId, type },
     });
     return notifications;
   }
 
-  // async markNotificationAsRead(id: number): Promise<Notification> {
-  //   const notification = await this.getNotificationById(id);
-  //   if (!notification.read) {
-  //     return this.prisma.notification.update({
-  //       where: { id },
-  //       data: { read: true },
-  //     });
-  //   }
-  //   return notification;
-  // }
+  async markNotificationAsRead(id: number): Promise<Notification> {
+    const notification = await this.getNotificationById(id);
+    if (!notification.read) {
+      return this.prisma.notification.update({
+        where: { id },
+        data: { read: true },
+      });
+    }
+    return notification;
+  }
+
+  async countUnreadNotifications(userId: number): Promise<number> {
+    const unreadNotifications = await this.prisma.notification.count({
+      where: { userId, read: false },
+    });
+    return unreadNotifications;
+  }
 
   async getNotificationsByUserId(userId: number): Promise<Notification[]> {
     const notifications = await this.prisma.notification.findMany({
