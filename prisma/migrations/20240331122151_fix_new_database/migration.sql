@@ -106,6 +106,7 @@ CREATE TABLE "Notification" (
     "message" TEXT NOT NULL,
     "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "type" "NotificationType" NOT NULL,
+    "read" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
