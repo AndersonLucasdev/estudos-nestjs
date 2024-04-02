@@ -44,6 +44,9 @@ export class NotificationController {
   }
 
   @Patch(':id/mark-as-read')
+  @ApiOperation({ summary: 'Mark notification as read by ID' })
+  @ApiParam({ name: 'id', description: 'Notification ID', type: Number })
+  @ApiResponse({ status: 200, description: 'Returns the updated notification marked as read' })
   async markNotificationAsRead(@Param('id') id: number): Promise<Notification> {
     try {
       return await this.notificationService.markNotificationAsRead(id);
