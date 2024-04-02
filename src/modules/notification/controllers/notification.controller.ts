@@ -56,6 +56,9 @@ export class NotificationController {
   }
 
   @Get('user/:userId/unread-count')
+  @ApiOperation({ summary: 'Count unread notifications for a user' })
+  @ApiParam({ name: 'userId', description: 'User ID', type: Number })
+  @ApiResponse({ status: 200, description: 'Returns the count of unread notifications for the user' })
   async countUnreadNotifications(@Param('userId') userId: number): Promise<number> {
     try {
       return await this.notificationService.countUnreadNotifications(userId);
@@ -76,7 +79,11 @@ export class NotificationController {
     }
   }
 
-  @Post()
+  @Get('user/:userId/recent/:limit')
+  @ApiOperation({ summary: 'Get recent notifications for a user with a limit' })
+  @ApiParam({ name: 'userId', description: 'User ID', type: Number })
+  @ApiParam({ name: 'limit', description: 'Limit of notifications to retrieve', type: Number })
+  @ApiResponse({ status: 200, description: 'Returns the recent notifications for the user with the specified limit' })
   @ApiOperation({ summary: 'Create a new notification' })
   @ApiBody({ type: CreateNotificationDto })
   @ApiResponse({ status: 201, description: 'Returns the newly created notification' })
