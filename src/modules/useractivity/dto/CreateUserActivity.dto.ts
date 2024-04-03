@@ -2,7 +2,7 @@ import { IsInt, IsEnum, IsDate } from 'class-validator';
 import { UserActivityType } from '@prisma/client';
 import { NotificationType } from '@prisma/client';
 
-export class UserActivityDto {
+export class CreateUserActivityDto {
   @IsInt()
   userId: number;
 
