@@ -1,27 +1,20 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { UserActivityType } from '../enums/user-activity-type.enum';
-import {
-    IsString,
-    IsEmail,
-    IsDate,
-    IsEnum,
-    Equals,
-    MinLength,
-    Matches,
-    IsOptional,
-    isEmail,
-  } from 'class-validator';
-  import { Gender } from '@prisma/client';
- 
-
+import { IsInt, IsEnum, IsDate } from 'class-validator';
+import { UserActivityType } from '@prisma/client';
+import { NotificationType } from '@prisma/client';
 
 export class UserActivityDto {
-  @ApiProperty()
+  @IsInt()
   userId: number;
 
-  @ApiProperty()
+  @IsEnum(UserActivityType)
   activityType: UserActivityType;
 
-  @ApiProperty()
+  @IsInt()
   entityId: number;
+
+  @IsDate()
+  creationDate: Date;
+
+  @IsEnum(NotificationType)
+  notificationType: NotificationType;
 }
