@@ -21,4 +21,6 @@ import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 @Controller('posts')
 export class UserActivityController {
     constructor(private readonly userActivityService: UserActivityService) {}
+
+    
 }

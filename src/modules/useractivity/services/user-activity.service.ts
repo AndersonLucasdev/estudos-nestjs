@@ -17,4 +17,14 @@ export class UserActivityService {
   constructor(
     private readonly prisma: PrismaService,
   ) {}
+
+  async getUserActivities(userId: number): Promise<UserActivity[]> {
+    return this.prisma.userActivity.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  
 }
