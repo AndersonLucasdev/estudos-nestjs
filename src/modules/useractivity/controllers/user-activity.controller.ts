@@ -18,6 +18,8 @@ import { UserActivityService } from '../services/user-activity.service';
 import { UserActivity } from '@prisma/client';
 import { TrimSpaces } from 'src/utils/helpers';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
+import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
+import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 
 @Controller('posts')
 export class UserActivityController {
@@ -35,5 +37,46 @@ export class UserActivityController {
       throw new NotFoundException('User activity not found.');
     }
     return activity;
+  }
+
+  @Post()
+  async createUserActivity(@Body() createUserActivityDto: CreateUserActivityDto): Promise<UserActivity> {
+    try {
+      return this.userActivityService.createUserActivity(createUserActivityDto);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw new ConflictException('Failed to create user activity.');
+      } else {
+        throw new BadRequestException('Invalid data provided.');
+      }
+    }
+  }
+
+  @Patch('/:activityId')
+  async updateUserActivity(@Param('activityId') activityId: number, @Body() patchUserActivityDto: PatchUserActivityDto): Promise<UserActivity> {
+    try {
+      return this.userActivityService.updateUserActivity(activityId, patchUserActivityDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('User activity not found.');
+      } else if (error instanceof BadRequestException) {
+        throw new BadRequestException('Invalid data provided.');
+      } else {
+        throw new BadRequestException('Failed to update user activity.');
+      }
+    }
+  }
+
+  @Delete('/:activityId')
+  async deleteUserActivity(@Param('activityId') activityId: number): Promise<void> {
+    try {
+      await this.userActivityService.deleteUserActivity(activityId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('User activity not found.');
+      } else {
+        throw new BadRequestException('Failed to delete user activity.');
+      }
+    }
   }
 }
