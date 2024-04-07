@@ -69,6 +69,29 @@ export class UserActivityService {
     });
   }
 
+  async getRecentUserActivities(userId: number, limit: number): Promise<UserActivity[]> {
+    return this.prisma.userActivity.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        creationDate: 'desc',
+      },
+      take: limit,
+    });
+  }
+
+  async deleteOldUserActivities(userId: number, cutoffDate: Date): Promise<void> {
+    await this.prisma.userActivity.deleteMany({
+      where: {
+        userId,
+        creationDate: {
+          lt: cutoffDate,
+        },
+      },
+    });
+  }
+
   async createUserActivity(createUserActivityDto: CreateUserActivityDto): Promise<UserActivity> {
     try {
       const createdActivity = await this.prisma.userActivity.create({
