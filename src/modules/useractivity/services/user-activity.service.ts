@@ -48,6 +48,27 @@ export class UserActivityService {
     });
   }
 
+  async countUserActivitiesByType(userId: number, activityType: UserActivityType): Promise<number> {
+    return this.prisma.userActivity.count({
+      where: {
+        userId,
+        activityType,
+      },
+    });
+  }
+
+  async filterUserActivitiesByDate(userId: number, startDate: Date, endDate: Date): Promise<UserActivity[]> {
+    return this.prisma.userActivity.findMany({
+      where: {
+        userId,
+        creationDate: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+  }
+
   async createUserActivity(createUserActivityDto: CreateUserActivityDto): Promise<UserActivity> {
     try {
       const createdActivity = await this.prisma.userActivity.create({
