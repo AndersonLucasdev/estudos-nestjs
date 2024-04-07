@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserActivity } from '@prisma/client';
+import { UserActivityType } from '@prisma/client';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import * as bcrypt from 'bcrypt';
@@ -36,6 +37,15 @@ export class UserActivityService {
       throw new NotFoundException('User activity not found.');
     }
     return activity;
+  }
+
+  async getUserActivitiesByType(userId: number, activityType: UserActivityType): Promise<UserActivity[]> {
+    return this.prisma.userActivity.findMany({
+      where: {
+        userId,
+        activityType,
+      },
+    });
   }
 
   async createUserActivity(createUserActivityDto: CreateUserActivityDto): Promise<UserActivity> {
