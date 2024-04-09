@@ -28,7 +28,9 @@ import {
   ApiResponse,
   ApiParam,
   ApiQuery,
+  ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
@@ -133,6 +135,11 @@ export class UserActivityController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create user activity' })
+  @ApiBody({ type: CreateUserActivityDto })
+  @ApiResponse({ status: 201, description: 'User activity created', type: CreateUserActivityDto })
+  @ApiBadRequestResponse({ description: 'Invalid data provided' })
+  @ApiConflictResponse({ description: 'Failed to create user activity' })
   async createUserActivity(
     @Body() createUserActivityDto: CreateUserActivityDto,
   ): Promise<UserActivity> {
@@ -148,6 +155,12 @@ export class UserActivityController {
   }
 
   @Patch('/:activityId')
+  @ApiOperation({ summary: 'Update user activity' })
+  @ApiParam({ name: 'activityId', description: 'Activity ID' })
+  @ApiBody({ type: PatchUserActivityDto })
+  @ApiResponse({ status: 200, description: 'User activity updated', type: CreateUserActivityDto })
+  @ApiNotFoundResponse({ description: 'User activity not found' })
+  @ApiBadRequestResponse({ description: 'Invalid data provided' })
   async updateUserActivity(
     @Param('activityId') activityId: number,
     @Body() patchUserActivityDto: PatchUserActivityDto,
@@ -169,6 +182,11 @@ export class UserActivityController {
   }
 
   @Delete('/:activityId')
+  @ApiOperation({ summary: 'Delete user activity' })
+  @ApiParam({ name: 'activityId', description: 'Activity ID' })
+  @ApiResponse({ status: 204, description: 'User activity deleted' })
+  @ApiNotFoundResponse({ description: 'User activity not found' })
+  @ApiBadRequestResponse({ description: 'Failed to delete user activity' })
   async deleteUserActivity(
     @Param('activityId') activityId: number,
   ): Promise<void> {
