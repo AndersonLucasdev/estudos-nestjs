@@ -24,6 +24,7 @@ import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('User Activities')
 @Controller('posts')
 export class UserActivityController {
   constructor(private readonly userActivityService: UserActivityService) {}
