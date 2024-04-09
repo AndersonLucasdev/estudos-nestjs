@@ -13,10 +13,12 @@ import {
   ConflictException,
   BadRequestException,
   HttpException,
+  Query
 } from '@nestjs/common';
 import { UserActivityService } from '../services/user-activity.service';
 import { UserActivity } from '@prisma/client';
 import { TrimSpaces } from 'src/utils/helpers';
+import { UserActivityType } from '@prisma/client';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
