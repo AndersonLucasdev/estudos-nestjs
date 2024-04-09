@@ -22,6 +22,7 @@ import { UserActivityType } from '@prisma/client';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
 
 @Controller('posts')
 export class UserActivityController {
