@@ -61,6 +61,27 @@ export class UserActivityController {
     return this.userActivityService.countUserActivitiesByType(userId, activityType);
   }
 
+  @Get('/:userId/filter')
+  async filterUserActivitiesByDate(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('startDate') startDate: Date,
+    @Query('endDate') endDate: Date
+  ): Promise<UserActivity[]> {
+    if (!startDate || !endDate) {
+      throw new BadRequestException('Both start date and end date are required.');
+    }
+    return this.userActivityService.filterUserActivitiesByDate(userId, startDate, endDate);
+  }
+
+  @Get('/:userId/recent')
+  async getRecentUserActivities(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('limit') limit: number = 10
+  ): Promise<UserActivity[]> {
+    return this.userActivityService.getRecentUserActivities(userId, limit);
+  }
+
+  
 
   @Post()
   async createUserActivity(
