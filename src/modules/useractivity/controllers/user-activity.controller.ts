@@ -13,7 +13,7 @@ import {
   ConflictException,
   BadRequestException,
   HttpException,
-  Query
+  Query,
 } from '@nestjs/common';
 import { UserActivityService } from '../services/user-activity.service';
 import { UserActivity } from '@prisma/client';
@@ -22,7 +22,15 @@ import { UserActivityType } from '@prisma/client';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('User Activities')
 @Controller('posts')
@@ -30,6 +38,14 @@ export class UserActivityController {
   constructor(private readonly userActivityService: UserActivityService) {}
 
   @Get('/:userId')
+  @ApiOperation({ summary: 'Get user activities' })
+  @ApiParam({ name: 'userId', description: 'User ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'User activities found',
+    type: CreateUserActivityDto,
+    isArray: true,
+  })
   async getUserActivities(
     @Param('userId') userId: number,
   ): Promise<UserActivity[]> {
@@ -37,6 +53,14 @@ export class UserActivityController {
   }
 
   @Get('/:activityId')
+  @ApiOperation({ summary: 'Get user activity by ID' })
+  @ApiParam({ name: 'activityId', description: 'Activity ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'User activity found',
+    type: CreateUserActivityDto,
+  })
+  @ApiNotFoundResponse({ description: 'User activity not found' })
   async getUserActivityById(
     @Param('activityId') activityId: number,
   ): Promise<UserActivity> {
@@ -52,35 +76,47 @@ export class UserActivityController {
   @Get('/:userId/type/:activityType')
   async getUserActivitiesByType(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('activityType') activityType: UserActivityType
+    @Param('activityType') activityType: UserActivityType,
   ): Promise<UserActivity[]> {
-    return this.userActivityService.getUserActivitiesByType(userId, activityType);
+    return this.userActivityService.getUserActivitiesByType(
+      userId,
+      activityType,
+    );
   }
 
   @Get('/:userId/type/:activityType/count')
   async countUserActivitiesByType(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('activityType') activityType: UserActivityType
+    @Param('activityType') activityType: UserActivityType,
   ): Promise<number> {
-    return this.userActivityService.countUserActivitiesByType(userId, activityType);
+    return this.userActivityService.countUserActivitiesByType(
+      userId,
+      activityType,
+    );
   }
 
   @Get('/:userId/filter')
   async filterUserActivitiesByDate(
     @Param('userId', ParseIntPipe) userId: number,
     @Query('startDate') startDate: Date,
-    @Query('endDate') endDate: Date
+    @Query('endDate') endDate: Date,
   ): Promise<UserActivity[]> {
     if (!startDate || !endDate) {
-      throw new BadRequestException('Both start date and end date are required.');
+      throw new BadRequestException(
+        'Both start date and end date are required.',
+      );
     }
-    return this.userActivityService.filterUserActivitiesByDate(userId, startDate, endDate);
+    return this.userActivityService.filterUserActivitiesByDate(
+      userId,
+      startDate,
+      endDate,
+    );
   }
 
   @Get('/:userId/recent')
   async getRecentUserActivities(
     @Param('userId', ParseIntPipe) userId: number,
-    @Query('limit') limit: number = 10
+    @Query('limit') limit: number = 10,
   ): Promise<UserActivity[]> {
     return this.userActivityService.getRecentUserActivities(userId, limit);
   }
@@ -88,7 +124,7 @@ export class UserActivityController {
   @Get('/:userId/delete-old')
   async deleteOldUserActivities(
     @Param('userId', ParseIntPipe) userId: number,
-    @Query('cutoffDate') cutoffDate: Date
+    @Query('cutoffDate') cutoffDate: Date,
   ): Promise<void> {
     if (!cutoffDate) {
       throw new BadRequestException('Cutoff date is required.');
