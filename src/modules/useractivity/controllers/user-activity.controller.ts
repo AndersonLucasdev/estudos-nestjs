@@ -83,7 +83,16 @@ export class UserActivityController {
     return this.userActivityService.getRecentUserActivities(userId, limit);
   }
 
-  
+  @Get('/:userId/delete-old')
+  async deleteOldUserActivities(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('cutoffDate') cutoffDate: Date
+  ): Promise<void> {
+    if (!cutoffDate) {
+      throw new BadRequestException('Cutoff date is required.');
+    }
+    return this.userActivityService.deleteOldUserActivities(userId, cutoffDate);
+  }
 
   @Post()
   async createUserActivity(
