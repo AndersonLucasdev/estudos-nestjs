@@ -14,7 +14,10 @@ import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class UserFollowersService {
-  constructor(private readonly prisma: PrismaService, private readonly webSocketService: WebSocketService,) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly webSocketService: WebSocketService,
+  ) {}
 
   // Method: Check if a user is following another user
   async CheckIfFollowing(
@@ -106,7 +109,14 @@ export class UserFollowersService {
     return unfollowed[0];
   }
 
-  private notifyUserFollowChange(userId: number, followerId: number, message: string): void {
-    this.webSocketService.sendNotificationToUser(userId, { message, followerId });
+  private notifyUserFollowChange(
+    userId: number,
+    followerId: number,
+    message: string,
+  ): void {
+    this.webSocketService.sendNotificationToUser(userId, {
+      message,
+      followerId,
+    });
   }
 }

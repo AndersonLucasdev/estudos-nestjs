@@ -14,7 +14,7 @@ import { WebSocketService } from 'src/modules/websocket/websocket.service';
 export class PostLikeService {
   constructor(
     private readonly prisma: PrismaService,
-    webSocketService: WebSocketService,
+    private readonly webSocketService: WebSocketService,
   ) {}
 
   // Recupera todos os likes
@@ -143,5 +143,20 @@ export class PostLikeService {
     }
 
     return deletedPostLike[0];
+  }
+
+  private async notifyPostLikeChange(postId: number, likerId: number): Promise<void> {
+    // Recupere o autor do post
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+      select: { userId: true },
+    });
+
+    if (!post) {
+      throw new NotFoundException('Post não encontrado.');
+    }
+
+    // Envie uma notificação WebSocket para o autor do post
+    this.webSocketService.sendNotificationToUser(post.userId, { message: `Alguém curtiu seu post.` });
   }
 }
