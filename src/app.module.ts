@@ -34,7 +34,7 @@ import { UserActivityModule } from './modules/useractivity/modules/user-activity
     CommentModule,
     CommentLikeModule,
     NotificationModule,
-    UserActivityModule
+    UserActivityModule,
     PostLikeModule,
     UserFollowersModule,
     ConversationModule,

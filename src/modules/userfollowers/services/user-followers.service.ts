@@ -10,10 +10,11 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserFollowers } from '@prisma/client';
 import { TrimSpaces } from 'src/utils/helpers';
+import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class UserFollowersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly webSocketService: WebSocketService,) {}
 
   // Method: Check if a user is following another user
   async CheckIfFollowing(
