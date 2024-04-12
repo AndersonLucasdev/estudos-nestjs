@@ -15,31 +15,6 @@ export class CommentLikeService {
 
   // Method to get Account Likes In Comment
   async AccountLikesInComment(commentId: number): Promise<number> {
-    // const comment = await this.prisma.comment.findMany({
-    //   where: { id: commentId },
-    //   include: {
-    //     commentLikes: true,
-    //   },
-    // });
-
-    // if (!comment) {
-    //   throw new NotFoundException('Comentário não encontrado.');
-    // }
-
-    // return
-
-    // const comment = await this.prisma.comment.findMany({
-    //   where: { id: commentId },
-    //   include: {
-    //     commentLikes: true,
-    //   },
-    // });
-
-    // if (!comment) {
-    //   throw new NotFoundException('Comentário não encontrado.');
-    // }
-
-    // return
     const comment = await this.prisma.comment.findUnique({
       where: { id: commentId },
       include: {
