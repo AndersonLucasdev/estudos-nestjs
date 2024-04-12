@@ -82,6 +82,8 @@ export class UserFollowersService {
       },
     });
 
+    this.notifyUserFollowChange(relatedUserId, userId, 'Seguindo você agora');
+
     return follow;
   }
 
