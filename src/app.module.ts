@@ -23,6 +23,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UserActivityModule } from './modules/useractivity/modules/user-activity.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     CommentModule,
     CommentLikeModule,
     NotificationModule,
+    UserActivityModule
     PostLikeModule,
     UserFollowersModule,
     ConversationModule,
