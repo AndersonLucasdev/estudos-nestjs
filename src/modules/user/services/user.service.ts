@@ -13,7 +13,6 @@ import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import Follower from '../interface/follower.interface';
 
-
 @Injectable()
 export class UserService {
   constructor(
@@ -119,13 +118,13 @@ export class UserService {
     const followersData = await this.prisma.userFollowers.findMany({
       where: { relatedUserId: userId },
     });
-  
+
     const followers: Follower[] = followersData.map((followerData) => ({
       id: followerData.id,
       userId: followerData.userId,
       relatedUserId: followerData.relatedUserId,
     }));
-  
+
     return followers;
   }
 

@@ -103,4 +103,8 @@ export class UserFollowersService {
 
     return unfollowed[0];
   }
+
+  private notifyUserFollowChange(userId: number, followerId: number, message: string): void {
+    this.webSocketService.sendNotificationToUser(userId, { message, followerId });
+  }
 }
