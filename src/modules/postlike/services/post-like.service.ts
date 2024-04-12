@@ -126,6 +126,8 @@ export class PostLikeService {
       },
     });
 
+    this.notifyPostLikeChange(postId, userId);
+
     return newLike;
   }
 
