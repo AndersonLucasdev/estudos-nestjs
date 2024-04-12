@@ -8,10 +8,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CommentLike, Post, PostLike } from '@prisma/client';
 import { CreatePostLikeDto } from '../dto/CreatePostLike.dto';
 import { TrimSpaces } from 'src/utils/helpers';
+import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class PostLikeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    webSocketService: WebSocketService,
+  ) {}
 
   // Recupera todos os likes
   async GetAllLikes(): Promise<PostLike[]> {
