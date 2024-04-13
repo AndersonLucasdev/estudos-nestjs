@@ -108,6 +108,8 @@ export class CommentService {
       },
     });
 
+    this.notifyPostSubscribers(postId);
+
     return comment;
   }
 
