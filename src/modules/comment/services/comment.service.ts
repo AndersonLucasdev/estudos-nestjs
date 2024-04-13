@@ -138,5 +138,15 @@ export class CommentService {
     return updatedComment;
   }
 
-  
+  private async notifyPostSubscribers(postId: number): Promise<void> {
+    // Recupere todos os usuários que curtiram
+    const postSubscribers = await this.prisma.userFollowers.findMany({
+      where: { relatedUserId: postId }, 
+      select: { userId: true },
+    });
+
+    for (const subscriber of postSubscribers) {
+      this.webSocketService.sendNotificationToUser(subscriber.userId, { message: 'Um novo comentário foi adicionado ao post.' });
+    }
+  }
 }
