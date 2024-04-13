@@ -9,10 +9,11 @@ import { Comment } from '@prisma/client';
 import { CreateCommentDto } from '../dto/CreateComment.dto';
 import { PatchCommentDto } from '../dto/PatchComment.dto';
 import { TrimSpaces } from 'src/utils/helpers';
+import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly webSocketService: WebSocketService,) {}
 
   // Method to get a comment by its ID
   async getCommentById(commentId: number): Promise<Comment> {
@@ -136,4 +137,6 @@ export class CommentService {
 
     return updatedComment;
   }
+
+  
 }
