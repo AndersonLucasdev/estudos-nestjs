@@ -34,6 +34,7 @@ model User {
   notifications    Notification[]
   activities       UserActivity[]
   conversations    Conversation[]  @relation("UserConversations")
+  
   connectionId     String? 
 }
 
@@ -124,6 +125,14 @@ model UserActivity {
   entityId     Int
   creationDate DateTime         @default(now()) @db.Timestamp(6)
   user         User             @relation(fields: [userId], references: [id])
+}
+
+model Story {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  image        String
+  creationDate DateTime @default(now()) @db.Timestamp(6)
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 enum NotificationType {
