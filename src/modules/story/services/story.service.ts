@@ -7,6 +7,6 @@ import {
 
 
 @Injectable()
-export class CommentService {
+export class StoryService {
 
 }
