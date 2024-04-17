@@ -19,6 +19,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
 import { ConversationModule } from './modules/conversation/modules/conversation.module';
 import { NotificationModule } from './modules/notification/modules/notification.module';
+import { StorynModule } from './modules/story/modules/story.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
@@ -32,6 +33,7 @@ import { UserActivityModule } from './modules/useractivity/modules/user-activity
     PostModule,
     AuthModule,
     CommentModule,
+    StorynModule,
     CommentLikeModule,
     NotificationModule,
     UserActivityModule,
