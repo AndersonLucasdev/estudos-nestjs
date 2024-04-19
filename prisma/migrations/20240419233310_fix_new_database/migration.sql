@@ -123,6 +123,24 @@ CREATE TABLE "UserActivity" (
 );
 
 -- CreateTable
+CREATE TABLE "Story" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "postId" INTEGER,
+    "image" TEXT,
+    "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "viewCount" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "Story_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_MessageToStory" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_UserConversations" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -130,6 +148,12 @@ CREATE TABLE "_UserConversations" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserFollowers_userId_relatedUserId_key" ON "UserFollowers"("userId", "relatedUserId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_MessageToStory_AB_unique" ON "_MessageToStory"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_MessageToStory_B_index" ON "_MessageToStory"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UserConversations_AB_unique" ON "_UserConversations"("A", "B");
@@ -178,6 +202,18 @@ ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "UserActivity" ADD CONSTRAINT "UserActivity_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Story" ADD CONSTRAINT "Story_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Story" ADD CONSTRAINT "Story_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_MessageToStory" ADD CONSTRAINT "_MessageToStory_A_fkey" FOREIGN KEY ("A") REFERENCES "Message"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_MessageToStory" ADD CONSTRAINT "_MessageToStory_B_fkey" FOREIGN KEY ("B") REFERENCES "Story"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserConversations" ADD CONSTRAINT "_UserConversations_A_fkey" FOREIGN KEY ("A") REFERENCES "Conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
