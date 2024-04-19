@@ -13,4 +13,11 @@ import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
-export class StoryService {}
+export class StoryService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly webSocketService: WebSocketService,
+  ) {}
+
+  
+}
