@@ -25,4 +25,6 @@ import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
+
+  
 }

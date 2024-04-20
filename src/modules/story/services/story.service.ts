@@ -22,7 +22,7 @@ export class StoryService {
   async GetStoryById(id: number): Promise<Story> {
     const story = await this.prisma.story.findUnique({ where: { id } });
     if (!story) {
-      throw new NotFoundException('História não encontrada.');
+      throw new NotFoundException('Story não encontrada.');
     }
     return story;
   }
@@ -38,7 +38,7 @@ export class StoryService {
       data: storyData,
     });
     if (!updatedStory) {
-      throw new NotFoundException(`História com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story com ID ${id} não encontrada`);
     }
     return updatedStory;
   }
@@ -46,7 +46,7 @@ export class StoryService {
   async DeleteStory(id: number): Promise<void> {
     const deletedStory = await this.prisma.story.delete({ where: { id } });
     if (!deletedStory) {
-      throw new NotFoundException(`História com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story com ID ${id} não encontrada`);
     }
   }
 }
