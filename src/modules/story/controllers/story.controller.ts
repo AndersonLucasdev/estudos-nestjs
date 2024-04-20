@@ -30,7 +30,7 @@ export class StoryController {
   async getStoryById(@Param('id') id: number): Promise<Story> {
     const story = await this.storyService.GetStoryById(id);
     if (!story) {
-      throw new NotFoundException('História não encontrada.');
+      throw new NotFoundException('Story não encontrada.');
     }
     return story;
   }
@@ -41,19 +41,23 @@ export class StoryController {
   }
 
   @Patch(':id')
-  async updateStory(@Param('id') id: number, @Body() storyData: PatchStoryDto): Promise<Story> {
+  async updateStory(
+    @Param('id') id: number,
+    @Body() storyData: PatchStoryDto,
+  ): Promise<Story> {
     const updatedStory = await this.storyService.UpdateStory(id, storyData);
     if (!updatedStory) {
-      throw new NotFoundException(`História com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story com ID ${id} não encontrada`);
     }
     return updatedStory;
   }
 
   @Delete(':id')
   async deleteStory(@Param('id') id: number): Promise<void> {
-    const deletedStory = await this.storyService.DeleteStory(id);
+    await this.storyService.DeleteStory(id);
+    const deletedStory = await this.storyService.GetStoryById(id);
     if (!deletedStory) {
-      throw new NotFoundException(`História com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story com ID ${id} não encontrada`);
     }
   }
 }
