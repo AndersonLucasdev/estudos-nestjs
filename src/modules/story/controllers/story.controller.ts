@@ -17,9 +17,9 @@ import {
 } from '@nestjs/common';
 import { StoryService } from '../services/story.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from '@prisma/client';
-import { CreateUserDto } from 'src/modules/user/dto/CreatUser.dto';
-import { PatchUserDto } from 'src/modules/user/dto/PatchUser.dto';
+import { Story } from '@prisma/client';
+import { CreateStoryDto } from '../dto/CreateStory.dto';
+import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Controller('stories')
@@ -28,7 +28,7 @@ export class StoryController {
 
   @Get(':id')
   async getStoryById(@Param('id') id: number): Promise<Story> {
-    const story = await this.storyService.getStoryById(id);
+    const story = await this.storyService.GetStoryById(id);
     if (!story) {
       throw new NotFoundException('História não encontrada.');
     }
@@ -37,12 +37,12 @@ export class StoryController {
 
   @Post()
   async createStory(@Body() storyData: CreateStoryDto): Promise<Story> {
-    return this.storyService.createStory(storyData);
+    return this.storyService.CreateStory(storyData);
   }
 
   @Patch(':id')
   async updateStory(@Param('id') id: number, @Body() storyData: PatchStoryDto): Promise<Story> {
-    const updatedStory = await this.storyService.updateStory(id, storyData);
+    const updatedStory = await this.storyService.UpdateStory(id, storyData);
     if (!updatedStory) {
       throw new NotFoundException(`História com ID ${id} não encontrada`);
     }
@@ -51,7 +51,7 @@ export class StoryController {
 
   @Delete(':id')
   async deleteStory(@Param('id') id: number): Promise<void> {
-    const deletedStory = await this.storyService.deleteStory(id);
+    const deletedStory = await this.storyService.DeleteStory(id);
     if (!deletedStory) {
       throw new NotFoundException(`História com ID ${id} não encontrada`);
     }
