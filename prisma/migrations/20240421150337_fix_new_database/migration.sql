@@ -130,6 +130,7 @@ CREATE TABLE "Story" (
     "image" TEXT,
     "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "viewCount" INTEGER NOT NULL DEFAULT 0,
+    "expirationDate" TIMESTAMP(3),
 
     CONSTRAINT "Story_pkey" PRIMARY KEY ("id")
 );
