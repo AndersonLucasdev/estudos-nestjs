@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import { Message } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class StoryService {
@@ -60,19 +61,20 @@ export class StoryService {
     return updatedStory;
   }
 
-  async getUsersWhoViewedStory(storyId: number): Promise<string[]> {
-    const story = await this.GetStoryById(storyId);
-    const viewers = await this.prisma.storyView.findMany({
-      where: { storyId },
-      select: { userId: true },
+  async getUsersWhoViewedStory(storyId: number): Promise<User[]> {
+    const story = await this.prisma.story.findUnique({
+      where: { id: storyId },
+      include: { user: true }, // Incluir os dados completos do usuário
     });
-    return viewers.map(viewer => viewer.userId);
+    if (!story || !story.user) {
+      throw new NotFoundException(`História com ID ${storyId} não encontrada`);
+    }
+    return [story.user]; // Retorna um array contendo o usuário
   }
 
   async getStoryReplies(storyId: number): Promise<Message[]> {
-    const replies = await this.prisma.message.findMany({
-      where: { postId: storyId },
-    });
+    const story = await this.GetStoryById(storyId);
+    const replies = story.replies;
     return replies;
   }
 
