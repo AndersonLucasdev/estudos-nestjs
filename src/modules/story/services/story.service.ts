@@ -11,6 +11,7 @@ import { PatchStoryDto } from '../dto/PatchStory.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
+import { Message } from '@prisma/client';
 
 @Injectable()
 export class StoryService {
@@ -27,7 +28,7 @@ export class StoryService {
     return story;
   }
 
-  async getStoriesByUser(userId: number): Promise<Story[]> {
+  async getStoriesByUserId(userId: number): Promise<Story[]> {
     const stories = await this.prisma.story.findMany({
       where: { userId },
     });
@@ -52,16 +53,15 @@ export class StoryService {
   }
 
   async incrementViewCount(storyId: number): Promise<Story> {
-    const story = await this.getStoryById(storyId);
     const updatedStory = await this.prisma.story.update({
       where: { id: storyId },
-      data: { viewCount: story.viewCount + 1 },
+      data: { viewCount: { increment: 1 } },
     });
     return updatedStory;
   }
 
   async getUsersWhoViewedStory(storyId: number): Promise<string[]> {
-    const story = await this.getStoryById(storyId);
+    const story = await this.GetStoryById(storyId);
     const viewers = await this.prisma.storyView.findMany({
       where: { storyId },
       select: { userId: true },
@@ -70,7 +70,6 @@ export class StoryService {
   }
 
   async getStoryReplies(storyId: number): Promise<Message[]> {
-    const story = await this.getStoryById(storyId);
     const replies = await this.prisma.message.findMany({
       where: { postId: storyId },
     });

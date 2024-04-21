@@ -99,7 +99,7 @@ model Message {
   sender         User          @relation("SentMessages", fields: [senderId], references: [id])
   recipient      User          @relation("ReceivedMessages", fields: [recipientId], references: [id])
   conversation   Conversation? @relation(fields: [conversationId], references: [id])
-  storyReplies   Story[]
+  storyReplies   Story[]       @relation("StoryReplies")
   conversationId Int?
 }
 
@@ -137,10 +137,9 @@ model Story {
   creationDate    DateTime  @default(now()) @db.Timestamp(6)
   viewCount       Int       @default(0)  
   expirationDate  DateTime?
-  replies         Message[] 
+  replies         Message[]  @relation("StoryReplies")
   user            User      @relation(fields: [userId], references: [id])
   post            Post?     @relation(fields: [postId], references: [id])
-  
 }
 
 enum NotificationType {
