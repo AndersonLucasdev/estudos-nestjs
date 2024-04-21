@@ -28,7 +28,15 @@ export class StoryService {
   }
 
   async CreateStory(storyData: CreateStoryDto): Promise<Story> {
-    const createdStory = await this.prisma.story.create({ data: storyData });
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 1);
+
+    const createdStory = await this.prisma.story.create({ 
+      data: { 
+        ...storyData,
+        expirationDate,
+      } 
+    });
     return createdStory;
   }
 
