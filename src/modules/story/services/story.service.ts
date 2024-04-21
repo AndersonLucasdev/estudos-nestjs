@@ -27,6 +27,30 @@ export class StoryService {
     return story;
   }
 
+  async getStoriesByUser(userId: number): Promise<Story[]> {
+    const stories = await this.prisma.story.findMany({
+      where: { userId },
+    });
+    return stories;
+  }
+
+  async getLast24HoursStoriesByUser(userId: number): Promise<Story[]> {
+    const currentDateTime = new Date();
+    const twentyFourHoursAgo = new Date(currentDateTime);
+    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1); // coloca um limite 24h
+
+    const stories = await this.prisma.story.findMany({
+      where: {
+        userId,
+        creationDate: {
+          gte: twentyFourHoursAgo,
+          lte: currentDateTime, // momento atual até 24 horas
+        },
+      },
+    });
+    return stories;
+  }
+
   async CreateStory(storyData: CreateStoryDto): Promise<Story> {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 1);
