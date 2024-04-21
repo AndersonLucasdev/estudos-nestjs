@@ -39,7 +39,7 @@ export class StoryService {
   async getLast24HoursStoriesByUser(userId: number): Promise<Story[]> {
     const currentDateTime = new Date();
     const twentyFourHoursAgo = new Date(currentDateTime);
-    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1); // coloca um limite 24h
+    twentyFourHoursAgo.setDate(twentyFourHoursAgo.getDate() - 1); // limite 24h
 
     const stories = await this.prisma.story.findMany({
       where: {
@@ -64,18 +64,23 @@ export class StoryService {
   async getUsersWhoViewedStory(storyId: number): Promise<User[]> {
     const story = await this.prisma.story.findUnique({
       where: { id: storyId },
-      include: { user: true }, // Incluir os dados completos do usuário
+      include: { user: true },
     });
     if (!story || !story.user) {
-      throw new NotFoundException(`História com ID ${storyId} não encontrada`);
+      throw new NotFoundException(`Story não encontrada: ID ${storyId}`);
     }
-    return [story.user]; // Retorna um array contendo o usuário
+    return [story.user]; // Retorna lista com users
   }
 
   async getStoryReplies(storyId: number): Promise<Message[]> {
-    const story = await this.GetStoryById(storyId);
-    const replies = story.replies;
-    return replies;
+    const story = await this.prisma.story.findUnique({
+      where: { id: storyId },
+      include: { replies: true },
+    });
+    if (!story) {
+      throw new NotFoundException(`História não encontrada: ID ${storyId}`);
+    }
+    return story.replies;
   }
 
   async CreateStory(storyData: CreateStoryDto): Promise<Story> {
@@ -97,7 +102,7 @@ export class StoryService {
       data: storyData,
     });
     if (!updatedStory) {
-      throw new NotFoundException(`Story com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story não encontrada: ID ${id}`);
     }
     return updatedStory;
   }
@@ -105,7 +110,7 @@ export class StoryService {
   async DeleteStory(id: number): Promise<void> {
     const deletedStory = await this.prisma.story.delete({ where: { id } });
     if (!deletedStory) {
-      throw new NotFoundException(`Story com ID ${id} não encontrada`);
+      throw new NotFoundException(`Story não encontrada: ID ${id}`);
     }
   }
 }
