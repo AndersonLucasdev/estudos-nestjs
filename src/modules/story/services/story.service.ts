@@ -51,6 +51,32 @@ export class StoryService {
     return stories;
   }
 
+  async incrementViewCount(storyId: number): Promise<Story> {
+    const story = await this.getStoryById(storyId);
+    const updatedStory = await this.prisma.story.update({
+      where: { id: storyId },
+      data: { viewCount: story.viewCount + 1 },
+    });
+    return updatedStory;
+  }
+
+  async getUsersWhoViewedStory(storyId: number): Promise<string[]> {
+    const story = await this.getStoryById(storyId);
+    const viewers = await this.prisma.storyView.findMany({
+      where: { storyId },
+      select: { userId: true },
+    });
+    return viewers.map(viewer => viewer.userId);
+  }
+
+  async getStoryReplies(storyId: number): Promise<Message[]> {
+    const story = await this.getStoryById(storyId);
+    const replies = await this.prisma.message.findMany({
+      where: { postId: storyId },
+    });
+    return replies;
+  }
+
   async CreateStory(storyData: CreateStoryDto): Promise<Story> {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 1);
