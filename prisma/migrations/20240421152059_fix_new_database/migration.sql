@@ -136,7 +136,7 @@ CREATE TABLE "Story" (
 );
 
 -- CreateTable
-CREATE TABLE "_MessageToStory" (
+CREATE TABLE "_StoryReplies" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -151,10 +151,10 @@ CREATE TABLE "_UserConversations" (
 CREATE UNIQUE INDEX "UserFollowers_userId_relatedUserId_key" ON "UserFollowers"("userId", "relatedUserId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_MessageToStory_AB_unique" ON "_MessageToStory"("A", "B");
+CREATE UNIQUE INDEX "_StoryReplies_AB_unique" ON "_StoryReplies"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_MessageToStory_B_index" ON "_MessageToStory"("B");
+CREATE INDEX "_StoryReplies_B_index" ON "_StoryReplies"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_UserConversations_AB_unique" ON "_UserConversations"("A", "B");
@@ -211,10 +211,10 @@ ALTER TABLE "Story" ADD CONSTRAINT "Story_userId_fkey" FOREIGN KEY ("userId") RE
 ALTER TABLE "Story" ADD CONSTRAINT "Story_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_MessageToStory" ADD CONSTRAINT "_MessageToStory_A_fkey" FOREIGN KEY ("A") REFERENCES "Message"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_StoryReplies" ADD CONSTRAINT "_StoryReplies_A_fkey" FOREIGN KEY ("A") REFERENCES "Message"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_MessageToStory" ADD CONSTRAINT "_MessageToStory_B_fkey" FOREIGN KEY ("B") REFERENCES "Story"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_StoryReplies" ADD CONSTRAINT "_StoryReplies_B_fkey" FOREIGN KEY ("B") REFERENCES "Story"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserConversations" ADD CONSTRAINT "_UserConversations_A_fkey" FOREIGN KEY ("A") REFERENCES "Conversation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
