@@ -136,9 +136,11 @@ model Story {
   image           String?
   creationDate    DateTime  @default(now()) @db.Timestamp(6)
   viewCount       Int       @default(0)  
+  expirationDate  DateTime?
   replies         Message[] 
   user            User      @relation(fields: [userId], references: [id])
   post            Post?     @relation(fields: [postId], references: [id])
+  
 }
 
 enum NotificationType {
