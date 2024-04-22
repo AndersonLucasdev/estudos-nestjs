@@ -21,7 +21,8 @@ import { Story } from '@prisma/client';
 import { CreateStoryDto } from '../dto/CreateStory.dto';
 import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
-
+import { User } from '@prisma/client';
+import { Message } from '@prisma/client';
 
 @Controller('stories')
 export class StoryController {
@@ -58,6 +59,14 @@ export class StoryController {
       throw new NotFoundException('Story não encontrado.');
     }
     return users;
+  }
+
+  async getStoryReplies(storyId: number): Promise<Message[]> {
+    const replies = await this.storyService.getStoryReplies(storyId);
+    if (!replies || replies.length === 0) {
+      throw new NotFoundException('Story não encontrado.');
+    }
+    return replies;
   }
 
   @Post()
