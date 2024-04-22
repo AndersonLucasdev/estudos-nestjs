@@ -37,6 +37,7 @@ export class StoryController {
     return story;
   }
 
+  @Get('user/:userId')
   async getStoriesByUserId(userId: number): Promise<Story[]> {
     const stories = await this.storyService.getStoriesByUserId(userId);
     if (!stories || stories.length === 0) {
@@ -45,28 +46,40 @@ export class StoryController {
     return stories;
   }
 
+  @Get('user/:userId/last24hours')
   async getLast24HoursStoriesByUser(userId: number): Promise<Story[]> {
     const stories = await this.storyService.getLast24HoursStoriesByUser(userId);
     if (!stories || stories.length === 0) {
-      throw new NotFoundException('Story não encontrado.');
+      throw new NotFoundException('Stories não encontrados.');
     }
     return stories;
   }
   
+  @Get(':id/viewers')
   async getUsersWhoViewedStory(storyId: number): Promise<User[]> {
     const users = await this.storyService.getUsersWhoViewedStory(storyId);
     if (!users || users.length === 0) {
-      throw new NotFoundException('Story não encontrado.');
+      throw new NotFoundException('Usuários não encontrados.');
     }
     return users;
   }
 
+  @Get(':id/replies')
   async getStoryReplies(storyId: number): Promise<Message[]> {
     const replies = await this.storyService.getStoryReplies(storyId);
     if (!replies || replies.length === 0) {
       throw new NotFoundException('Story não encontrado.');
     }
     return replies;
+  }
+
+  @Get(':id/increment-view-count')
+  async incrementViewCount(@Param('id') storyId: number): Promise<Story> {
+    const viewscount = await this.storyService.incrementViewCount(storyId);
+    if (!viewscount) {
+      throw new NotFoundException(`Erro ao contar usuários.`);
+    }
+    return viewscount;
   }
 
   @Post()
