@@ -22,6 +22,7 @@ import { CreateStoryDto } from '../dto/CreateStory.dto';
 import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
+
 @Controller('stories')
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
@@ -41,6 +42,22 @@ export class StoryController {
       throw new NotFoundException('Story não encontrado.');
     }
     return stories;
+  }
+
+  async getLast24HoursStoriesByUser(userId: number): Promise<Story[]> {
+    const stories = await this.storyService.getLast24HoursStoriesByUser(userId);
+    if (!stories || stories.length === 0) {
+      throw new NotFoundException('Story não encontrado.');
+    }
+    return stories;
+  }
+  
+  async getUsersWhoViewedStory(storyId: number): Promise<User[]> {
+    const users = await this.storyService.getUsersWhoViewedStory(storyId);
+    if (!users || users.length === 0) {
+      throw new NotFoundException('Story não encontrado.');
+    }
+    return users;
   }
 
   @Post()
