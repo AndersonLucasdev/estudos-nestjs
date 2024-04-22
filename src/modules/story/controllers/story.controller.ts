@@ -30,9 +30,17 @@ export class StoryController {
   async getStoryById(@Param('id') id: number): Promise<Story> {
     const story = await this.storyService.GetStoryById(id);
     if (!story) {
-      throw new NotFoundException('Story não encontrada.');
+      throw new NotFoundException('Story não encontrado.');
     }
     return story;
+  }
+
+  async getStoriesByUserId(userId: number): Promise<Story[]> {
+    const stories = await this.storyService.getStoriesByUserId(userId);
+    if (!stories || stories.length === 0) {
+      throw new NotFoundException('Story não encontrado.');
+    }
+    return stories;
   }
 
   @Post()
