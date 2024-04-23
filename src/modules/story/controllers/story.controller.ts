@@ -25,6 +25,7 @@ import { User } from '@prisma/client';
 import { Message } from '@prisma/client';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
+@ApiTags('Stories')
 @Controller('stories')
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
