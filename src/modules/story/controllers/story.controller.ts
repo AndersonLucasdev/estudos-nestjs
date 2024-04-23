@@ -44,6 +44,10 @@ export class StoryController {
   }
 
   @Get('user/:userId')
+  @ApiOperation({ summary: 'Get stories by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Stories found successfully.' })
+  @ApiResponse({ status: 404, description: 'Stories not found.' })
   async getStoriesByUserId(userId: number): Promise<Story[]> {
     const stories = await this.storyService.getStoriesByUserId(userId);
     if (!stories || stories.length === 0) {
@@ -53,6 +57,10 @@ export class StoryController {
   }
 
   @Get('user/:userId/last24hours')
+  @ApiOperation({ summary: 'Get stories by user ID posted in the last 24 hours' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Stories found successfully.' })
+  @ApiResponse({ status: 404, description: 'Stories not found.' })
   async getLast24HoursStoriesByUser(userId: number): Promise<Story[]> {
     const stories = await this.storyService.getLast24HoursStoriesByUser(userId);
     if (!stories || stories.length === 0) {
@@ -62,6 +70,10 @@ export class StoryController {
   }
   
   @Get(':id/viewers')
+  @ApiOperation({ summary: 'Get users who viewed a story' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'Users found successfully.' })
+  @ApiResponse({ status: 404, description: 'Users not found.' })
   async getUsersWhoViewedStory(storyId: number): Promise<User[]> {
     const users = await this.storyService.getUsersWhoViewedStory(storyId);
     if (!users || users.length === 0) {
@@ -71,6 +83,10 @@ export class StoryController {
   }
 
   @Get(':id/replies')
+  @ApiOperation({ summary: 'Get replies to a story' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'Replies found successfully.' })
+  @ApiResponse({ status: 404, description: 'Replies not found.' })
   async getStoryReplies(storyId: number): Promise<Message[]> {
     const replies = await this.storyService.getStoryReplies(storyId);
     if (!replies || replies.length === 0) {
@@ -79,7 +95,11 @@ export class StoryController {
     return replies;
   }
 
-  @Get(':id/increment-view-count')
+  @Patch(':id/increment-view-count')
+  @ApiOperation({ summary: 'Increment view count of a story' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'View count incremented successfully.' })
+  @ApiResponse({ status: 404, description: 'Story not found.' })
   async incrementViewCount(@Param('id') storyId: number): Promise<Story> {
     const viewscount = await this.storyService.incrementViewCount(storyId);
     if (!viewscount) {
