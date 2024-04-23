@@ -31,6 +31,10 @@ export class StoryController {
   constructor(private readonly storyService: StoryService) {}
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a story by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'Story found successfully.' })
+  @ApiResponse({ status: 404, description: 'Story not found.' })
   async getStoryById(@Param('id') id: number): Promise<Story> {
     const story = await this.storyService.GetStoryById(id);
     if (!story) {
@@ -85,11 +89,19 @@ export class StoryController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new story' })
+  @ApiBody({ type: CreateStoryDto })
+  @ApiResponse({ status: 201, description: 'Story created successfully.' })
   async createStory(@Body() storyData: CreateStoryDto): Promise<Story> {
     return this.storyService.CreateStory(storyData);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a story by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiBody({ type: PatchStoryDto })
+  @ApiResponse({ status: 200, description: 'Story updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Story not found.' })
   async updateStory(
     @Param('id') id: number,
     @Body() storyData: PatchStoryDto,
@@ -102,6 +114,9 @@ export class StoryController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a story by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'Story deleted successfully.' })
   async deleteStory(@Param('id') id: number): Promise<void> {
     await this.storyService.DeleteStory(id);
     const deletedStory = await this.storyService.GetStoryById(id);
