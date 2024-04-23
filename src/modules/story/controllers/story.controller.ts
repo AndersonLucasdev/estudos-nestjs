@@ -23,6 +23,7 @@ import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import { User } from '@prisma/client';
 import { Message } from '@prisma/client';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @Controller('stories')
 export class StoryController {
