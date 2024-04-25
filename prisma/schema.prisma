@@ -34,6 +34,8 @@ model User {
   notifications    Notification[]
   activities       UserActivity[]
   conversations    Conversation[]  @relation("UserConversations")
+  blockedUsers     Block[] @relation("BlockedUser")
+  blockingUsers    Block[] @relation("BlockingUser")
   stories          Story[]
   connectionId     String? 
 }
@@ -133,11 +135,8 @@ model Block {
   id               Int    @id @default(autoincrement())
   userId           Int
   blockedUserId    Int
-  createdAt        DateTime @default(now()) @db.Timestamp(6)
-  user             User   @relation(fields: [userId], references: [id])
+  user             User   @relation("BlockingUser", fields: [userId], references: [id])
   blockedUser      User   @relation("BlockedUser", fields: [blockedUserId], references: [id])
-
-  @@unique([userId, blockedUserId])
 }
 
 model Story {
