@@ -72,6 +72,19 @@ model CommentLike {
   user      User    @relation(fields: [userId], references: [id])
 }
 
+model Like {
+  id         Int   @id @default(autoincrement())
+  userId     Int
+  postId     Int?
+  commentId  Int?
+  storyId    Int?
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  user       User  @relation(fields: [userId], references: [id])
+  post       Post? @relation(fields: [postId], references: [id])
+  comment    Comment? @relation(fields: [commentId], references: [id])
+  story      Story? @relation(fields: [storyId], references: [id])
+}
+
 model PostLike {
   id     Int  @id @default(autoincrement())
   postId Int
