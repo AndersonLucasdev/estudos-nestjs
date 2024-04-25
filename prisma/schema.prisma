@@ -13,57 +13,57 @@ model User {
   id               Int             @id @default(autoincrement())
   username         String          @db.VarChar(50)
   name             String          @db.VarChar(100)
-  Bio              String?
   email            String          @db.VarChar(100)
   password         String          @db.VarChar(60)
   confirmPassword  String          @db.VarChar(60)
-  phone            String?         @db.VarChar(20)
   creationDate     DateTime        @default(now()) @db.Timestamp(6)
   lastUpdateDate   DateTime        @updatedAt
-  gender           Gender?
   birthDate        DateTime?       @db.Date
+  phone            String?         @db.VarChar(20)
+  Bio              String?
+  gender           Gender?
   profilePhoto     String?
+  connectionId     String?
   comments         Comment[]
   commentLikes     CommentLike[]
   posts            Post[]
   postLikes        PostLike[]
+  notifications    Notification[]
+  activities       UserActivity[]
+  stories          Story[]
   following        UserFollowers[] @relation("Following")
   followers        UserFollowers[] @relation("UserFollowers")
   sentMessages     Message[]       @relation("SentMessages")
   receivedMessages Message[]       @relation("ReceivedMessages")
-  notifications    Notification[]
-  activities       UserActivity[]
   conversations    Conversation[]  @relation("UserConversations")
-  blockedUsers     Block[] @relation("BlockedUser")
-  blockingUsers    Block[] @relation("BlockingUser")
-  stories          Story[]
-  connectionId     String? 
+  blockedUsers     Block[]         @relation("BlockedUser")
+  blockingUsers    Block[]         @relation("BlockingUser")
 }
 
 model Post {
   id              Int        @id @default(autoincrement())
-  userId          Int
-  image           String?
-  description     String
   creationDate    DateTime   @default(now()) @db.Timestamp(6)
   disableComments Boolean    @default(false)
   likes           Int        @default(0)
+  userId          Int
+  description     String
+  image           String?
   comments        Comment[]
-  user            User       @relation(fields: [userId], references: [id])
   postLikes       PostLike[]
   stories         Story[]
+  user            User       @relation(fields: [userId], references: [id])
 }
 
 model Comment {
   id           Int           @id @default(autoincrement())
+  creationDate DateTime      @default(now()) @db.Timestamp(6)
+  likes        Int           @default(0)
   postId       Int
   userId       Int
   content      String
-  creationDate DateTime      @default(now()) @db.Timestamp(6)
-  likes        Int           @default(0)
+  commentLikes CommentLike[]
   post         Post          @relation(fields: [postId], references: [id])
   user         User          @relation(fields: [userId], references: [id])
-  commentLikes CommentLike[]
 }
 
 model CommentLike {
@@ -97,12 +97,12 @@ model Message {
   senderId       Int
   recipientId    Int
   content        String
+  conversationId Int?
   creationDate   DateTime      @default(now()) @db.Timestamp(6)
   sender         User          @relation("SentMessages", fields: [senderId], references: [id])
   recipient      User          @relation("ReceivedMessages", fields: [recipientId], references: [id])
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
   storyReplies   Story[]       @relation("StoryReplies")
-  conversationId Int?
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
 }
 
 model Conversation {
@@ -114,42 +114,42 @@ model Conversation {
 
 model Notification {
   id           Int              @id @default(autoincrement())
+  creationDate DateTime         @default(now()) @db.Timestamp(6)
+  read         Boolean          @default(false)
   userId       Int
   message      String
-  creationDate DateTime         @default(now()) @db.Timestamp(6)
-  user         User             @relation(fields: [userId], references: [id])
   type         NotificationType
-  read         Boolean          @default(false)
+  user         User             @relation(fields: [userId], references: [id])
 }
 
 model UserActivity {
   id           Int              @id @default(autoincrement())
-  userId       Int
-  activityType UserActivityType
-  entityId     Int
   creationDate DateTime         @default(now()) @db.Timestamp(6)
+  userId       Int
+  entityId     Int
+  activityType UserActivityType
   user         User             @relation(fields: [userId], references: [id])
 }
 
 model Block {
-  id               Int    @id @default(autoincrement())
-  userId           Int
-  blockedUserId    Int
-  user             User   @relation("BlockingUser", fields: [userId], references: [id])
-  blockedUser      User   @relation("BlockedUser", fields: [blockedUserId], references: [id])
+  id            Int  @id @default(autoincrement())
+  userId        Int
+  blockedUserId Int
+  user          User @relation("BlockingUser", fields: [userId], references: [id])
+  blockedUser   User @relation("BlockedUser", fields: [blockedUserId], references: [id])
 }
 
 model Story {
-  id              Int       @id @default(autoincrement())
-  userId          Int
-  postId          Int?
-  image           String?
-  creationDate    DateTime  @default(now()) @db.Timestamp(6)
-  viewCount       Int       @default(0)  
-  expirationDate  DateTime?
-  replies         Message[]  @relation("StoryReplies")
-  user            User      @relation(fields: [userId], references: [id])
-  post            Post?     @relation(fields: [postId], references: [id])
+  id             Int       @id @default(autoincrement())
+  creationDate   DateTime  @default(now()) @db.Timestamp(6)
+  viewCount      Int       @default(0)
+  userId         Int
+  postId         Int?
+  image          String?
+  expirationDate DateTime?
+  user           User      @relation(fields: [userId], references: [id])
+  replies        Message[] @relation("StoryReplies")
+  post           Post?     @relation(fields: [postId], references: [id])
 }
 
 enum NotificationType {
