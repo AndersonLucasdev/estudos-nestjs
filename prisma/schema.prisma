@@ -38,6 +38,7 @@ model User {
   conversations    Conversation[]  @relation("UserConversations")
   blockedUsers     Block[]         @relation("BlockedUser")
   blockingUsers    Block[]         @relation("BlockingUser")
+  tags             Tag[]           @relation("TaggedUsers")
 }
 
 model Post {
@@ -51,22 +52,22 @@ model Post {
   comments        Comment[]
   postLikes       PostLike[]
   stories         Story[]
+  tags            Tag[]
   user            User       @relation(fields: [userId], references: [id])
 }
 
 model Tag {
-  id            Int    @id @default(autoincrement())
-  userId        Int
-  postId        Int?
-  commentId     Int?
-  storyId       Int?
-  taggedUserId  Int
-  createdAt     DateTime @default(now()) @db.Timestamp(6)
-  user          User   @relation(fields: [userId], references: [id])
-  taggedUser    User   @relation("TaggedUsers", fields: [taggedUserId], references: [id])
-  post          Post?  @relation(fields: [postId], references: [id])
-  comment       Comment? @relation(fields: [commentId], references: [id])
-  story         Story? @relation(fields: [storyId], references: [id])
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  postId       Int?
+  commentId    Int?
+  storyId      Int?
+  taggedUserId Int
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  user         User     @relation("TaggedUsers", fields: [taggedUserId], references: [id])
+  post         Post?    @relation(fields: [postId], references: [id])
+  comment      Comment? @relation(fields: [commentId], references: [id])
+  story        Story?   @relation(fields: [storyId], references: [id])
 }
 
 model Comment {
@@ -77,6 +78,7 @@ model Comment {
   userId       Int
   content      String
   commentLikes CommentLike[]
+  tags         Tag[]
   post         Post          @relation(fields: [postId], references: [id])
   user         User          @relation(fields: [userId], references: [id])
 }
@@ -162,6 +164,7 @@ model Story {
   postId         Int?
   image          String?
   expirationDate DateTime?
+  tags           Tag[]
   user           User      @relation(fields: [userId], references: [id])
   replies        Message[] @relation("StoryReplies")
   post           Post?     @relation(fields: [postId], references: [id])
