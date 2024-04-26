@@ -21,9 +21,9 @@ model User {
   birthDate        DateTime?       @db.Date
   phone            String?         @db.VarChar(20)
   Bio              String?
-  gender           Gender?
   profilePhoto     String?
   connectionId     String?
+  gender           Gender?
   comments         Comment[]
   commentLikes     CommentLike[]
   posts            Post[]
@@ -58,12 +58,12 @@ model Post {
 
 model Tag {
   id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  taggedUserId Int
   userId       Int
   postId       Int?
   commentId    Int?
   storyId      Int?
-  taggedUserId Int
-  createdAt    DateTime @default(now()) @db.Timestamp(6)
   user         User     @relation("TaggedUsers", fields: [taggedUserId], references: [id])
   post         Post?    @relation(fields: [postId], references: [id])
   comment      Comment? @relation(fields: [commentId], references: [id])
@@ -111,15 +111,15 @@ model UserFollowers {
 
 model Message {
   id             Int           @id @default(autoincrement())
+  creationDate   DateTime      @default(now()) @db.Timestamp(6)
   senderId       Int
   recipientId    Int
   content        String
   conversationId Int?
-  creationDate   DateTime      @default(now()) @db.Timestamp(6)
   sender         User          @relation("SentMessages", fields: [senderId], references: [id])
   recipient      User          @relation("ReceivedMessages", fields: [recipientId], references: [id])
-  storyReplies   Story[]       @relation("StoryReplies")
   conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  storyReplies   Story[]       @relation("StoryReplies")
 }
 
 model Conversation {
@@ -166,8 +166,8 @@ model Story {
   expirationDate DateTime?
   tags           Tag[]
   user           User      @relation(fields: [userId], references: [id])
-  replies        Message[] @relation("StoryReplies")
   post           Post?     @relation(fields: [postId], references: [id])
+  replies        Message[] @relation("StoryReplies")
 }
 
 enum NotificationType {
