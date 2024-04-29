@@ -170,6 +170,11 @@ model Story {
   replies        Message[] @relation("StoryReplies")
 }
 
+enum ReportStatus {
+  AWAITING_REVIEW
+  RESOLVED
+}
+
 enum NotificationType {
   LIKE
   COMMENT
