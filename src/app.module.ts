@@ -9,6 +9,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
 import { AuthModule } from './modules/auth/modules/auth.module';
+import { BlockModule } from './modules/block/modules/block.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
 import { CommentModule } from './modules/comment/modules/comment.module';
 import { PostLikeModule } from './modules/postlike/modules/post-like.module';
@@ -35,6 +36,7 @@ import { UserActivityModule } from './modules/useractivity/modules/user-activity
     CommentModule,
     StorynModule,
     CommentLikeModule,
+    BlockModule,
     NotificationModule,
     UserActivityModule,
     PostLikeModule,
