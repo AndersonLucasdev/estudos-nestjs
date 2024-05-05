@@ -53,4 +53,14 @@ export class BlockController {
       throw error;
     }
   }
+
+  @Get('count/:userId')
+  async countBlocksByUserId(@Param('userId') userId: number): Promise<number> {
+    return this.blockService.countBlocksByUserId(userId);
+  }
+
+  @Get('findBlockedUsers/:userId')
+  async findBlockedUsers(@Param('userId') userId: number): Promise<number[]> {
+    return this.blockService.findBlockedUsers(userId);
+  }
 }
