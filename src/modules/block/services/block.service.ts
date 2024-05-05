@@ -35,4 +35,16 @@ export class BlockService {
     });
   }
   
+  async countBlocksByUserId(userId: number): Promise<number> {
+    return this.prisma.block.count({
+      where: { userId },
+    });
+  }
+
+  async findBlockedUsers(userId: number): Promise<Block[]> {
+    return this.prisma.block.findMany({
+      where: { userId },
+      include: { blockedUser: true },
+    });
+  }
 }
