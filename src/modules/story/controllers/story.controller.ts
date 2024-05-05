@@ -45,11 +45,11 @@ export class StoryController {
     try {
       const story = await this.storyService.GetStoryById(id);
       if (!story) {
-        throw new NotFoundException('Story não encontrado.');
+        throw new NotFoundException('Story not found.');
       }
       return story;
     } catch (error) {
-      throw new NotFoundException('Story não encontrado.');
+      throw new NotFoundException('Story not found.');
     }
   }
 

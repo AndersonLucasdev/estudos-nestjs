@@ -34,8 +34,12 @@ export class UserFollowersController {
     @Param('followerId') followerId: number,
     @Param('followedId') followedId: number,
   ) {
-    const isFollowing = await this.userFollowersService.CheckIfFollowing(followerId, followedId);
-    return { isFollowing };
+    try {
+      const isFollowing = await this.userFollowersService.CheckIfFollowing(followerId, followedId);
+      return { isFollowing };
+    } catch (error) {
+      throw new NotFoundException('Error checking if user is following.');
+    }
   }
 
   // EndPoint: Get the count of followers for a specific user
@@ -44,8 +48,12 @@ export class UserFollowersController {
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
   @ApiResponse({ status: 200, description: 'Followers count obtained successfully.' })
   async countFollowers(@Param('userId') userId: number) {
-    const followersCount = await this.userFollowersService.CountFollowers(userId);
-    return { followersCount };
+    try {
+      const followersCount = await this.userFollowersService.CountFollowers(userId);
+      return { followersCount };
+    } catch (error) {
+      throw new NotFoundException('Error counting followers.');
+    }
   }
 
   // EndPoint: Get the count of users a specific user is following
@@ -54,8 +62,12 @@ export class UserFollowersController {
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
   @ApiResponse({ status: 200, description: 'Following count obtained successfully.' })
   async countFollowing(@Param('userId') userId: number) {
-    const followingCount = await this.userFollowersService.CountFollowing(userId);
-    return { followingCount };
+    try {
+      const followingCount = await this.userFollowersService.CountFollowing(userId);
+      return { followingCount };
+    } catch (error) {
+      throw new NotFoundException('Error counting following users.');
+    }
   }
 
   // EndPoint: List common followers between two users
@@ -68,8 +80,12 @@ export class UserFollowersController {
     @Param('user1Id') user1Id: number,
     @Param('user2Id') user2Id: number,
   ) {
-    const commonFollowers = await this.userFollowersService.ListCommonFollowers(user1Id, user2Id);
-    return commonFollowers;
+    try {
+      const commonFollowers = await this.userFollowersService.ListCommonFollowers(user1Id, user2Id);
+      return commonFollowers;
+    } catch (error) {
+      throw new NotFoundException('Error listing common followers.');
+    }
   }
 
   // EndPoint: Follow a user by creating a follow relationship
@@ -82,8 +98,15 @@ export class UserFollowersController {
     @Param('followerId') followerId: number,
     @Param('followedId') followedId: number,
   ) {
-    const follow = await this.userFollowersService.CreateFollowers(followerId, followedId);
-    return follow;
+    try {
+      const follow = await this.userFollowersService.CreateFollowers(followerId, followedId);
+      return follow;
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw new ConflictException('User already followed.');
+      }
+      throw error;
+    }
   }
 
   // EndPoint: Unfollow a user by deleting the follow relationship
@@ -96,7 +119,14 @@ export class UserFollowersController {
     @Param('followerId') followerId: number,
     @Param('followedId') followedId: number,
   ) {
-    const unfollow = await this.userFollowersService.Unfollow(followerId, followedId);
-    return unfollow;
-  }  
+    try {
+      const unfollow = await this.userFollowersService.Unfollow(followerId, followedId);
+      return unfollow;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Relationship not found.');
+      }
+      throw error;
+    }
+  }
 }
