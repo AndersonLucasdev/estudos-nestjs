@@ -61,6 +61,8 @@ export class BlockController {
 
   @Get('findBlockedUsers/:userId')
   async findBlockedUsers(@Param('userId') userId: number): Promise<number[]> {
-    return this.blockService.findBlockedUsers(userId);
+    const blockedUsers = await this.blockService.findBlockedUsers(userId);
+    const blockedUserIds = blockedUsers.map(blockedUser => blockedUser.blockedUserId);
+    return blockedUserIds;
   }
 }
