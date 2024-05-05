@@ -24,14 +24,15 @@ export class BlockService {
   }
 
   async unlockUser(userId: number, blockedUserId: number): Promise<void> {
-    const block = await this.prisma.block.findUnique({
-      where: { userId_blockedUserId: { userId, blockedUserId } },
+    const block = await this.prisma.block.findFirst({
+      where: { userId: userId, blockedUserId: blockedUserId },
     });
     if (!block) {
       throw new NotFoundException('Block not found.');
     }
     await this.prisma.block.delete({
-      where: { userId_blockedUserId: { userId, blockedUserId } },
+      where: { id: block.id },
     });
   }
+  
 }
