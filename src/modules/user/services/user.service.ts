@@ -20,11 +20,21 @@ export class UserService {
     private readonly webSocketService: WebSocketService,
   ) {}
   // Method to get all users
-  async GetAllUsers(): Promise<User[]> {
-    const users = await this.prisma.user.findMany();
+  async GetAllUsers(userId: number): Promise<User[]> {
+    const blockedUserIds = (await this.prisma.block.findMany({
+      where: { userId: userId },
+    })).map(block => block.blockedUserId);
+  
+    const users = await this.prisma.user.findMany({
+      where: {
+        NOT: { id: { in: blockedUserIds } },
+      },
+    });
+  
     if (!users || users.length === 0) {
-      throw new NotFoundException('Não existem usuários cadastrados.');
+      throw new NotFoundException('Não existem usuários cadastrados ou visíveis.');
     }
+  
     return users;
   }
 

@@ -32,9 +32,9 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'List of users obtained successfully.' })
-  async getAllUsers() {
+  async getAllUsers(@Query('userId') userId: number) {
     try {
-      const user = await this.userService.GetAllUsers();
+      const user = await this.userService.GetAllUsers(userId);
       return { user };
     } catch (error) {
       throw new NotFoundException('Não existem usuários.');
