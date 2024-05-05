@@ -20,5 +20,9 @@ import { CreateBlockDto } from '../dto/CreateBlock.dto';
 import { PatchBlockDto } from '../dto/PatchBlock.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 
-@Controller('comments')
-export class BlockController {}
+@Controller('blocks')
+export class BlockController {
+  constructor(private readonly blockService: BlockService) {}
+
+  
+}
