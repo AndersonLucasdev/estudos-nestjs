@@ -11,7 +11,7 @@ import { PatchUserDto } from '../dto/PatchUser.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
-
+import Follower from '../interface/follower.interface';
 
 @Injectable()
 export class UserService {
