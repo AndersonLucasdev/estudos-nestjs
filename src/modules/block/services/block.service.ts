@@ -11,4 +11,8 @@ import { PatchCommentDto } from 'src/modules/comment/dto/PatchComment.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
-export class BlockService {}
+export class BlockService {
+  constructor(private readonly prisma: PrismaService) {}
+
+
+}
