@@ -48,11 +48,15 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'User found successfully.' })
   @ApiResponse({ status: 404, description: 'User not found.' })
   async getUserById(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.userService.GetUserById(id);
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
+    try {
+      const user = await this.userService.GetUserById(id);
+      if (!user) {
+        throw new NotFoundException('User not found.');
+      }
+      return { user };
+    } catch (error) {
+      throw new NotFoundException('User not found.');
     }
-    return { user };
   }
 
   // EndPoint to get the user with that name
@@ -61,8 +65,15 @@ export class UserController {
   @ApiQuery({ name: 'username', description: 'Username', type: String })
   @ApiResponse({ status: 200, description: 'User found successfully.' })
   async getUserByUsername(@Query('username') username: string) {
-    const user = await this.userService.GetUserByUsername(username);
-    return user;
+    try {
+      const user = await this.userService.GetUserByUsername(username);
+      if (!user) {
+        throw new NotFoundException('User not found.');
+      }
+      return user;
+    } catch (error) {
+      throw new NotFoundException('User not found.');
+    }
   }
 
   // EndPoint to find multiple people with that part of the name
@@ -71,8 +82,12 @@ export class UserController {
   @ApiQuery({ name: 'username', description: 'Partial username', type: String })
   @ApiResponse({ status: 200, description: 'Users found successfully.' })
   async getUsersByUsername(@Query('username') username: string) {
-    const users = await this.userService.GetUsersByUsername(username);
-    return users;
+    try {
+      const users = await this.userService.GetUsersByUsername(username);
+      return users;
+    } catch (error) {
+      throw new NotFoundException('Users not found.');
+    }
   }
 
   // EndPoint to get users with more likes
@@ -80,8 +95,12 @@ export class UserController {
   @ApiOperation({ summary: 'Get users with the most likes' })
   @ApiResponse({ status: 200, description: 'Users with the most likes obtained successfully.' })
   async getUsersWithMostLikes() {
-    const users = await this.userService.GetUsersWithMostLikes();
-    return users;
+    try {
+      const users = await this.userService.GetUsersWithMostLikes();
+      return users;
+    } catch (error) {
+      throw new NotFoundException('Users not found.');
+    }
   }
 
   // EndPoint to get users with latest updates
@@ -90,8 +109,12 @@ export class UserController {
   @ApiQuery({ name: 'days', description: 'Number of days for recent activity', type: Number })
   @ApiResponse({ status: 200, description: 'Users with recent activity obtained successfully.' })
   async getUsersWithRecentActivity(@Query('days') days: number) {
-    const users = await this.userService.GetUsersWithRecentActivity(days);
-    return users;
+    try {
+      const users = await this.userService.GetUsersWithRecentActivity(days);
+      return users;
+    } catch (error) {
+      throw new NotFoundException('Users not found.');
+    }
   }
 
   // EndPoint get followers by userid
@@ -100,8 +123,12 @@ export class UserController {
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
   @ApiResponse({ status: 200, description: 'Followers obtained successfully.' })
   async listFollowers(@Param('userId') userId: number) {
-    const followers = await this.userService.ListFollowers(userId);
-    return followers;
+    try {
+      const followers = await this.userService.ListFollowers(userId);
+      return followers;
+    } catch (error) {
+      throw new NotFoundException('Followers not found.');
+    }
   }
 
   // EndPoint get follings by userid
@@ -110,8 +137,12 @@ export class UserController {
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
   @ApiResponse({ status: 200, description: 'Followings obtained successfully.' })
   async listFollowing(@Param('userId') userId: number) {
-    const following = await this.userService.ListFollowing(userId);
-    return following;
+    try {
+      const following = await this.userService.ListFollowing(userId);
+      return following;
+    } catch (error) {
+      throw new NotFoundException('Following not found.');
+    }
   }
 
   // Endpoint to create a new user
@@ -121,8 +152,12 @@ export class UserController {
   @ApiResponse({ status: 201, description: 'User created successfully.' })
   @UsePipes(new DtoValidationPipe()) // Coloque a anotação aqui
   async createUser(@Body() createUserDto: CreateUserDto) {
-    const user = await this.userService.CreateUser(createUserDto);
-    return { message: 'Usuário criado com sucesso!', user };
+    try {
+      const user = await this.userService.CreateUser(createUserDto);
+      return { message: 'User created successfully!', user };
+    } catch (error) {
+      throw new NotFoundException('Error creating user.');
+    }
   }
 
   // Endpoint to delete a user by ID
@@ -131,8 +166,12 @@ export class UserController {
   @ApiParam({ name: 'id', description: 'ID of the user', type: Number })
   @ApiResponse({ status: 200, description: 'User removed successfully.' })
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.userService.DeleteUser(id);
-    return { message: 'Usuário removido com sucesso!', user };
+    try {
+      const user = await this.userService.DeleteUser(id);
+      return { message: 'User removed successfully!', user };
+    } catch (error) {
+      throw new NotFoundException('Error deleting user.');
+    }
   }
 
   // Endpoint to update a user by ID
