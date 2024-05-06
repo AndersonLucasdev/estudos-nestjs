@@ -51,11 +51,15 @@ export class PostController {
   @ApiParam({ name: 'id', description: 'ID of the post', type: Number })
   @ApiResponse({ status: 200, description: 'Post obtained successfully.' })
   async getPostById(@Param('id', ParseIntPipe) id: number) {
-    const post = await this.postService.GetPostById(id);
-    if (!post) {
+    try {
+      const post = await this.postService.GetPostById(id);
+      if (!post) {
+        throw new NotFoundException('Post not found.');
+      }
+      return { post };
+    } catch (error) {
       throw new NotFoundException('Post not found.');
     }
-    return { post };
   }
 
   // Endpoint to get posts from a specific user by user ID
@@ -159,8 +163,15 @@ export class PostController {
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createPostDto: CreatePostDto,
   ) {
-    const post = await this.postService.CreatePost(userId, createPostDto);
-    return { message: 'Post criado com sucesso!', post };
+    try {
+      const post = await this.postService.CreatePost(userId, createPostDto);
+      if (!post) {
+        throw new NotFoundException('Post not found.');
+      }
+      return { message: 'Create post successfully!', post };
+    } catch (error) {
+      throw new NotFoundException('Post not found.');
+    }
   }
 
   // Endpoint to delete a post by its ID
@@ -169,8 +180,16 @@ export class PostController {
   @ApiParam({ name: 'id', description: 'ID of the post', type: Number })
   @ApiResponse({ status: 200, description: 'Post removed successfully.' })
   async deletePost(@Param('id', ParseIntPipe) id: number) {
-    const post = await this.postService.DeletePost(id);
-    return { message: 'Post removido com sucesso!', post };
+    try {
+      const post = await this.postService.DeletePost(id);
+      if (!post) {
+        throw new NotFoundException('Post not found.');
+      }
+      return { message: 'Post removed successfully!', post };
+    } catch (error) {
+      throw new NotFoundException('Post not found.');
+    }
+    
   }
 
   // Endpoint to update a post by its ID
