@@ -32,7 +32,11 @@ export class NotificationController {
   @ApiParam({ name: 'userId', description: 'User ID', type: Number })
   @ApiResponse({ status: 200, description: 'Returns notifications for the specified user' })
   async getNotificationsByUserId(@Param('userId') userId: number): Promise<Notification[]> {
-    return await this.notificationService.getNotificationsByUserId(userId);
+    try {
+      return await this.notificationService.getNotificationsByUserId(userId);
+    } catch (error) {
+      throw new NotFoundException('Notifications not found.');
+    }
   }
 
   @Get('/:id')
@@ -40,7 +44,15 @@ export class NotificationController {
   @ApiParam({ name: 'id', description: 'Notification ID', type: Number })
   @ApiResponse({ status: 200, description: 'Returns the notification with the specified ID' })
   async getNotificationById(@Param('id') id: number): Promise<Notification> {
-    return await this.notificationService.getNotificationById(id);
+    try {
+      const notification = await this.notificationService.getNotificationById(id);
+      if (!notification) {
+        throw new NotFoundException('Notification not found.');
+      }
+      return notification;
+    } catch (error) {
+      throw new NotFoundException('Notification not found.');
+    }
   }
 
   @Patch(':id/mark-as-read')
@@ -88,7 +100,11 @@ export class NotificationController {
   @ApiBody({ type: CreateNotificationDto })
   @ApiResponse({ status: 201, description: 'Returns the newly created notification' })
   async createNotification(@Body() createNotificationDto: CreateNotificationDto): Promise<Notification> {
-    return await this.notificationService.createNotification(createNotificationDto);
+    try {
+      return await this.notificationService.createNotification(createNotificationDto);
+    } catch (error) {
+      throw new NotFoundException('Failed to create notification.');
+    }
   }
 
   @Delete('/:id')
@@ -96,6 +112,10 @@ export class NotificationController {
   @ApiParam({ name: 'id', description: 'Notification ID', type: Number })
   @ApiResponse({ status: 204, description: 'Notification successfully deleted' })
   async deleteNotification(@Param('id') id: number): Promise<void> {
-    return await this.notificationService.deleteNotification(id);
+    try {
+      await this.notificationService.deleteNotification(id);
+    } catch (error) {
+      throw new NotFoundException('Notification not found.');
+    }
   }
 }
