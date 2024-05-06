@@ -49,9 +49,19 @@ export class UserActivityController {
     isArray: true,
   })
   async getUserActivities(
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
   ): Promise<UserActivity[]> {
-    return this.userActivityService.getUserActivities(userId);
+    try {
+      const activities = await this.userActivityService.getUserActivities(
+        userId,
+      );
+      if (!activities || activities.length === 0) {
+        throw new NotFoundException('User activities not found.');
+      }
+      return activities;
+    } catch (error) {
+      throw new NotFoundException('User activities not found.');
+    }
   }
 
   @Get('/:activityId')
@@ -80,10 +90,18 @@ export class UserActivityController {
     @Param('userId', ParseIntPipe) userId: number,
     @Param('activityType') activityType: UserActivityType,
   ): Promise<UserActivity[]> {
-    return this.userActivityService.getUserActivitiesByType(
-      userId,
-      activityType,
-    );
+    try {
+      const activities = await this.userActivityService.getUserActivitiesByType(
+        userId,
+        activityType,
+      );
+      if (!activities || activities.length === 0) {
+        throw new NotFoundException('User activities not found.');
+      }
+      return activities;
+    } catch (error) {
+      throw new NotFoundException('User activities not found.');
+    }
   }
 
   @Get('/:userId/type/:activityType/count')
@@ -91,10 +109,14 @@ export class UserActivityController {
     @Param('userId', ParseIntPipe) userId: number,
     @Param('activityType') activityType: UserActivityType,
   ): Promise<number> {
-    return this.userActivityService.countUserActivitiesByType(
-      userId,
-      activityType,
-    );
+    try {
+      return await this.userActivityService.countUserActivitiesByType(
+        userId,
+        activityType,
+      );
+    } catch (error) {
+      throw new NotFoundException('User activities not found.');
+    }
   }
 
   @Get('/:userId/filter')
@@ -120,7 +142,18 @@ export class UserActivityController {
     @Param('userId', ParseIntPipe) userId: number,
     @Query('limit') limit: number = 10,
   ): Promise<UserActivity[]> {
-    return this.userActivityService.getRecentUserActivities(userId, limit);
+    try {
+      const activities = await this.userActivityService.getRecentUserActivities(
+        userId,
+        limit,
+      );
+      if (!activities || activities.length === 0) {
+        throw new NotFoundException('Recent user activities not found.');
+      }
+      return activities;
+    } catch (error) {
+      throw new NotFoundException('Recent user activities not found.');
+    }
   }
 
   @Get('/:userId/delete-old')
@@ -137,7 +170,11 @@ export class UserActivityController {
   @Post()
   @ApiOperation({ summary: 'Create user activity' })
   @ApiBody({ type: CreateUserActivityDto })
-  @ApiResponse({ status: 201, description: 'User activity created', type: CreateUserActivityDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User activity created',
+    type: CreateUserActivityDto,
+  })
   @ApiBadRequestResponse({ description: 'Invalid data provided' })
   @ApiConflictResponse({ description: 'Failed to create user activity' })
   async createUserActivity(
@@ -158,7 +195,11 @@ export class UserActivityController {
   @ApiOperation({ summary: 'Update user activity' })
   @ApiParam({ name: 'activityId', description: 'Activity ID' })
   @ApiBody({ type: PatchUserActivityDto })
-  @ApiResponse({ status: 200, description: 'User activity updated', type: CreateUserActivityDto })
+  @ApiResponse({
+    status: 200,
+    description: 'User activity updated',
+    type: CreateUserActivityDto,
+  })
   @ApiNotFoundResponse({ description: 'User activity not found' })
   @ApiBadRequestResponse({ description: 'Invalid data provided' })
   async updateUserActivity(
