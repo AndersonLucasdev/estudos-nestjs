@@ -38,7 +38,11 @@ export class PostLikeController {
   @ApiOperation({ summary: 'Get all likes' })
   @ApiResponse({ status: 200, description: 'Likes obtained successfully.' })
   async getAllLikes() {
-    return await this.postLikeService.GetAllLikes();
+    try {
+      return await this.postLikeService.GetAllLikes();
+    } catch (error) {
+      throw new NotFoundException('Likes not found.');
+    }
   }
 
   // EndPoint: Get like by ID
@@ -47,7 +51,15 @@ export class PostLikeController {
   @ApiParam({ name: 'likeId', description: 'ID of the like', type: Number })
   @ApiResponse({ status: 200, description: 'Like obtained successfully.' })
   async getLikeById(@Param('likeId') likeId: number) {
-    return await this.postLikeService.GetLikeById(likeId);
+    try {
+      const like = await this.postLikeService.GetLikeById(likeId);
+      if (!like) {
+        throw new NotFoundException('Like not found.');
+      }
+      return like;
+    } catch (error) {
+      throw new NotFoundException('Like not found.');
+    }
   }
 
   // EndPoint: Get all likes with details (user and post information included)
@@ -60,7 +72,11 @@ export class PostLikeController {
     description: 'Likes with details obtained successfully.',
   })
   async getAllLikesWithDetails() {
-    return await this.postLikeService.GetAllLikesWithDetails();
+    try {
+      return await this.postLikeService.GetAllLikesWithDetails();
+    } catch (error) {
+      throw new NotFoundException('Likes with details not found.');
+    }
   }
 
   // EndPoint: Get all likes for a specific post
@@ -72,7 +88,11 @@ export class PostLikeController {
     description: 'Likes for the post obtained successfully.',
   })
   async getLikesForPost(@Param('postId') postId: number) {
-    return await this.postLikeService.GetLikesForPost(postId);
+    try {
+      return await this.postLikeService.GetLikesForPost(postId);
+    } catch (error) {
+      throw new NotFoundException('Likes for the post not found.');
+    }
   }
 
   // EndPoint: Get all likes for a specific user
@@ -84,7 +104,15 @@ export class PostLikeController {
     description: 'Likes for the user obtained successfully.',
   })
   async getLikesForUser(@Param('userId') userId: number) {
-    return await this.postLikeService.GetLikesForUser(userId);
+    try {
+      const likes = await this.postLikeService.GetLikesForUser(userId);
+      if (!likes) {
+        throw new NotFoundException('Likes of the user not found.');
+      }
+      return likes;
+    } catch (error) {
+      throw new NotFoundException('Likes of the user not found.');
+    }
   }
 
   // EndPoint: Count total likes for a specific post
@@ -96,7 +124,15 @@ export class PostLikeController {
     description: 'Likes count for the post obtained successfully.',
   })
   async countLikesForPost(@Param('postId') postId: number) {
-    return await this.postLikeService.CountLikesForPost(postId);
+    try {
+      const likes = await this.postLikeService.CountLikesForPost(postId); 
+      if (!likes) {
+        throw new NotFoundException('Likes of the user not found.');
+      }
+      return likes;
+    } catch (error) {
+      throw new NotFoundException('Likes of the user not found.');
+    }
   }
 
   // EndPoint: Get all likes by user
@@ -140,11 +176,15 @@ export class PostLikeController {
     @Query('startDate') startDate: Date,
     @Query('endDate') endDate: Date,
   ) {
-    return await this.postLikeService.GetLikesForUserInPeriod(
-      userId,
-      startDate,
-      endDate,
-    );
+    try {
+      return await this.postLikeService.GetLikesForUserInPeriod(
+        userId,
+        startDate,
+        endDate,
+      );
+    } catch (error) {
+      throw new NotFoundException('Likes for the user within the period not found.');
+    }
   }
 
   // EndPoint: Get users who liked a post and whose names contain the provided partial name
@@ -167,10 +207,14 @@ export class PostLikeController {
     @Param('postId') postId: number,
     @Query('partialName') partialName: string,
   ) {
-    return await this.postLikeService.GetUsersWhoLikedPostWithPartialName(
-      postId,
-      partialName,
-    );
+    try {
+      return await this.postLikeService.GetUsersWhoLikedPostWithPartialName(
+        postId,
+        partialName,
+      );
+    } catch (error) {
+      throw new NotFoundException('Users who liked the post not found.');
+    }
   }
 
   // EndPoint: Create a new like for a specific post and user
@@ -179,8 +223,12 @@ export class PostLikeController {
   @ApiBody({ type: CreatePostLikeDto })
   @ApiResponse({ status: 201, description: 'Like created successfully.' })
   async createLike(@Body() createLikeDto: CreatePostLikeDto) {
-    const { userId, postId } = createLikeDto;
-    return await this.postLikeService.CreateLike(userId, postId);
+    try {
+      const { userId, postId } = createLikeDto;
+      return await this.postLikeService.CreateLike(userId, postId);
+    } catch (error) {
+      throw new BadRequestException('Failed to create like.');
+    }
   }
 
   // EndPoint: Remove a like made by a specific user for a specific post
@@ -195,6 +243,13 @@ export class PostLikeController {
     @Param('userId') userId: number,
     @Param('postId') postId: number,
   ) {
-    return await this.postLikeService.RemoveLike(userId, postId);
+    try {
+      return await this.postLikeService.RemoveLike(userId, postId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Like not found.');
+      }
+      throw error;
+    }
   }
 }
