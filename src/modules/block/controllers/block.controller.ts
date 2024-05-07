@@ -56,13 +56,21 @@ export class BlockController {
 
   @Get('count/:userId')
   async countBlocksByUserId(@Param('userId') userId: number): Promise<number> {
-    return this.blockService.countBlocksByUserId(userId);
+    try {
+      return await this.blockService.countBlocksByUserId(userId);
+    } catch (error) {
+      throw new NotFoundException('Failed to count blocks for the user.');
+    }
   }
 
   @Get('findBlockedUsers/:userId')
   async findBlockedUsers(@Param('userId') userId: number): Promise<number[]> {
-    const blockedUsers = await this.blockService.findBlockedUsers(userId);
-    const blockedUserIds = blockedUsers.map(blockedUser => blockedUser.blockedUserId);
-    return blockedUserIds;
+    try {
+      const blockedUsers = await this.blockService.findBlockedUsers(userId);
+      const blockedUserIds = blockedUsers.map(blockedUser => blockedUser.blockedUserId);
+      return blockedUserIds;
+    } catch (error) {
+      throw new NotFoundException('Failed to find blocked users for the user.');
+    }
   }
 }
