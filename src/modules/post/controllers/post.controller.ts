@@ -189,7 +189,6 @@ export class PostController {
     } catch (error) {
       throw new NotFoundException('Post not found.');
     }
-    
   }
 
   // Endpoint to update a post by its ID

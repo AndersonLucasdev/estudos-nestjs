@@ -20,7 +20,14 @@ import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
 import { formatUserData } from 'src/utils/FormartUserData';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 
 @ApiTags('User')
@@ -31,7 +38,10 @@ export class UserController {
   // Endpoint to get all users
   @Get()
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'List of users obtained successfully.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of users obtained successfully.',
+  })
   async getAllUsers(@Query('userId') userId: number) {
     try {
       const user = await this.userService.GetAllUsers(userId);
@@ -93,7 +103,10 @@ export class UserController {
   // EndPoint to get users with more likes
   @Get('most-likes')
   @ApiOperation({ summary: 'Get users with the most likes' })
-  @ApiResponse({ status: 200, description: 'Users with the most likes obtained successfully.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Users with the most likes obtained successfully.',
+  })
   async getUsersWithMostLikes() {
     try {
       const users = await this.userService.GetUsersWithMostLikes();
@@ -106,8 +119,15 @@ export class UserController {
   // EndPoint to get users with latest updates
   @Get('recent-activity')
   @ApiOperation({ summary: 'Get users with recent activity' })
-  @ApiQuery({ name: 'days', description: 'Number of days for recent activity', type: Number })
-  @ApiResponse({ status: 200, description: 'Users with recent activity obtained successfully.' })
+  @ApiQuery({
+    name: 'days',
+    description: 'Number of days for recent activity',
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Users with recent activity obtained successfully.',
+  })
   async getUsersWithRecentActivity(@Query('days') days: number) {
     try {
       const users = await this.userService.GetUsersWithRecentActivity(days);
@@ -135,7 +155,10 @@ export class UserController {
   @Get(':userId/following')
   @ApiOperation({ summary: 'Get followings by user ID' })
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
-  @ApiResponse({ status: 200, description: 'Followings obtained successfully.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Followings obtained successfully.',
+  })
   async listFollowing(@Param('userId') userId: number) {
     try {
       const following = await this.userService.ListFollowing(userId);

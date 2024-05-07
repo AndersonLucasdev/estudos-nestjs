@@ -18,7 +18,14 @@ import {
 import { CreateConversationDto } from '../dto/CreateConversation.dto';
 import { ConversationService } from '../services/conversation.service';
 import { Conversation } from '@prisma/client';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 
 @ApiTags('Conversation')
 @Controller('coversation')
@@ -27,7 +34,11 @@ export class ConversationController {
 
   @Get('user/:userId/conversations')
   @ApiParam({ name: 'userId', description: 'User ID' })
-  @ApiResponse({ status: 200, description: 'Returns user conversations', type: [CreateConversationDto] })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns user conversations',
+    type: [CreateConversationDto],
+  })
   async getUserConversations(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -45,7 +56,11 @@ export class ConversationController {
 
   @Get('user/:userId/recent-conversations')
   @ApiParam({ name: 'userId', description: 'User ID' })
-  @ApiResponse({ status: 200, description: 'Returns recent conversations of the user', type: [CreateConversationDto] })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns recent conversations of the user',
+    type: [CreateConversationDto],
+  })
   async getRecentConversations(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -63,7 +78,11 @@ export class ConversationController {
 
   @Get('user/:userId/common-group-conversations')
   @ApiParam({ name: 'userId', description: 'User ID' })
-  @ApiResponse({ status: 200, description: 'Returns common group conversations of the user', type: [CreateConversationDto] })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns common group conversations of the user',
+    type: [CreateConversationDto],
+  })
   async searchConversationsByCommonGroups(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Conversation[]> {
@@ -82,8 +101,15 @@ export class ConversationController {
   }
 
   @Get('search')
-  @ApiQuery({ name: 'namePart', description: 'Name part to search in conversations' })
-  @ApiResponse({ status: 200, description: 'Returns conversations matching the search query', type: [CreateConversationDto] })
+  @ApiQuery({
+    name: 'namePart',
+    description: 'Name part to search in conversations',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns conversations matching the search query',
+    type: [CreateConversationDto],
+  })
   async searchConversationsByNamePart(
     @Query('namePart') namePart: string,
   ): Promise<Conversation[]> {
@@ -128,7 +154,10 @@ export class ConversationController {
   @Patch(':id/remove-participants')
   @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBody({ type: [Number], description: 'Array of participant IDs' })
-  @ApiResponse({ status: 200, description: 'Participants removed successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Participants removed successfully',
+  })
   async removeParticipantsFromConversation(
     @Param('id', ParseIntPipe) id: number,
     @Body('participants', ParseIntPipe) participants: number[],
@@ -153,8 +182,14 @@ export class ConversationController {
 
   @Post(':userId')
   @ApiParam({ name: 'userId', description: 'User ID' })
-  @ApiBody({ type: CreateConversationDto, description: 'Details for creating a new conversation' })
-  @ApiResponse({ status: 200, description: 'Conversation created successfully' })
+  @ApiBody({
+    type: CreateConversationDto,
+    description: 'Details for creating a new conversation',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Conversation created successfully',
+  })
   async createConversation(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createConversationDto: CreateConversationDto,
@@ -178,7 +213,10 @@ export class ConversationController {
 
   @Delete(':id')
   @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiResponse({ status: 200, description: 'Conversation deleted successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Conversation deleted successfully',
+  })
   async deleteConversation(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.conversationService.deleteConversation(id);

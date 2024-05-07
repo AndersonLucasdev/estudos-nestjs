@@ -37,12 +37,18 @@ export class MessageController {
   @Get('conversations/:conversationId/messages')
   @ApiOperation({ summary: 'Get all messages of a user in a conversation' })
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
-  @ApiParam({ name: 'conversationId', description: 'ID of the conversation', type: Number })
+  @ApiParam({
+    name: 'conversationId',
+    description: 'ID of the conversation',
+    type: Number,
+  })
   async getAllMessagesInConversation(
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
     try {
-      return await this.messageService.getAllMessagesInConversation(conversationId);
+      return await this.messageService.getAllMessagesInConversation(
+        conversationId,
+      );
     } catch (error) {
       throw new NotFoundException('Messages in conversation not found.');
     }
@@ -51,7 +57,11 @@ export class MessageController {
   @Get(':userId/conversations/:conversationId/messages')
   @ApiOperation({ summary: 'Get messages of a user in a conversation' })
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
-  @ApiParam({ name: 'conversationId', description: 'ID of the conversation', type: Number })
+  @ApiParam({
+    name: 'conversationId',
+    description: 'ID of the conversation',
+    type: Number,
+  })
   async getUserMessagesInConversation(
     @Param('userId') userId: number,
     @Param('conversationId') conversationId: number,
@@ -68,9 +78,17 @@ export class MessageController {
 
   @Post('reply/:messageId')
   @ApiOperation({ summary: 'Reply to a message' })
-  @ApiParam({ name: 'messageId', description: 'ID of the message', type: Number })
+  @ApiParam({
+    name: 'messageId',
+    description: 'ID of the message',
+    type: Number,
+  })
   @ApiBody({ type: CreateMessageDto })
-  @ApiResponse({ status: 201, description: 'Message replied successfully.', type: CreateMessageDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Message replied successfully.',
+    type: CreateMessageDto,
+  })
   async replyToMessage(
     @Param('messageId') messageId: number,
     @Body() createMessageDto: CreateMessageDto,
@@ -88,8 +106,14 @@ export class MessageController {
   @Post()
   @ApiOperation({ summary: 'Send a message' })
   @ApiBody({ type: CreateMessageDto })
-  @ApiResponse({ status: 201, description: 'Message sent successfully.', type: CreateMessageDto })
-  async sendMessage(@Body() createMessageDto: CreateMessageDto): Promise<Message> {
+  @ApiResponse({
+    status: 201,
+    description: 'Message sent successfully.',
+    type: CreateMessageDto,
+  })
+  async sendMessage(
+    @Body() createMessageDto: CreateMessageDto,
+  ): Promise<Message> {
     try {
       return await this.messageService.sendMessage(createMessageDto);
     } catch (error) {
@@ -113,7 +137,11 @@ export class MessageController {
   @ApiOperation({ summary: 'Update a message by its ID' })
   @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
   @ApiBody({ type: PatchMessageDto })
-  @ApiResponse({ status: 200, description: 'Message updated successfully.', type: CreateMessageDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Message updated successfully.',
+    type: CreateMessageDto,
+  })
   async updateMessage(
     @Param('id') messageId: number,
     @Body() updateMessageDto: PatchMessageDto,
@@ -127,8 +155,4 @@ export class MessageController {
       throw new NotFoundException('Failed to update message.');
     }
   }
-
-  
-
-  
 }

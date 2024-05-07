@@ -67,7 +67,9 @@ export class BlockController {
   async findBlockedUsers(@Param('userId') userId: number): Promise<number[]> {
     try {
       const blockedUsers = await this.blockService.findBlockedUsers(userId);
-      const blockedUserIds = blockedUsers.map(blockedUser => blockedUser.blockedUserId);
+      const blockedUserIds = blockedUsers.map(
+        (blockedUser) => blockedUser.blockedUserId,
+      );
       return blockedUserIds;
     } catch (error) {
       throw new NotFoundException('Failed to find blocked users for the user.');

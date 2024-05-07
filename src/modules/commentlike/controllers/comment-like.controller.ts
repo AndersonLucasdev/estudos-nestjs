@@ -35,13 +35,18 @@ export class CommentLikeController {
   // EndPoint Returns the number of likes on a specific comment
   @Get(':commentId/likes')
   @ApiParam({ name: 'commentId', description: 'Comment ID' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Number of likes on the comment' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Number of likes on the comment',
+  })
   @ApiNotFoundResponse({ description: 'Comment not found' })
   async getLikesInComment(
     @Param('commentId') commentId: number,
   ): Promise<number> {
     try {
-      const likesCount = await this.commentLikeService.AccountLikesInComment(commentId);
+      const likesCount = await this.commentLikeService.AccountLikesInComment(
+        commentId,
+      );
       return likesCount;
     } catch (error) {
       throw new NotFoundException('Comment not found');
@@ -51,7 +56,10 @@ export class CommentLikeController {
   // EndPoint Adds a like to a specific comment based on the provided user ID
   @Post(':commentId/likes')
   @ApiParam({ name: 'commentId', description: 'Comment ID' })
-  @ApiResponse({ status: HttpStatus.CREATED, description: 'Liked the comment successfully' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Liked the comment successfully',
+  })
   @ApiNotFoundResponse({ description: 'Comment not found' })
   async likeComment(
     @Param('commentId') commentId: number,
@@ -68,14 +76,20 @@ export class CommentLikeController {
   @Delete(':commentId/likes/:userId')
   @ApiParam({ name: 'commentId', description: 'Comment ID' })
   @ApiParam({ name: 'userId', description: 'User ID' })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Like removed successfully' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Like removed successfully',
+  })
   @ApiNotFoundResponse({ description: 'Comment or user not found' })
   async removeLikeFromComment(
     @Param('commentId') commentId: number,
     @Param('userId') userId: number,
   ) {
     try {
-      return await this.commentLikeService.RemoveLikeOnComment(userId, commentId);
+      return await this.commentLikeService.RemoveLikeOnComment(
+        userId,
+        commentId,
+      );
     } catch (error) {
       throw new NotFoundException('Comment or user not found');
     }

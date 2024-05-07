@@ -125,7 +125,7 @@ export class PostLikeController {
   })
   async countLikesForPost(@Param('postId') postId: number) {
     try {
-      const likes = await this.postLikeService.CountLikesForPost(postId); 
+      const likes = await this.postLikeService.CountLikesForPost(postId);
       if (!likes) {
         throw new NotFoundException('Likes of the user not found.');
       }
@@ -183,7 +183,9 @@ export class PostLikeController {
         endDate,
       );
     } catch (error) {
-      throw new NotFoundException('Likes for the user within the period not found.');
+      throw new NotFoundException(
+        'Likes for the user within the period not found.',
+      );
     }
   }
 
