@@ -48,7 +48,7 @@ export class CommentController {
       return comment;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException('Comentário não encontrado.');
+        throw new NotFoundException('Comment not found.');
       }
       throw error;
     }
@@ -68,7 +68,7 @@ export class CommentController {
       const comments = await this.commentService.GetAllPostComments(id);
       return { comments }; // Use the name "comments" instead of "post" for consistency
     } catch (error) {
-      throw new NotFoundException('Não existem comentários para o post.');
+      throw new NotFoundException('Comment not found.');
     }
   }
 
@@ -86,7 +86,7 @@ export class CommentController {
       const comments = await this.commentService.GetAllUserComments(id);
       return { comments };
     } catch (error) {
-      throw new NotFoundException('Não existem comentários para o usuário.');
+      throw new NotFoundException('Comment not found.');
     }
   }
 
@@ -103,7 +103,7 @@ export class CommentController {
       const comments = await this.commentService.GetRecentComments(limit);
       return { comments };
     } catch (error) {
-      throw new NotFoundException('Comentários não encontrados.');
+      throw new NotFoundException('Comment not found.');
     }
   }
 
@@ -120,7 +120,7 @@ export class CommentController {
       const comments = await this.commentService.GetPopularComments(limit);
       return { comments };
     } catch (error) {
-      throw new NotFoundException('Comentários não encontrados.');
+      throw new NotFoundException('Comment not found.');
     }
   }
 
@@ -131,7 +131,7 @@ export class CommentController {
       const count = await this.commentService.CountPostComments(postId);
       return { count };
     } catch (error) {
-      throw new NotFoundException('Comentários não encontrados.');
+      throw new NotFoundException('Comment not found.');
     }
   }
 
@@ -146,19 +146,33 @@ export class CommentController {
     @Param('postId', ParseIntPipe) postId: number,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    const comment = await this.commentService.CreateComment(
-      userId,
-      postId,
-      createCommentDto,
-    );
-    return { message: 'Comentário criado com sucesso!', comment };
+    try {
+      const comment = await this.commentService.CreateComment(
+        userId,
+        postId,
+        createCommentDto,
+      );
+      return { message: 'Create comment successfully!', comment };
+    } catch (error) {
+      throw new BadRequestException('Comment not found.');
+    }
   }
 
   // Endpoint to delete a comment by its ID
   @Delete(':id')
   async deleteComment(@Param('id', ParseIntPipe) id: number) {
-    const comment = await this.commentService.DeleteComment(id);
-    return { message: 'Comentário removido com sucesso!', comment };
+    try {
+      const comment = await this.commentService.DeleteComment(id);
+      if (!comment) {
+        throw new NotFoundException('Comment not found.');
+      }
+      return { message: 'Like removed successfully!', comment };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new BadRequestException('Comment or user not found.');
+    }
   }
 
   // Endpoint to update a comment by its ID
@@ -173,7 +187,7 @@ export class CommentController {
         const trimmedcontent = patchCommentDto.content.trim();
 
         if (trimmedcontent.length === 0) {
-          throw new NotFoundException('O comentário não pode ser vazio.');
+          throw new NotFoundException('Comment not found.');
         }
       }
 
@@ -183,11 +197,11 @@ export class CommentController {
       );
 
       return {
-        message: 'Comentário atualizado com sucesso!',
+        message: 'Comment updated successfully!',
         comment: updatedComment,
       };
     } catch (error) {
-      return { error: 'Erro ao atualizar comentário. ' + error.message };
+      return { error: 'Error updating comment. ' + error.message };
     }
   }
 }
