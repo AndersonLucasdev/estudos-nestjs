@@ -28,13 +28,20 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'Invalid username or password' })
   @ApiUnauthorizedResponse({ description: 'Invalid username or password' })
   async login(@Body() loginData: { username: string; password: string }) {
-    const user = await this.authService.validateUser(
-      loginData.username,
-      loginData.password,
-    );
-    if (!user) {
-      throw new UnauthorizedException('Usuário ou senha inválidos');
+    try {
+      const user = await this.authService.validateUser(
+        loginData.username,
+        loginData.password,
+      );
+      if (!user) {
+        throw new UnauthorizedException('Invalid username or password');
+      }
+      return this.authService.login(user);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw new UnauthorizedException('Invalid username or password');
+      }
+      throw error;
     }
-    return this.authService.login(user);
   }
 }
