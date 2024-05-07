@@ -34,39 +34,6 @@ import {
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Send a message' })
-  @ApiBody({ type: CreateMessageDto })
-  @ApiResponse({ status: 201, description: 'Message sent successfully.', type: CreateMessageDto })
-  async sendMessage(
-    @Body() createMessageDto: CreateMessageDto,
-  ): Promise<Message> {
-    return await this.messageService.sendMessage(createMessageDto);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a message by its ID' })
-  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
-  @ApiResponse({ status: 200, description: 'Message deleted successfully.' })
-  async deleteMessage(@Param('id') messageId: number): Promise<void> {
-    return await this.messageService.deleteMessage(messageId);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update a message by its ID' })
-  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
-  @ApiBody({ type: PatchMessageDto })
-  @ApiResponse({ status: 200, description: 'Message updated successfully.', type: CreateMessageDto })
-  async updateMessage(
-    @Param('id') messageId: number,
-    @Body() updateMessageDto: PatchMessageDto,
-  ): Promise<Message> {
-    return await this.messageService.updateMessage(
-      messageId,
-      updateMessageDto.content,
-    );
-  }
-
   @Get('conversations/:conversationId/messages')
   @ApiOperation({ summary: 'Get all messages of a user in a conversation' })
   @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
@@ -74,7 +41,11 @@ export class MessageController {
   async getAllMessagesInConversation(
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
-    return await this.messageService.getAllMessagesInConversation(conversationId);
+    try {
+      return await this.messageService.getAllMessagesInConversation(conversationId);
+    } catch (error) {
+      throw new NotFoundException('Messages in conversation not found.');
+    }
   }
 
   @Get(':userId/conversations/:conversationId/messages')
@@ -85,10 +56,14 @@ export class MessageController {
     @Param('userId') userId: number,
     @Param('conversationId') conversationId: number,
   ): Promise<Message[]> {
-    return await this.messageService.getUserMessagesInConversation(
-      userId,
-      conversationId,
-    );
+    try {
+      return await this.messageService.getUserMessagesInConversation(
+        userId,
+        conversationId,
+      );
+    } catch (error) {
+      throw new NotFoundException('User messages in conversation not found.');
+    }
   }
 
   @Post('reply/:messageId')
@@ -100,9 +75,60 @@ export class MessageController {
     @Param('messageId') messageId: number,
     @Body() createMessageDto: CreateMessageDto,
   ): Promise<Message> {
-    return await this.messageService.replyToMessage(
-      messageId,
-      createMessageDto.content,
-    );
+    try {
+      return await this.messageService.replyToMessage(
+        messageId,
+        createMessageDto.content,
+      );
+    } catch (error) {
+      throw new NotFoundException('Failed to reply to message.');
+    }
   }
+
+  @Post()
+  @ApiOperation({ summary: 'Send a message' })
+  @ApiBody({ type: CreateMessageDto })
+  @ApiResponse({ status: 201, description: 'Message sent successfully.', type: CreateMessageDto })
+  async sendMessage(@Body() createMessageDto: CreateMessageDto): Promise<Message> {
+    try {
+      return await this.messageService.sendMessage(createMessageDto);
+    } catch (error) {
+      throw new NotFoundException('Failed to send message.');
+    }
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a message by its ID' })
+  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
+  @ApiResponse({ status: 200, description: 'Message deleted successfully.' })
+  async deleteMessage(@Param('id') messageId: number): Promise<void> {
+    try {
+      await this.messageService.deleteMessage(messageId);
+    } catch (error) {
+      throw new NotFoundException('Failed to delete message.');
+    }
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a message by its ID' })
+  @ApiParam({ name: 'id', description: 'ID of the message', type: Number })
+  @ApiBody({ type: PatchMessageDto })
+  @ApiResponse({ status: 200, description: 'Message updated successfully.', type: CreateMessageDto })
+  async updateMessage(
+    @Param('id') messageId: number,
+    @Body() updateMessageDto: PatchMessageDto,
+  ): Promise<Message> {
+    try {
+      return await this.messageService.updateMessage(
+        messageId,
+        updateMessageDto.content,
+      );
+    } catch (error) {
+      throw new NotFoundException('Failed to update message.');
+    }
+  }
+
+  
+
+  
 }
