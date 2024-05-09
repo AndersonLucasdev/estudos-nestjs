@@ -19,6 +19,17 @@ import { BlockService } from '../services/block.service';
 import { CreateBlockDto } from '../dto/CreateBlock.dto';
 import { PatchBlockDto } from '../dto/PatchBlock.dto';
 import { DtoValidationPipe } from 'src/pipes/dto-validation.pipe';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiConflictResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 
 @Controller('blocks')
 export class BlockController {
