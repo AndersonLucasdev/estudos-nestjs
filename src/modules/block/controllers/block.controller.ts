@@ -36,6 +36,11 @@ export class BlockController {
   constructor(private readonly blockService: BlockService) {}
 
   @Post(':userId/:blockedUserId')
+  @ApiOperation({ summary: 'Create a block' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiParam({ name: 'blockedUserId', description: 'ID of the blocked user', type: Number })
+  @ApiResponse({ status: 201, description: 'Block created successfully.' })
+  @ApiConflictResponse({ description: 'User already blocked.' })
   async createBlock(
     @Param('userId') userId: number,
     @Param('blockedUserId') blockedUserId: number,
@@ -51,6 +56,11 @@ export class BlockController {
   }
 
   @Delete(':userId/:blockedUserId')
+  @ApiOperation({ summary: 'Unlock a user' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiParam({ name: 'blockedUserId', description: 'ID of the blocked user', type: Number })
+  @ApiResponse({ status: 200, description: 'User unlocked successfully.' })
+  @ApiNotFoundResponse({ description: 'Block not found.' })
   async unlockUser(
     @Param('userId') userId: number,
     @Param('blockedUserId') blockedUserId: number,
