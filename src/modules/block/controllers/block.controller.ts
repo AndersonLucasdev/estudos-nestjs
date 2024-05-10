@@ -76,6 +76,10 @@ export class BlockController {
   }
 
   @Get('count/:userId')
+  @ApiOperation({ summary: 'Count blocks by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Block count obtained successfully.' })
+  @ApiNotFoundResponse({ description: 'Failed to count blocks for the user.' })
   async countBlocksByUserId(@Param('userId') userId: number): Promise<number> {
     try {
       return await this.blockService.countBlocksByUserId(userId);
