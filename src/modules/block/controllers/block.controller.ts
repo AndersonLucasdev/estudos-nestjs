@@ -89,6 +89,10 @@ export class BlockController {
   }
 
   @Get('findBlockedUsers/:userId')
+  @ApiOperation({ summary: 'Find blocked users by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Blocked users found successfully.' })
+  @ApiNotFoundResponse({ description: 'Failed to find blocked users for the user.' })
   async findBlockedUsers(@Param('userId') userId: number): Promise<number[]> {
     try {
       const blockedUsers = await this.blockService.findBlockedUsers(userId);
