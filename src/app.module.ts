@@ -12,6 +12,7 @@ import { AuthModule } from './modules/auth/modules/auth.module';
 import { BlockModule } from './modules/block/modules/block.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
 import { CommentModule } from './modules/comment/modules/comment.module';
+import { TagnModule } from './modules/tag/modules/tag.module';
 import { PostLikeModule } from './modules/postlike/modules/post-like.module';
 import { UserFollowersModule } from './modules/userfollowers/modules/user-followers.module';
 import { MessageModule } from './modules/message/modules/message.module';
@@ -34,6 +35,7 @@ import { UserActivityModule } from './modules/useractivity/modules/user-activity
     PostModule,
     AuthModule,
     CommentModule,
+    TagnModule,
     StorynModule,
     CommentLikeModule,
     BlockModule,
