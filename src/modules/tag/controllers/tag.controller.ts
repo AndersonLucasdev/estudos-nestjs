@@ -15,13 +15,13 @@ import {
   BadRequestException,
   HttpException,
 } from '@nestjs/common';
-// import { TagService }
+import { TagService } from '../services/tag.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Tag } from '@prisma/client';
 // import { CreateTagDto }
 // import { PatchSTagDto }
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
-export class StoryController {
- 
+export class TagController {
+    constructor(private readonly tagService: TagService) {}
 }
