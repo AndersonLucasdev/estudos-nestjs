@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Tag } from '@prisma/client';
-// import { CreateTagDto }
-// import { PatchSTagDto }
+import { CreateTagDto } from '../dto/CreateTag.dto';
+import { PatchTagDto } from '../dto/PatchTag.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
