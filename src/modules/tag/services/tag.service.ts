@@ -19,5 +19,18 @@ export class TagService {
     private readonly webSocketService: WebSocketService,
   ) {}
 
-  
+  async createTag(data: CreateTagDto): Promise<Tag> {
+    const tag = await this.prisma.tag.create({
+      data: data,
+    });
+    return tag;
+  }
+
+  async getTagById(id: number): Promise<Tag> {
+    const tag = await this.prisma.tag.findUnique({ where: { id } });
+    if (!tag) {
+      throw new NotFoundException('Tag not found.');
+    }
+    return tag;
+  }
 }
