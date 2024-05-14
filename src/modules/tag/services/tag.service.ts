@@ -53,4 +53,32 @@ export class TagService {
     }
     await this.prisma.tag.delete({ where: { id } });
   }
+
+  async getUserTags(userId: number): Promise<Tag[]> {
+    const userTags = await this.prisma.tag.findMany({
+      where: { userId },
+    });
+    return userTags;
+  }
+
+  async getPostTags(postId: number): Promise<Tag[]> {
+    const postTags = await this.prisma.tag.findMany({
+      where: { postId },
+    });
+    return postTags;
+  }
+
+  async getCommentTags(commentId: number): Promise<Tag[]> {
+    const commentTags = await this.prisma.tag.findMany({
+      where: { commentId },
+    });
+    return commentTags;
+  }
+
+  async getStoryTags(storyId: number): Promise<Tag[]> {
+    const storyTags = await this.prisma.tag.findMany({
+      where: { storyId },
+    });
+    return storyTags;
+  }
 }
