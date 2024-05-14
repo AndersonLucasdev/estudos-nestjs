@@ -1,7 +1,6 @@
 import { IsInt, IsOptional, IsDate } from 'class-validator';
 
 export class CreateTagDto {
-
   @IsInt()
   taggedUserId: number;
 
