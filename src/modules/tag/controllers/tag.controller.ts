@@ -57,4 +57,14 @@ export class TagController {
   async getPostTags(@Param('postId', ParseIntPipe) postId: number): Promise<Tag[]> {
     return this.tagService.getPostTags(postId);
   }
+
+  @Get('comment/:commentId')
+  async getCommentTags(@Param('commentId', ParseIntPipe) commentId: number): Promise<Tag[]> {
+    return this.tagService.getCommentTags(commentId);
+  }
+
+  @Get('story/:storyId')
+  async getStoryTags(@Param('storyId', ParseIntPipe) storyId: number): Promise<Tag[]> {
+    return this.tagService.getStoryTags(storyId);
+  }
 }
