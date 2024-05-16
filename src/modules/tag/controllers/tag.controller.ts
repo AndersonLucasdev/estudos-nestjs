@@ -48,4 +48,13 @@ export class TagController {
     return this.tagService.updateTag(id, patchTagDto);
   }
 
+  @Get('user/:userId')
+  async getUserTags(@Param('userId', ParseIntPipe) userId: number): Promise<Tag[]> {
+    return this.tagService.getUserTags(userId);
+  }
+
+  @Get('post/:postId')
+  async getPostTags(@Param('postId', ParseIntPipe) postId: number): Promise<Tag[]> {
+    return this.tagService.getPostTags(postId);
+  }
 }
