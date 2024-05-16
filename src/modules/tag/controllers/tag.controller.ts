@@ -23,5 +23,15 @@ import { PatchTagDto } from '../dto/PatchTag.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 export class TagController {
-    constructor(private readonly tagService: TagService) {}
+  constructor(private readonly tagService: TagService) {}
+
+  @Post()
+  async createTag(@Body() createTagDto: CreateTagDto): Promise<Tag> {
+    return this.tagService.createTag(createTagDto);
+  }
+
+  @Get(':id')
+  async getTagById(@Param('id', ParseIntPipe) id: number): Promise<Tag> {
+    return this.tagService.getTagById(id);
+  }
 }
