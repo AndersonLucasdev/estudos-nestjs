@@ -26,8 +26,16 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Get(':id')
-  async getTagById(@Param('id', ParseIntPipe) id: number): Promise<Tag> {
-    return this.tagService.getTagById(id);
+  async getTagById(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const tag = await this.tagService.getTagById(id);
+      if (!tag) {
+        throw new NotFoundException('Tag não encontrada.');
+      }
+      return { tag };
+    } catch (error) {
+      throw new NotFoundException('Tag não encontrada.');
+    }
   }
 
   @Post()
