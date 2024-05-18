@@ -30,6 +30,8 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 
+@ApiTags('Tag')
+@Controller('tags')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 

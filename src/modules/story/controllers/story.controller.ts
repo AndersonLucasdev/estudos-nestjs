@@ -31,7 +31,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 
-@ApiTags('Stories')
+@ApiTags('Story')
 @Controller('stories')
 export class StoryController {
   constructor(private readonly storyService: StoryService) {}
