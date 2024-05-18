@@ -76,22 +76,54 @@ export class TagController {
   }
 
   @Get('user/:userId')
-  async getUserTags(@Param('userId', ParseIntPipe) userId: number): Promise<Tag[]> {
-    return this.tagService.getUserTags(userId);
+  async getUserTags(@Param('userId', ParseIntPipe) userId: number) {
+    try {
+      const tags = await this.tagService.getUserTags(userId);
+      if (!tags || tags.length === 0) {
+        throw new NotFoundException('Tags not found for user.');
+      }
+      return { tags };
+    } catch (error) {
+      throw new NotFoundException('Tags not found for user.');
+    }
   }
 
   @Get('post/:postId')
-  async getPostTags(@Param('postId', ParseIntPipe) postId: number): Promise<Tag[]> {
-    return this.tagService.getPostTags(postId);
+  async getPostTags(@Param('postId', ParseIntPipe) postId: number) {
+    try {
+      const tags = await this.tagService.getPostTags(postId);
+      if (!tags || tags.length === 0) {
+        throw new NotFoundException('Tags not found for user.');
+      }
+      return { tags };
+    } catch (error) {
+      throw new NotFoundException('Tags not found for user.');
+    }
   }
 
   @Get('comment/:commentId')
-  async getCommentTags(@Param('commentId', ParseIntPipe) commentId: number): Promise<Tag[]> {
-    return this.tagService.getCommentTags(commentId);
+  async getCommentTags(@Param('commentId', ParseIntPipe) commentId: number) {
+    try {
+      const tags = await this.tagService.getCommentTags(commentId);
+      if (!tags || tags.length === 0) {
+        throw new NotFoundException('Tags not found for comment.');
+      }
+      return { tags };
+    } catch (error) {
+      throw new NotFoundException('Tags not found for comment.');
+    }
   }
 
   @Get('story/:storyId')
-  async getStoryTags(@Param('storyId', ParseIntPipe) storyId: number): Promise<Tag[]> {
-    return this.tagService.getStoryTags(storyId);
+  async getStoryTags(@Param('storyId', ParseIntPipe) storyId: number) {
+    try {
+      const tags = await this.tagService.getStoryTags(storyId);
+      if (!tags || tags.length === 0) {
+        throw new NotFoundException('Tags not found for stories.');
+      }
+      return { tags };
+    } catch (error) {
+      throw new NotFoundException('Tags not found for stories.');
+    }
   }
 }
