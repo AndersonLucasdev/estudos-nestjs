@@ -103,6 +103,10 @@ export class TagController {
   }
 
   @Get('user/:userId')
+  @ApiOperation({ summary: 'Get tags by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Tags found successfully.' })
+  @ApiResponse({ status: 404, description: 'Tags not found for this user.' })
   async getUserTags(@Param('userId', ParseIntPipe) userId: number) {
     try {
       const tags = await this.tagService.getUserTags(userId);
@@ -116,6 +120,10 @@ export class TagController {
   }
 
   @Get('post/:postId')
+  @ApiOperation({ summary: 'Get tags by post ID' })
+  @ApiParam({ name: 'postId', description: 'ID of the post', type: Number })
+  @ApiResponse({ status: 200, description: 'Tags found successfully.' })
+  @ApiResponse({ status: 404, description: 'Tags not found for this post.' })
   async getPostTags(@Param('postId', ParseIntPipe) postId: number) {
     try {
       const tags = await this.tagService.getPostTags(postId);
@@ -129,6 +137,10 @@ export class TagController {
   }
 
   @Get('comment/:commentId')
+  @ApiOperation({ summary: 'Get tags by comment ID' })
+  @ApiParam({ name: 'commentId', description: 'ID of the comment', type: Number })
+  @ApiResponse({ status: 200, description: 'Tags found successfully.' })
+  @ApiResponse({ status: 404, description: 'Tags not found for this comment.' })
   async getCommentTags(@Param('commentId', ParseIntPipe) commentId: number) {
     try {
       const tags = await this.tagService.getCommentTags(commentId);
@@ -142,6 +154,10 @@ export class TagController {
   }
 
   @Get('story/:storyId')
+  @ApiOperation({ summary: 'Get tags by story ID' })
+  @ApiParam({ name: 'storyId', description: 'ID of the story', type: Number })
+  @ApiResponse({ status: 200, description: 'Tags found successfully.' })
+  @ApiResponse({ status: 404, description: 'Tags not found for this story.' })
   async getStoryTags(@Param('storyId', ParseIntPipe) storyId: number) {
     try {
       const tags = await this.tagService.getStoryTags(storyId);
