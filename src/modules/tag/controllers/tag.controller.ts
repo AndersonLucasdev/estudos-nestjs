@@ -36,6 +36,10 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a tag by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the tag', type: Number })
+  @ApiResponse({ status: 200, description: 'Tag found successfully.' })
+  @ApiResponse({ status: 404, description: 'Tag not found.' })
   async getTagById(@Param('id', ParseIntPipe) id: number) {
     try {
       const tag = await this.tagService.getTagById(id);
@@ -49,6 +53,10 @@ export class TagController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new tag' })
+  @ApiBody({ type: CreateTagDto })
+  @ApiResponse({ status: 201, description: 'Tag created successfully.' })
+  @ApiResponse({ status: 400, description: 'Error creating tag.' })
   async createTag(@Body() createTagDto: CreateTagDto) {
     try {
       const tag = await this.tagService.createTag(createTagDto);
@@ -60,6 +68,10 @@ export class TagController {
 
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a tag by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the tag', type: Number })
+  @ApiResponse({ status: 200, description: 'Tag removed successfully.' })
+  @ApiResponse({ status: 404, description: 'Tag not found.' })
   async deleteTag(@Param('id', ParseIntPipe) id: number){
     try {
       await this.tagService.deleteTag(id);
@@ -70,6 +82,11 @@ export class TagController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a tag by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the tag', type: Number })
+  @ApiBody({ type: PatchTagDto })
+  @ApiResponse({ status: 200, description: 'Tag updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Tag not found.' })
   async updateTag(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchTagDto: PatchTagDto,
