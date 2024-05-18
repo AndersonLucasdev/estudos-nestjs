@@ -21,6 +21,14 @@ import { Tag } from '@prisma/client';
 import { CreateTagDto } from '../dto/CreateTag.dto';
 import { PatchTagDto } from '../dto/PatchTag.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 
 export class TagController {
   constructor(private readonly tagService: TagService) {}
