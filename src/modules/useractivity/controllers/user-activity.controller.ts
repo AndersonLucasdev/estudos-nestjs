@@ -34,7 +34,7 @@ import {
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
-@ApiTags('User Activities')
+@ApiTags('User Activitity')
 @Controller('posts')
 export class UserActivityController {
   constructor(private readonly userActivityService: UserActivityService) {}

@@ -29,7 +29,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 
-@ApiTags('Messages')
+@ApiTags('Message')
 @Controller('messages')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}

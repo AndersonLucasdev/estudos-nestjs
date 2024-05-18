@@ -28,7 +28,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
-@ApiTags('Comments')
+@ApiTags('Comment')
 @Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}

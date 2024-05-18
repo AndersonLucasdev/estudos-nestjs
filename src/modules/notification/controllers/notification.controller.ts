@@ -29,7 +29,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 
-@ApiTags('Notifications')
+@ApiTags('Notification')
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}

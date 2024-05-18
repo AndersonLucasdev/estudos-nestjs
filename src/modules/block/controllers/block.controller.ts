@@ -31,6 +31,7 @@ import {
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
+@ApiTags('Block')
 @Controller('blocks')
 export class BlockController {
   constructor(private readonly blockService: BlockService) {}
