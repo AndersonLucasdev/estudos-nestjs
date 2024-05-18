@@ -30,30 +30,49 @@ export class TagController {
     try {
       const tag = await this.tagService.getTagById(id);
       if (!tag) {
-        throw new NotFoundException('Tag não encontrada.');
+        throw new NotFoundException('Tag not found.');
       }
-      return { tag };
+      return {tag}
     } catch (error) {
-      throw new NotFoundException('Tag não encontrada.');
+      throw new NotFoundException('Tag not found.');
     }
   }
 
   @Post()
-  async createTag(@Body() createTagDto: CreateTagDto): Promise<Tag> {
-    return this.tagService.createTag(createTagDto);
+  async createTag(@Body() createTagDto: CreateTagDto) {
+    try {
+      const tag = await this.tagService.createTag(createTagDto);
+      return {tag}
+    } catch (error) {
+      throw new BadRequestException('Error creating a tag.');
+    }
   }
 
+
   @Delete(':id')
-  async deleteTag(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.tagService.deleteTag(id);
+  async deleteTag(@Param('id', ParseIntPipe) id: number){
+    try {
+      await this.tagService.deleteTag(id);
+      return { message: 'Tag deleted successfully.' };
+    } catch (error) {
+      throw new NotFoundException('Tag not found.');
+    }
   }
 
   @Patch(':id')
   async updateTag(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchTagDto: PatchTagDto,
-  ): Promise<Tag> {
-    return this.tagService.updateTag(id, patchTagDto);
+  ) {
+    try {
+      const tag = await this.tagService.updateTag(id, patchTagDto);
+      if (!tag) {
+        throw new NotFoundException('Tag not found.');
+      }
+      return { tag };
+    } catch (error) {
+      throw new NotFoundException('Tag not found.');
+    }
   }
 
   @Get('user/:userId')
