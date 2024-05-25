@@ -33,7 +33,47 @@ export class ReportController {
       if (!report) {
         throw new NotFoundException('Tag not found.');
       }
-      return report
+      return report;
+    } catch (error) {
+      throw new NotFoundException('Report not found.');
+    }
+  }
+
+  @Post()
+  async createReport(
+    @Body() createReportDto: CreateReportDto,
+  ): Promise<Report> {
+    try {
+      const report = this.reportService.createReport(createReportDto);
+      if (!report) {
+        throw new NotFoundException('Report not found.');
+      }
+      return report;
+    } catch (error) {
+      throw new NotFoundException('Report not found.');
+    }
+  }
+
+  @Delete(':id')
+  async deleteReport(@Param('id', ParseIntPipe) id: number) {
+    try {
+      await this.reportService.deleteReport(id);
+      return { message: 'Report deleted successfully.' };
+    } catch (error) {
+      throw new NotFoundException('Report not found.');
+    }
+  }
+
+  async updateReport(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchReportDto: PatchReportDto,
+  ): Promise<Report> {
+    try {
+      const report = await this.reportService.updateReport(id, patchReportDto);
+      if (!report) {
+        throw new NotFoundException('Report not found.');
+      }
+      return report;
     } catch (error) {
       throw new NotFoundException('Report not found.');
     }
