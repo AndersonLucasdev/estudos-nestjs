@@ -8,6 +8,7 @@ import { AllExceptionsFilter } from './commom/filters/exception.filter';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { PostModule } from './modules/post/modules/post.module';
+import { ReportModule } from './modules/report/modules/report.module';
 import { AuthModule } from './modules/auth/modules/auth.module';
 import { BlockModule } from './modules/block/modules/block.module';
 import { CommentLikeModule } from './modules/commentlike/modules/comment-like.module';
@@ -36,6 +37,7 @@ import { UserActivityModule } from './modules/useractivity/modules/user-activity
     AuthModule,
     CommentModule,
     TagModule,
+    ReportModule,
     StorynModule,
     CommentLikeModule,
     BlockModule,
