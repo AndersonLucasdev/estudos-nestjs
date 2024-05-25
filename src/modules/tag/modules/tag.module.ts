@@ -8,4 +8,4 @@ import { TagService } from '../services/tag.service';
   controllers: [TagController],
   providers: [TagService],
 })
-export class TagnModule {}
+export class TagModule {}
