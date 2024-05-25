@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Report } from '@prisma/client';
-import { ReportPatchDto } from '../dto/PatchReport.dto';
+import { PatchReportDto } from '../dto/PatchReport.dto';
 import { CreateReportDto } from '../dto/CreateReport.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
@@ -22,6 +22,44 @@ export class ReportService {
   async getReportById(id: number): Promise<Report> {
     const report = await this.prisma.report.findUnique({
       where: { id },
+    });
+    if (!report) {
+      throw new NotFoundException(`Report not found`);
+    }
+    return report;
+  }
+
+  async createReport(reportCreateDto: CreateReportDto): Promise<Report> {
+    const { reporterId, postId, commentId, storyId, reason } = reportCreateDto;
+    const report = await this.prisma.report.create({
+      data: {
+        reporterId,
+        postId,
+        commentId,
+        storyId,
+        reason,
+      },
+    });
+    return report;
+  }
+
+  async deleteReport(id: number): Promise<void> {
+    const report = await this.prisma.report.findUnique({
+      where: { id },
+    });
+    if (!report) {
+      throw new NotFoundException(`Report not found`);
+    }
+    await this.prisma.report.delete({
+      where: { id },
+    });
+  }
+
+  async updateReport(id: number, reportPatchDto: PatchReportDto): Promise<Report> {
+    const { status, reason } = reportPatchDto;
+    const report = await this.prisma.report.update({
+      where: { id },
+      data: { status, reason },
     });
     if (!report) {
       throw new NotFoundException(`Report not found`);

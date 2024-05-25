@@ -18,7 +18,7 @@ import {
 import { ReportService } from '../services/report.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Report } from '@prisma/client';
-import { ReportPatchDto } from '../dto/PatchReport.dto';
+import { PatchReportDto } from '../dto/PatchReport.dto';
 import { CreateReportDto } from '../dto/CreateReport.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
