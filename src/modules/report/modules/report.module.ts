@@ -8,4 +8,4 @@ import { ReportService } from '../services/report.service';
   controllers: [ReportController],
   providers: [ReportService],
 })
-export class TagnModule {}
+export class ReportModule {}
