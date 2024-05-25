@@ -18,4 +18,14 @@ export class ReportService {
     private readonly prisma: PrismaService,
     private readonly webSocketService: WebSocketService,
   ) {}
+
+  async getReportById(id: number): Promise<Report> {
+    const report = await this.prisma.report.findUnique({
+      where: { id },
+    });
+    if (!report) {
+      throw new NotFoundException(`Report not found`);
+    }
+    return report;
+  }
 }
