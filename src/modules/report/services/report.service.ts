@@ -7,13 +7,13 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Report } from '@prisma/client';
 import { ReportPatchDto } from '../dto/PatchReport.dto';
-import CreateReportDto from '../dto/Cre'
+import { CreateReportDto } from '../dto/CreateReport.dto';
 import * as bcrypt from 'bcrypt';
 import { TrimSpaces } from 'src/utils/helpers';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 
 @Injectable()
-export class TagService {
+export class ReportService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly webSocketService: WebSocketService,
