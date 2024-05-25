@@ -29,6 +29,24 @@ export class ReportService {
     return report;
   }
 
+  async getAllReports(): Promise<Report[]> {
+    const report = await this.prisma.report.findMany();
+    if (!report) {
+      throw new NotFoundException(`Reports not found`);
+    }
+    return report;
+  }
+
+  async getReportsByUserId(userId: number): Promise<Report[]> {
+    const report = await this.prisma.report.findMany({
+      where: { reporterId: userId },
+    });
+    if (!report) {
+      throw new NotFoundException(`Report not found`);
+    }
+    return report;
+  }
+
   async createReport(reportCreateDto: CreateReportDto): Promise<Report> {
     const { reporterId, postId, commentId, storyId, reason } = reportCreateDto;
     const report = await this.prisma.report.create({
