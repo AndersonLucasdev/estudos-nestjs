@@ -31,7 +31,33 @@ export class ReportController {
     try {
       const report = await this.reportService.getReportById(id);
       if (!report) {
-        throw new NotFoundException('Tag not found.');
+        throw new NotFoundException('Report not found.');
+      }
+      return report;
+    } catch (error) {
+      throw new NotFoundException('Report not found.');
+    }
+  }
+
+  @Get()
+  async getAllReports(): Promise<Report[]> {
+    try {
+      const report = await this.reportService.getAllReports();
+      if (!report) {
+        throw new NotFoundException('Report not found.');
+      }
+      return report;
+    } catch (error) {
+      throw new NotFoundException('Report not found.');
+    }
+  }
+
+  @Get('user/:userId')
+  async getReportsByUserId(@Param('userId', ParseIntPipe) userId: number): Promise<Report[]> {
+    try {
+      const report = await this.reportService.getReportsByUserId(userId);
+      if (!report) {
+        throw new NotFoundException('Report not found.');
       }
       return report;
     } catch (error) {
@@ -64,6 +90,7 @@ export class ReportController {
     }
   }
 
+  @Patch(':id')
   async updateReport(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchReportDto: PatchReportDto,
