@@ -40,7 +40,6 @@ export class ReportController {
   @ApiParam({ name: 'id', description: 'ID of the report', type: Number })
   @ApiResponse({ status: 200, description: 'report found successfully.' })
   @ApiResponse({ status: 404, description: 'report not found.' })
-  @Get(':id')
   async getReportById(@Param('id', ParseIntPipe) id: number): Promise<Report> {
     try {
       const report = await this.reportService.getReportById(id);
@@ -80,6 +79,10 @@ export class ReportController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new report' })
+  @ApiBody({ type: CreateReportDto })
+  @ApiResponse({ status: 201, description: 'Report created successfully.' })
+  @ApiResponse({ status: 400, description: 'Error creating report.' })
   async createReport(
     @Body() createReportDto: CreateReportDto,
   ): Promise<Report> {
@@ -95,6 +98,10 @@ export class ReportController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a report by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the report', type: Number })
+  @ApiResponse({ status: 200, description: 'Report removed successfully.' })
+  @ApiResponse({ status: 404, description: 'Report not found.' })
   async deleteReport(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.reportService.deleteReport(id);
@@ -105,6 +112,11 @@ export class ReportController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update a report by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the report', type: Number })
+  @ApiBody({ type: PatchReportDto })
+  @ApiResponse({ status: 200, description: 'Report updated successfully.' })
+  @ApiResponse({ status: 404, description: 'Report not found.' })
   async updateReport(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchReportDto: PatchReportDto,
