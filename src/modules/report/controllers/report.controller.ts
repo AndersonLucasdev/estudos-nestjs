@@ -21,6 +21,15 @@ import { Report } from '@prisma/client';
 import { PatchReportDto } from '../dto/PatchReport.dto';
 import { CreateReportDto } from '../dto/CreateReport.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
+
 
 @Controller('reports')
 export class ReportController {
