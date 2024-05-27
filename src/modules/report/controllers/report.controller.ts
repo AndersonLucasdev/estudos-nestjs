@@ -36,6 +36,11 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a report by ID' })
+  @ApiParam({ name: 'id', description: 'ID of the report', type: Number })
+  @ApiResponse({ status: 200, description: 'report found successfully.' })
+  @ApiResponse({ status: 404, description: 'report not found.' })
+  @Get(':id')
   async getReportById(@Param('id', ParseIntPipe) id: number): Promise<Report> {
     try {
       const report = await this.reportService.getReportById(id);
