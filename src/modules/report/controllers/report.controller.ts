@@ -53,6 +53,9 @@ export class ReportController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all reports' })
+  @ApiResponse({ status: 200, description: 'Reports found successfully.' })
+  @ApiResponse({ status: 404, description: 'Reports not found.' })
   async getAllReports(): Promise<Report[]> {
     try {
       const report = await this.reportService.getAllReports();
@@ -66,7 +69,13 @@ export class ReportController {
   }
 
   @Get('user/:userId')
-  async getReportsByUserId(@Param('userId', ParseIntPipe) userId: number): Promise<Report[]> {
+  @ApiOperation({ summary: 'Get reports by user ID' })
+  @ApiParam({ name: 'userId', description: 'ID of the user', type: Number })
+  @ApiResponse({ status: 200, description: 'Reports found successfully.' })
+  @ApiResponse({ status: 404, description: 'Reports not found.' })
+  async getReportsByUserId(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Report[]> {
     try {
       const report = await this.reportService.getReportsByUserId(userId);
       if (!report) {
