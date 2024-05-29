@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("POSTGRES_PRISMA_URL")
-  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
   // shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
@@ -31,6 +31,8 @@ model User {
   notifications    Notification[]
   activities       UserActivity[]
   stories          Story[]
+  Report           Report[]
+  feedbacks        Feedback[]
   following        UserFollowers[] @relation("Following")
   followers        UserFollowers[] @relation("UserFollowers")
   sentMessages     Message[]       @relation("SentMessages")
@@ -39,7 +41,6 @@ model User {
   blockedUsers     Block[]         @relation("BlockedUser")
   blockingUsers    Block[]         @relation("BlockingUser")
   tags             Tag[]           @relation("TaggedUsers")
-  Report           Report[]
 }
 
 model Post {
@@ -73,12 +74,12 @@ model Tag {
 }
 
 model Feedback {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  content    String
-  rating     Int      @default(0)
-  createdAt  DateTime @default(now()) @db.Timestamp(6)
-  user       User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  content   String
+  rating    Int      @default(0)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Comment {
