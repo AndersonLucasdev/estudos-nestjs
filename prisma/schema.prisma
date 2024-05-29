@@ -72,6 +72,15 @@ model Tag {
   story        Story?   @relation(fields: [storyId], references: [id])
 }
 
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  content    String
+  rating     Int      @default(0)
+  createdAt  DateTime @default(now()) @db.Timestamp(6)
+  user       User     @relation(fields: [userId], references: [id])
+}
+
 model Comment {
   id           Int           @id @default(autoincrement())
   creationDate DateTime      @default(now()) @db.Timestamp(6)
