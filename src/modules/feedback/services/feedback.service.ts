@@ -18,8 +18,43 @@ export class FeedbackService {
       where: { id },
     });
     if (!feedback) {
-      throw new NotFoundException(`Feedback with id ${id} not found.`);
+      throw new NotFoundException(`Feedback not found.`);
     }
     return feedback;
+  }
+
+  async createFeedback(createFeedbackDto: CreateFeedbackDto): Promise<Feedback> {
+    try {
+      const feedback = await this.prisma.feedback.create({
+        data: createFeedbackDto,
+      });
+      return feedback;
+    } catch (error) {
+      throw new ConflictException('Error creating feedback.');
+    }
+  }
+
+  async updateFeedback(id: number, patchFeedbackDto: PatchFeedbackDto): Promise<Feedback> {
+    try {
+      const feedback = await this.prisma.feedback.update({
+        where: { id },
+        data: patchFeedbackDto,
+      });
+      return feedback;
+    } catch (error) {
+      throw new NotFoundException(`Feedback not found.`);
+    }
+  }
+
+  async deleteFeedback(id: number): Promise<void> {
+    const feedback = await this.prisma.feedback.findUnique({
+      where: { id },
+    });
+    if (!feedback) {
+      throw new NotFoundException(`Feedback not found.`);
+    }
+    await this.prisma.feedback.delete({
+      where: { id },
+    });
   }
 }
