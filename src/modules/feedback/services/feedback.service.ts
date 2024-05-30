@@ -23,6 +23,24 @@ export class FeedbackService {
     return feedback;
   }
 
+  async getAllFeedbacks(): Promise<Feedback[]> {
+    const feedbacks = await this.prisma.feedback.findMany();
+    if (!feedbacks.length) {
+      throw new NotFoundException(`Feedbacks not found.`);
+    }
+    return feedbacks;
+  }
+
+  async getFeedbacksByUserId(userId: number): Promise<Feedback[]> {
+    const feedbacks = await this.prisma.feedback.findMany({
+      where: { userId },
+    });
+    if (!feedbacks.length) {
+      throw new NotFoundException(`Feedbacks not found for user.`);
+    }
+    return feedbacks;
+  }
+
   async createFeedback(createFeedbackDto: CreateFeedbackDto): Promise<Feedback> {
     try {
       const feedback = await this.prisma.feedback.create({
