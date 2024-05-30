@@ -12,4 +12,14 @@ import { Feedback } from '@prisma/client';
 @Injectable()
 export class FeedbackService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getFeedbackById(id: number): Promise<Feedback> {
+    const feedback = await this.prisma.feedback.findUnique({
+      where: { id },
+    });
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with id ${id} not found.`);
+    }
+    return feedback;
+  }
 }
