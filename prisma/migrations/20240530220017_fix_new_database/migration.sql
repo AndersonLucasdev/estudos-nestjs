@@ -57,6 +57,17 @@ CREATE TABLE "Tag" (
 );
 
 -- CreateTable
+CREATE TABLE "Feedback" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "content" TEXT NOT NULL,
+    "rating" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Feedback_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "creationDate" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -215,6 +226,9 @@ ALTER TABLE "Tag" ADD CONSTRAINT "Tag_commentId_fkey" FOREIGN KEY ("commentId") 
 
 -- AddForeignKey
 ALTER TABLE "Tag" ADD CONSTRAINT "Tag_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "Story"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
