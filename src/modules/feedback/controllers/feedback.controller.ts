@@ -18,25 +18,41 @@ import { Feedback } from '@prisma/client';
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  async getFeedbackById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Feedback> {
-    const feedback = await this.feedbackService.getFeedbackById(id);
-    return feedback;
-  }
-
   @Get('/:userId')
   async getFeedbacksByUserId(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Feedback[]> {
-    return await this.feedbackService.getFeedbacksByUserId(userId);
+    try {
+      return await this.feedbackService.getFeedbacksByUserId(userId);
+    } catch (error) {
+      throw new NotFoundException('Feedbacks not found.');
+    }
+  }
+
+  @Get('/:id')
+  async getFeedbackById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Feedback> {
+    try {
+      const feedback = await this.feedbackService.getFeedbackById(id);
+      if (!feedback) {
+        throw new NotFoundException('Feedback not found.');
+      }
+      return feedback;
+    } catch (error) {
+      throw new NotFoundException('Feedback not found.');
+    }
   }
 
   @Post('/')
   async createFeedback(
     @Body() createFeedbackDto: CreateFeedbackDto,
   ): Promise<Feedback> {
-    return await this.feedbackService.createFeedback(createFeedbackDto);
+    try {
+      return await this.feedbackService.createFeedback(createFeedbackDto);
+    } catch (error) {
+      throw new NotFoundException('Failed to create feedback.');
+    }
   }
 
   @Patch('/:id')
@@ -44,16 +60,28 @@ export class FeedbackController {
     @Param('id', ParseIntPipe) id: number,
     @Body() patchFeedbackDto: PatchFeedbackDto,
   ): Promise<Feedback> {
-    return await this.feedbackService.updateFeedback(id, patchFeedbackDto);
+    try {
+      return await this.feedbackService.updateFeedback(id, patchFeedbackDto);
+    } catch (error) {
+      throw new NotFoundException('Failed to update feedback.');
+    }
   }
 
   @Delete('/:id')
   async deleteFeedback(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    await this.feedbackService.deleteFeedback(id);
+    try {
+      await this.feedbackService.deleteFeedback(id);
+    } catch (error) {
+      throw new NotFoundException('Feedback not found.');
+    }
   }
 
   @Get('/')
   async getAllFeedbacks(): Promise<Feedback[]> {
-    return await this.feedbackService.getAllFeedbacks();
+    try {
+      return await this.feedbackService.getAllFeedbacks();
+    } catch (error) {
+      throw new NotFoundException('Feedbacks not found.');
+    }
   }
 }
