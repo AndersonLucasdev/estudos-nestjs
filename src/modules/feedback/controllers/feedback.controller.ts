@@ -18,6 +18,13 @@ import { Feedback } from '@prisma/client';
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
+  async getFeedbackById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Feedback> {
+    const feedback = await this.feedbackService.getFeedbackById(id);
+    return feedback;
+  }
+
   @Get('/:userId')
   async getFeedbacksByUserId(
     @Param('userId', ParseIntPipe) userId: number,
@@ -43,5 +50,10 @@ export class FeedbackController {
   @Delete('/:id')
   async deleteFeedback(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.feedbackService.deleteFeedback(id);
+  }
+
+  @Get('/')
+  async getAllFeedbacks(): Promise<Feedback[]> {
+    return await this.feedbackService.getAllFeedbacks();
   }
 }
