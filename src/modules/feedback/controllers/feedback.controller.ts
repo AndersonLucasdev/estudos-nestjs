@@ -17,6 +17,13 @@ import { Feedback } from '@prisma/client';
 
 @Controller('feedbacks')
 export class FeedbackController {
+  constructor(private readonly feedbackService: FeedbackService) {}
 
+  @Get('/:userId')
+  async getFeedbacksByUserId(
+    @Param('userId', ParseIntPipe) userId: number,
+  ): Promise<Feedback[]> {
     
+      return await this.feedbackService.getFeedbacksByUserId(userId);
+  }
 }
