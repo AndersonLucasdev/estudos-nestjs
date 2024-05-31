@@ -9,7 +9,6 @@ import {
   NotFoundException,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { FeedbackService } from '../services/feedback.service';
 import { CreateFeedbackDto } from '../dto/CreateFeedback.dto';
 import { PatchFeedbackDto } from '../dto/PatchFeedback.dto';
@@ -23,7 +22,26 @@ export class FeedbackController {
   async getFeedbacksByUserId(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Feedback[]> {
-    
-      return await this.feedbackService.getFeedbacksByUserId(userId);
+    return await this.feedbackService.getFeedbacksByUserId(userId);
+  }
+
+  @Post('/')
+  async createFeedback(
+    @Body() createFeedbackDto: CreateFeedbackDto,
+  ): Promise<Feedback> {
+    return await this.feedbackService.createFeedback(createFeedbackDto);
+  }
+
+  @Patch('/:id')
+  async updateFeedback(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchFeedbackDto: PatchFeedbackDto,
+  ): Promise<Feedback> {
+    return await this.feedbackService.updateFeedback(id, patchFeedbackDto);
+  }
+
+  @Delete('/:id')
+  async deleteFeedback(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.feedbackService.deleteFeedback(id);
   }
 }
