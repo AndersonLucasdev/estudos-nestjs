@@ -13,7 +13,16 @@ import { FeedbackService } from '../services/feedback.service';
 import { CreateFeedbackDto } from '../dto/CreateFeedback.dto';
 import { PatchFeedbackDto } from '../dto/PatchFeedback.dto';
 import { Feedback } from '@prisma/client';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 
+@ApiTags('Feedback')
 @Controller('feedbacks')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
