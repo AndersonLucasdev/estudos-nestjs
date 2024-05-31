@@ -28,6 +28,12 @@ export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
   @Get('/:userId')
+  @ApiOperation({ summary: 'Get feedbacks by user ID' })
+  @ApiParam({ name: 'userId', description: 'User ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns feedbacks for the specified user',
+  })
   async getFeedbacksByUserId(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Feedback[]> {
@@ -39,6 +45,12 @@ export class FeedbackController {
   }
 
   @Get('/:id')
+  @ApiOperation({ summary: 'Get feedback by ID' })
+  @ApiParam({ name: 'id', description: 'Feedback ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the feedback with the specified ID',
+  })
   async getFeedbackById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Feedback> {
@@ -54,6 +66,12 @@ export class FeedbackController {
   }
 
   @Post('/')
+  @ApiOperation({ summary: 'Create a new feedback' })
+  @ApiBody({ type: CreateFeedbackDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns the newly created feedback',
+  })
   async createFeedback(
     @Body() createFeedbackDto: CreateFeedbackDto,
   ): Promise<Feedback> {
@@ -65,6 +83,13 @@ export class FeedbackController {
   }
 
   @Patch('/:id')
+  @ApiOperation({ summary: 'Update feedback by ID' })
+  @ApiParam({ name: 'id', description: 'Feedback ID', type: Number })
+  @ApiBody({ type: PatchFeedbackDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the updated feedback',
+  })
   async updateFeedback(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchFeedbackDto: PatchFeedbackDto,
@@ -77,6 +102,12 @@ export class FeedbackController {
   }
 
   @Delete('/:id')
+  @ApiOperation({ summary: 'Delete feedback by ID' })
+  @ApiParam({ name: 'id', description: 'Feedback ID', type: Number })
+  @ApiResponse({
+    status: 204,
+    description: 'Feedback successfully deleted',
+  })
   async deleteFeedback(@Param('id', ParseIntPipe) id: number): Promise<void> {
     try {
       await this.feedbackService.deleteFeedback(id);
