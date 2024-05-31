@@ -117,6 +117,11 @@ export class FeedbackController {
   }
 
   @Get('/')
+  @ApiOperation({ summary: 'Get all feedbacks' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all feedbacks',
+  })
   async getAllFeedbacks(): Promise<Feedback[]> {
     try {
       return await this.feedbackService.getAllFeedbacks();
