@@ -13,5 +13,5 @@ import {
     controllers: [FeedbackController],
     providers: [FeedbackService],
   })
-  export class NotificationModule {}
+  export class FeedbackModule {}
   
