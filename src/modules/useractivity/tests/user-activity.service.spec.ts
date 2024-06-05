@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserActivityService } from '../services/user-activity.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 
 describe('UserActivityService', () => {
   let service: UserActivityService;
@@ -35,6 +39,4 @@ describe('UserActivityService', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
-
-})
+});
