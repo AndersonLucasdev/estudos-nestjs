@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { UserActivityType } from '@prisma/client';
+import { NotificationType } from '@prisma/client';
 
 import {
   NotFoundException,
@@ -220,7 +221,7 @@ describe('UserActivityService', () => {
       entityId: 1, 
       activityType: UserActivityType.POST_CREATED, 
       creationDate: new Date(), 
-      notificationType: NotificationType.EMAIL 
+      notificationType: NotificationType.EMAIL
     };
     const mockActivity = { id: 1, ...createUserActivityDto };
     jest.spyOn(prisma.userActivity, 'create').mockResolvedValue(mockActivity);
