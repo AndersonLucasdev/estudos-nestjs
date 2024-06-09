@@ -216,12 +216,12 @@ describe('UserActivityService', () => {
   });
 
   it('should create user activity', async () => {
-    const createUserActivityDto = { 
-      userId: 1, 
-      entityId: 1, 
-      activityType: UserActivityType.POST_CREATED, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.EMAIL
+    const createUserActivityDto = {
+      userId: 1,
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
+      notificationType: NotificationType.EMAIL,
     };
     const mockActivity = { id: 1, ...createUserActivityDto };
     jest.spyOn(prisma.userActivity, 'create').mockResolvedValue(mockActivity);
@@ -235,32 +235,37 @@ describe('UserActivityService', () => {
   });
 
   it('should throw ConflictException if failed to create user activity', async () => {
-    const createUserActivityDto = { 
-      userId: 1, 
-      entityId: 1, 
-      activityType: UserActivityType.POST_CREATED, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.EMAIL 
+    const createUserActivityDto = {
+      userId: 1,
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
+      notificationType: NotificationType.EMAIL,
     };
     jest.spyOn(prisma.userActivity, 'create').mockRejectedValue(new Error());
 
-    await expect(service.createUserActivity(createUserActivityDto)).rejects.toThrow(ConflictException);
+    await expect(
+      service.createUserActivity(createUserActivityDto),
+    ).rejects.toThrow(ConflictException);
   });
 
   it('should update user activity', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { 
-      activityType: UserActivityType.COMMENT_ADDED, 
-      userId: 1, 
-      entityId: 1, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.SMS 
+    const patchUserActivityDto = {
+      activityType: UserActivityType.COMMENT_ADDED,
+      userId: 1,
+      entityId: 1,
+      creationDate: new Date(),
+      notificationType: NotificationType.SMS,
     };
     const mockActivity = { id: activityId, ...patchUserActivityDto };
     jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
     jest.spyOn(prisma.userActivity, 'update').mockResolvedValue(mockActivity);
 
-    const result = await service.updateUserActivity(activityId, patchUserActivityDto);
+    const result = await service.updateUserActivity(
+      activityId,
+      patchUserActivityDto,
+    );
 
     expect(result).toEqual(mockActivity);
     expect(prisma.userActivity.update).toHaveBeenCalledWith({
@@ -271,24 +276,25 @@ describe('UserActivityService', () => {
 
   it('should throw BadRequestException if failed to update user activity', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { 
-      activityType: UserActivityType.COMMENT_ADDED, 
-      userId: 1, 
-      entityId: 1, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.SMS 
+    const patchUserActivityDto = {
+      activityType: UserActivityType.COMMENT_ADDED,
+      userId: 1,
+      entityId: 1,
+      creationDate: new Date(),
+      notificationType: NotificationType.SMS,
     };
-    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ 
-      id: activityId, 
-      userId: 1, 
-      entityId: 1, 
-      activityType: UserActivityType.POST_CREATED, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.EMAIL 
+    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({
+      id: activityId,
+      userId: 1,
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
     });
     jest.spyOn(prisma.userActivity, 'update').mockRejectedValue(new Error());
 
-    await expect(service.updateUserActivity(activityId, patchUserActivityDto)).rejects.toThrow(BadRequestException);
+    await expect(
+      service.updateUserActivity(activityId, patchUserActivityDto),
+    ).rejects.toThrow(BadRequestException);
   });
 
   it('should delete old user activities', async () => {
@@ -310,16 +316,17 @@ describe('UserActivityService', () => {
 
   it('should throw BadRequestException if failed to delete user activity', async () => {
     const activityId = 1;
-    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ 
-      id: activityId, 
-      userId: 1, 
-      entityId: 1, 
-      activityType: UserActivityType.POST_CREATED, 
-      creationDate: new Date(), 
-      notificationType: NotificationType.EMAIL 
+    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({
+      id: activityId,
+      userId: 1,
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
     });
     jest.spyOn(prisma.userActivity, 'delete').mockRejectedValue(new Error());
 
-    await expect(service.deleteUserActivity(activityId)).rejects.toThrow(BadRequestException);
+    await expect(service.deleteUserActivity(activityId)).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });
