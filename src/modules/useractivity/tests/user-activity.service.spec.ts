@@ -3,6 +3,8 @@ import { UserActivityService } from '../services/user-activity.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
+import { UserActivityType } from '@prisma/client';
+
 import {
   NotFoundException,
   ConflictException,
@@ -48,7 +50,7 @@ describe('UserActivityService', () => {
 
   it('should get user activities', async () => {
     const userId = 1;
-    const mockActivities = [{ id: 1, userId, activityType: 'login', creationDate: new Date() }];
+    const mockActivities = [{ id: 1, userId, entityId: 1, activityType: UserActivityType.LOGIN, creationDate: new Date() }];
     jest.spyOn(prisma.userActivity, 'findMany').mockResolvedValue(mockActivities);
 
     const result = await service.getUserActivities(userId);
@@ -61,7 +63,7 @@ describe('UserActivityService', () => {
 
   it('should get user activity by ID', async () => {
     const activityId = 1;
-    const mockActivity = { id: activityId, userId: 1, activityType: 'login', creationDate: new Date() };
+    const mockActivity = { id: activityId, userId: 1, entityId: 1, activityType: 'login', creationDate: new Date() };
     jest.spyOn(prisma.userActivity, 'findUnique').mockResolvedValue(mockActivity);
 
     const result = await service.getUserActivityById(activityId);
