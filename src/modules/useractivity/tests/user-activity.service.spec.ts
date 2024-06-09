@@ -50,8 +50,18 @@ describe('UserActivityService', () => {
 
   it('should get user activities', async () => {
     const userId = 1;
-    const mockActivities = [{ id: 1, userId, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() }];
-    jest.spyOn(prisma.userActivity, 'findMany').mockResolvedValue(mockActivities);
+    const mockActivities = [
+      {
+        id: 1,
+        userId,
+        entityId: 1,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+      },
+    ];
+    jest
+      .spyOn(prisma.userActivity, 'findMany')
+      .mockResolvedValue(mockActivities);
 
     const result = await service.getUserActivities(userId);
 
@@ -63,8 +73,16 @@ describe('UserActivityService', () => {
 
   it('should get user activity by ID', async () => {
     const activityId = 1;
-    const mockActivity = { id: activityId, userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() };
-    jest.spyOn(prisma.userActivity, 'findUnique').mockResolvedValue(mockActivity);
+    const mockActivity = {
+      id: activityId,
+      userId: 1,
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
+    };
+    jest
+      .spyOn(prisma.userActivity, 'findUnique')
+      .mockResolvedValue(mockActivity);
 
     const result = await service.getUserActivityById(activityId);
 
@@ -78,14 +96,20 @@ describe('UserActivityService', () => {
     const activityId = 1;
     jest.spyOn(prisma.userActivity, 'findUnique').mockResolvedValue(null);
 
-    await expect(service.getUserActivityById(activityId)).rejects.toThrow(NotFoundException);
+    await expect(service.getUserActivityById(activityId)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 
   it('should get user activities by type', async () => {
     const userId = 1;
     const activityType = UserActivityType.POST_CREATED;
-    const mockActivities = [{ id: 1, userId, entityId: 1, activityType, creationDate: new Date() }];
-    jest.spyOn(prisma.userActivity, 'findMany').mockResolvedValue(mockActivities);
+    const mockActivities = [
+      { id: 1, userId, entityId: 1, activityType, creationDate: new Date() },
+    ];
+    jest
+      .spyOn(prisma.userActivity, 'findMany')
+      .mockResolvedValue(mockActivities);
 
     const result = await service.getUserActivitiesByType(userId, activityType);
 
@@ -101,7 +125,10 @@ describe('UserActivityService', () => {
     const count = 5;
     jest.spyOn(prisma.userActivity, 'count').mockResolvedValue(count);
 
-    const result = await service.countUserActivitiesByType(userId, activityType);
+    const result = await service.countUserActivitiesByType(
+      userId,
+      activityType,
+    );
 
     expect(result).toBe(count);
     expect(prisma.userActivity.count).toHaveBeenCalledWith({
@@ -113,10 +140,24 @@ describe('UserActivityService', () => {
     const userId = 1;
     const startDate = new Date('2023-01-01');
     const endDate = new Date('2023-12-31');
-    const mockActivities = [{ id: 1, userId, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() }];
-    jest.spyOn(prisma.userActivity, 'findMany').mockResolvedValue(mockActivities);
+    const mockActivities = [
+      {
+        id: 1,
+        userId,
+        entityId: 1,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+      },
+    ];
+    jest
+      .spyOn(prisma.userActivity, 'findMany')
+      .mockResolvedValue(mockActivities);
 
-    const result = await service.filterUserActivitiesByDate(userId, startDate, endDate);
+    const result = await service.filterUserActivitiesByDate(
+      userId,
+      startDate,
+      endDate,
+    );
 
     expect(result).toEqual(mockActivities);
     expect(prisma.userActivity.findMany).toHaveBeenCalledWith({
@@ -133,8 +174,18 @@ describe('UserActivityService', () => {
   it('should get recent user activities', async () => {
     const userId = 1;
     const limit = 10;
-    const mockActivities = [{ id: 1, userId, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() }];
-    jest.spyOn(prisma.userActivity, 'findMany').mockResolvedValue(mockActivities);
+    const mockActivities = [
+      {
+        id: 1,
+        userId,
+        entityId: 1,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+      },
+    ];
+    jest
+      .spyOn(prisma.userActivity, 'findMany')
+      .mockResolvedValue(mockActivities);
 
     const result = await service.getRecentUserActivities(userId, limit);
 
@@ -149,7 +200,9 @@ describe('UserActivityService', () => {
   it('should delete old user activities', async () => {
     const userId = 1;
     const cutoffDate = new Date('2023-01-01');
-    jest.spyOn(prisma.userActivity, 'deleteMany').mockResolvedValue({ count: 1 });
+    jest
+      .spyOn(prisma.userActivity, 'deleteMany')
+      .mockResolvedValue({ count: 1 });
 
     await service.deleteOldUserActivities(userId, cutoffDate);
 
@@ -162,7 +215,13 @@ describe('UserActivityService', () => {
   });
 
   it('should create user activity', async () => {
-    const createUserActivityDto = { userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date(), notificationType: NotificationType.EMAIL };
+    const createUserActivityDto = { 
+      userId: 1, 
+      entityId: 1, 
+      activityType: UserActivityType.POST_CREATED, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.EMAIL 
+    };
     const mockActivity = { id: 1, ...createUserActivityDto };
     jest.spyOn(prisma.userActivity, 'create').mockResolvedValue(mockActivity);
 
@@ -175,7 +234,13 @@ describe('UserActivityService', () => {
   });
 
   it('should throw ConflictException if failed to create user activity', async () => {
-    const createUserActivityDto = { userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date(), notificationType: 'EMAIL' };
+    const createUserActivityDto = { 
+      userId: 1, 
+      entityId: 1, 
+      activityType: UserActivityType.POST_CREATED, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.EMAIL 
+    };
     jest.spyOn(prisma.userActivity, 'create').mockRejectedValue(new Error());
 
     await expect(service.createUserActivity(createUserActivityDto)).rejects.toThrow(ConflictException);
@@ -183,8 +248,14 @@ describe('UserActivityService', () => {
 
   it('should update user activity', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { activityType: UserActivityType.COMMENT_ADDED };
-    const mockActivity = { id: activityId, userId: 1, entityId: 1, activityType: UserActivityType.COMMENT_ADDED, creationDate: new Date() };
+    const patchUserActivityDto = { 
+      activityType: UserActivityType.COMMENT_ADDED, 
+      userId: 1, 
+      entityId: 1, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.SMS 
+    };
+    const mockActivity = { id: activityId, ...patchUserActivityDto };
     jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
     jest.spyOn(prisma.userActivity, 'update').mockResolvedValue(mockActivity);
 
@@ -199,29 +270,53 @@ describe('UserActivityService', () => {
 
   it('should throw BadRequestException if failed to update user activity', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { activityType: UserActivityType.COMMENT_ADDED };
-    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ id: activityId, userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() });
+    const patchUserActivityDto = { 
+      activityType: UserActivityType.COMMENT_ADDED, 
+      userId: 1, 
+      entityId: 1, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.SMS 
+    };
+    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ 
+      id: activityId, 
+      userId: 1, 
+      entityId: 1, 
+      activityType: UserActivityType.POST_CREATED, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.EMAIL 
+    });
     jest.spyOn(prisma.userActivity, 'update').mockRejectedValue(new Error());
 
     await expect(service.updateUserActivity(activityId, patchUserActivityDto)).rejects.toThrow(BadRequestException);
   });
 
-  it('should delete user activity', async () => {
-    const activityId = 1;
-    const mockActivity = { id: activityId, userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date() };
-    jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
-    jest.spyOn(prisma.userActivity, 'delete').mockResolvedValue(mockActivity);
+  it('should delete old user activities', async () => {
+    const userId = 1;
+    const cutoffDate = new Date('2023-01-01');
+    jest
+      .spyOn(prisma.userActivity, 'deleteMany')
+      .mockResolvedValue({ count: 1 });
 
-    await service.deleteUserActivity(activityId);
+    await service.deleteOldUserActivities(userId, cutoffDate);
 
-    expect(prisma.userActivity.delete).toHaveBeenCalledWith({
-      where: { id: activityId },
+    expect(prisma.userActivity.deleteMany).toHaveBeenCalledWith({
+      where: {
+        userId,
+        creationDate: { lt: cutoffDate },
+      },
     });
   });
 
   it('should throw BadRequestException if failed to delete user activity', async () => {
     const activityId = 1;
-    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ id: activityId, userId: 1, entityId: 1, activityType: UserActivityType.POST_CREATED, creationDate: new Date(), notificationType: 'EMAIL' });
+    jest.spyOn(service, 'getUserActivityById').mockResolvedValue({ 
+      id: activityId, 
+      userId: 1, 
+      entityId: 1, 
+      activityType: UserActivityType.POST_CREATED, 
+      creationDate: new Date(), 
+      notificationType: NotificationType.EMAIL 
+    });
     jest.spyOn(prisma.userActivity, 'delete').mockRejectedValue(new Error());
 
     await expect(service.deleteUserActivity(activityId)).rejects.toThrow(BadRequestException);

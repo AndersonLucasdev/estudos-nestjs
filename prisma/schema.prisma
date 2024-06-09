@@ -208,6 +208,8 @@ enum NotificationType {
   LIKE
   COMMENT
   FRIEND_REQUEST
+  EMAIL
+  SMS
 }
 
 enum UserActivityType {
