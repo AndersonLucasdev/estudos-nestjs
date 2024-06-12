@@ -44,36 +44,40 @@ describe('UserActivityController', () => {
 
   it('should get user activities', async () => {
     const userId = 1;
-    const mockActivities = [{
+    const mockActivities = [
+      {
         id: 1,
         userId: userId,
-        entityId: 1, 
+        entityId: 1,
         activityType: 'login',
-        creationDate: new Date()
-    }];
+        creationDate: new Date(),
+      },
+    ];
     jest.spyOn(service, 'getUserActivities').mockResolvedValue(mockActivities);
 
     const result = await controller.getUserActivities(userId);
 
     expect(result).toEqual(mockActivities);
     expect(service.getUserActivities).toHaveBeenCalledWith(userId);
-});
+  });
 
   it('should throw NotFoundException if no activities found', async () => {
     const userId = 1;
     jest.spyOn(service, 'getUserActivities').mockResolvedValue([]);
 
-    await expect(controller.getUserActivities(userId)).rejects.toThrow(NotFoundException);
+    await expect(controller.getUserActivities(userId)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 
   it('should get user activity by ID', async () => {
     const activityId = 1;
     const mockActivity = {
-        id: activityId,
-        userId: 1,
-        entityId: 1, // Adicione esta linha
-        activityType: 'login',
-        creationDate: new Date()
+      id: activityId,
+      userId: 1,
+      entityId: 1, // Adicione esta linha
+      activityType: 'login',
+      creationDate: new Date(),
     };
     jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
 
@@ -81,6 +85,13 @@ describe('UserActivityController', () => {
 
     expect(result).toEqual(mockActivity);
     expect(service.getUserActivityById).toHaveBeenCalledWith(activityId);
-});
-})
+  });
+  it('should throw NotFoundException if activity by ID not found', async () => {
+    const activityId = 1;
+    jest.spyOn(service, 'getUserActivityById').mockResolvedValue(null);
 
+    await expect(controller.getUserActivityById(activityId)).rejects.toThrow(
+      NotFoundException,
+    );
+  });
+});
