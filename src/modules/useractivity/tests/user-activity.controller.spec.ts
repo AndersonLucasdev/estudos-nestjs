@@ -47,7 +47,7 @@ describe('UserActivityController', () => {
     const mockActivities = [{
         id: 1,
         userId: userId,
-        entityId: 1, // Adicione esta linha
+        entityId: 1, 
         activityType: 'login',
         creationDate: new Date()
     }];
@@ -82,3 +82,5 @@ describe('UserActivityController', () => {
     expect(result).toEqual(mockActivity);
     expect(service.getUserActivityById).toHaveBeenCalledWith(activityId);
 });
+})
+
