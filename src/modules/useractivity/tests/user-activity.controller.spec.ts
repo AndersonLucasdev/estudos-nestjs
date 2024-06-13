@@ -50,7 +50,7 @@ describe('UserActivityController', () => {
         id: 1,
         userId: userId,
         entityId: 1,
-        activityType: 'login',
+        activityType: UserActivityType.POST_CREATED,
         creationDate: new Date(),
       },
     ];
@@ -76,8 +76,8 @@ describe('UserActivityController', () => {
     const mockActivity = {
       id: activityId,
       userId: 1,
-      entityId: 1, // Adicione esta linha
-      activityType: UserActivityType.LOGIN, // Use o enum correto
+      entityId: 1,
+      activityType: UserActivityType.POST_CREATED, 
       creationDate: new Date(),
     };
     jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
