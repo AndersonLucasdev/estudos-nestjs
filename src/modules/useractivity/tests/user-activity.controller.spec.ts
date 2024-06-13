@@ -3,6 +3,7 @@ import { UserActivityController } from '../controllers/user-activity.controller'
 import { UserActivityService } from '../services/user-activity.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
+import { UserActivityType } from '@prisma/client';
 
 describe('UserActivityController', () => {
   let controller: UserActivityController;
@@ -76,7 +77,7 @@ describe('UserActivityController', () => {
       id: activityId,
       userId: 1,
       entityId: 1, // Adicione esta linha
-      activityType: 'login',
+      activityType: UserActivityType.LOGIN, // Use o enum correto
       creationDate: new Date(),
     };
     jest.spyOn(service, 'getUserActivityById').mockResolvedValue(mockActivity);
