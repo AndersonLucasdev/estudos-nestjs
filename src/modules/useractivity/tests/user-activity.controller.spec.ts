@@ -101,7 +101,13 @@ describe('UserActivityController', () => {
     const userId = 1;
     const activityType = 'login';
     const mockActivities = [
-      { id: 1, userId, activityType: UserActivityType.POST_CREATED, creationDate: new Date(), entityId: 1 },
+      {
+        id: 1,
+        userId,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+        entityId: 1,
+      },
     ];
     jest
       .spyOn(service, 'getUserActivitiesByType')
@@ -109,7 +115,7 @@ describe('UserActivityController', () => {
 
     const result = await controller.getUserActivitiesByType(
       userId,
-      activityType,
+      UserActivityType.POST_CREATED,
     );
 
     expect(result).toEqual(mockActivities);
@@ -129,7 +135,7 @@ describe('UserActivityController', () => {
 
     const result = await controller.countUserActivitiesByType(
       userId,
-      activityType,
+      UserActivityType.POST_CREATED,
     );
 
     expect(result).toEqual(mockCount);
@@ -144,7 +150,13 @@ describe('UserActivityController', () => {
     const startDate = new Date('2023-01-01');
     const endDate = new Date('2023-12-31');
     const mockActivities = [
-      { id: 1, userId, activityType: 'login', creationDate: new Date() },
+      {
+        id: 1,
+        userId,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+        entityId: 1,
+      },
     ];
     jest
       .spyOn(service, 'filterUserActivitiesByDate')
@@ -168,7 +180,13 @@ describe('UserActivityController', () => {
     const userId = 1;
     const limit = 10;
     const mockActivities = [
-      { id: 1, userId, activityType: 'login', creationDate: new Date() },
+      {
+        id: 1,
+        userId,
+        activityType: UserActivityType.POST_CREATED,
+        creationDate: new Date(),
+        entityId: 1,
+      },,
     ];
     jest
       .spyOn(service, 'getRecentUserActivities')
@@ -197,10 +215,12 @@ describe('UserActivityController', () => {
 
   it('should create user activity', async () => {
     const createUserActivityDto = {
-      userId: 1,
-      activityType: 'login',
+      id: 1,
+      userId,
+      activityType: UserActivityType.POST_CREATED,
       creationDate: new Date(),
-    };
+      entityId: 1,
+    },
     const mockActivity = { id: 1, ...createUserActivityDto };
     jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
 
