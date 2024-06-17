@@ -201,9 +201,7 @@ describe('UserActivityController', () => {
   it('should delete old user activities', async () => {
     const userId = 1;
     const cutoffDate = new Date('2023-01-01');
-    jest
-      .spyOn(service, 'deleteOldUserActivities')
-      .mockResolvedValue({ count: 1 });
+    jest.spyOn(service, 'deleteOldUserActivities').mockResolvedValue(); 
 
     await controller.deleteOldUserActivities(userId, cutoffDate);
 
@@ -211,7 +209,7 @@ describe('UserActivityController', () => {
       userId,
       cutoffDate,
     );
-  });
+});
 
   it('should create user activity', async () => {
     const createUserActivityDto = {
