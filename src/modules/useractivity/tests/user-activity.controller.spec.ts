@@ -211,24 +211,23 @@ describe('UserActivityController', () => {
     );
 });
 
-  it('should create user activity', async () => {
-    const createUserActivityDto = {
-      id: 1,
-      userId,
-      activityType: UserActivityType.POST_CREATED,
-      creationDate: new Date(),
-      entityId: 1,
-    },
-    const mockActivity = { id: 1, ...createUserActivityDto };
-    jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
+it('should create user activity', async () => {
+  const userId = 1; // Declare the userId variable
+  const createUserActivityDto = {
+    id: 1,
+    userId,
+    activityType: UserActivityType.POST_CREATED,
+    creationDate: new Date(),
+    entityId: 1,
+  };
+  const mockActivity = { id: 1, ...createUserActivityDto };
+  jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
 
-    const result = await controller.createUserActivity(createUserActivityDto);
+  const result = await controller.createUserActivity(createUserActivityDto);
 
-    expect(result).toEqual(mockActivity);
-    expect(service.createUserActivity).toHaveBeenCalledWith(
-      createUserActivityDto,
-    );
-  });
+  expect(result).toEqual(mockActivity);
+  expect(service.createUserActivity).toHaveBeenCalledWith(createUserActivityDto);
+});
 
   it('should throw ConflictException if create user activity fails', async () => {
     const createUserActivityDto = {
