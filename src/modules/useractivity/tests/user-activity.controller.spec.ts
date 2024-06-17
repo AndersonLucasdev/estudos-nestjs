@@ -247,26 +247,25 @@ it('should create user activity', async () => {
 
   it('should update user activity', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { activityType: 'logout' };
-    const mockActivity = {
-      id: activityId,
-      userId: 1,
-      ...patchUserActivityDto,
-      creationDate: new Date(),
+    const patchUserActivityDto = {
+        userId: 1,
+        activityType: 'logout' as UserActivityType,
+        entityId: 1,
+        creationDate: new Date(),
+        notificationType: 'email' as NotificationType, // Incluindo campo de notificationType
     };
+    const mockActivity = {
+        id: activityId,
+        ...patchUserActivityDto,
+    };
+
     jest.spyOn(service, 'updateUserActivity').mockResolvedValue(mockActivity);
 
-    const result = await controller.updateUserActivity(
-      activityId,
-      patchUserActivityDto,
-    );
+    const result = await controller.updateUserActivity(activityId, patchUserActivityDto);
 
     expect(result).toEqual(mockActivity);
-    expect(service.updateUserActivity).toHaveBeenCalledWith(
-      activityId,
-      patchUserActivityDto,
-    );
-  });
+    expect(service.updateUserActivity).toHaveBeenCalledWith(activityId, patchUserActivityDto);
+});
 
   it('should throw BadRequestException if update user activity fails', async () => {
     const activityId = 1;
