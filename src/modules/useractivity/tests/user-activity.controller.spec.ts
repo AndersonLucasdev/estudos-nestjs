@@ -2,10 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserActivityController } from '../controllers/user-activity.controller';
 import { UserActivityService } from '../services/user-activity.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
 import { UserActivityType } from '@prisma/client';
-import { ConflictException } from '@nestjs/common';
-import { BadRequestException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('UserActivityController', () => {
   let controller: UserActivityController;
@@ -188,7 +190,8 @@ describe('UserActivityController', () => {
         activityType: UserActivityType.POST_CREATED,
         creationDate: new Date(),
         entityId: 1,
-      },,
+      },
+      ,
     ];
     jest
       .spyOn(service, 'getRecentUserActivities')
@@ -203,7 +206,7 @@ describe('UserActivityController', () => {
   it('should delete old user activities', async () => {
     const userId = 1;
     const cutoffDate = new Date('2023-01-01');
-    jest.spyOn(service, 'deleteOldUserActivities').mockResolvedValue(); 
+    jest.spyOn(service, 'deleteOldUserActivities').mockResolvedValue();
 
     await controller.deleteOldUserActivities(userId, cutoffDate);
 
@@ -211,25 +214,27 @@ describe('UserActivityController', () => {
       userId,
       cutoffDate,
     );
-});
+  });
 
-it('should create user activity', async () => {
-  const userId = 1; // Declare the userId variable
-  const createUserActivityDto = {
-    id: 1,
-    userId,
-    activityType: UserActivityType.POST_CREATED,
-    creationDate: new Date(),
-    entityId: 1,
-  };
-  const mockActivity = { id: 1, ...createUserActivityDto };
-  jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
+  it('should create user activity', async () => {
+    const userId = 1; // Declare the userId variable
+    const createUserActivityDto = {
+      id: 1,
+      userId,
+      activityType: UserActivityType.POST_CREATED,
+      creationDate: new Date(),
+      entityId: 1,
+    };
+    const mockActivity = { id: 1, ...createUserActivityDto };
+    jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
 
-  const result = await controller.createUserActivity(createUserActivityDto);
+    const result = await controller.createUserActivity(createUserActivityDto);
 
-  expect(result).toEqual(mockActivity);
-  expect(service.createUserActivity).toHaveBeenCalledWith(createUserActivityDto);
-});
+    expect(result).toEqual(mockActivity);
+    expect(service.createUserActivity).toHaveBeenCalledWith(
+      createUserActivityDto,
+    );
+  });
 
   it('should throw ConflictException if create user activity fails', async () => {
     const createUserActivityDto = {
@@ -249,24 +254,30 @@ it('should create user activity', async () => {
   it('should update user activity', async () => {
     const activityId = 1;
     const patchUserActivityDto = {
-        userId: 1,
-        activityType: 'logout' as UserActivityType,
-        entityId: 1,
-        creationDate: new Date(),
-        notificationType: 'email' as NotificationType, // Incluindo campo de notificationType
+      userId: 1,
+      activityType: 'logout' as UserActivityType,
+      entityId: 1,
+      creationDate: new Date(),
+      notificationType: 'email' as NotificationType, // Incluindo campo de notificationType
     };
     const mockActivity = {
-        id: activityId,
-        ...patchUserActivityDto,
+      id: activityId,
+      ...patchUserActivityDto,
     };
 
     jest.spyOn(service, 'updateUserActivity').mockResolvedValue(mockActivity);
 
-    const result = await controller.updateUserActivity(activityId, patchUserActivityDto);
+    const result = await controller.updateUserActivity(
+      activityId,
+      patchUserActivityDto,
+    );
 
     expect(result).toEqual(mockActivity);
-    expect(service.updateUserActivity).toHaveBeenCalledWith(activityId, patchUserActivityDto);
-});
+    expect(service.updateUserActivity).toHaveBeenCalledWith(
+      activityId,
+      patchUserActivityDto,
+    );
+  });
 
   it('should throw BadRequestException if update user activity fails', async () => {
     const activityId = 1;
