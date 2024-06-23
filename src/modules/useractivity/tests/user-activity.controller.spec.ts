@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
 import { UserActivityType } from '@prisma/client';
 import { ConflictException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 describe('UserActivityController', () => {
   let controller: UserActivityController;
