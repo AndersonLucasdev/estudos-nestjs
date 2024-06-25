@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserActivityController } from '../controllers/user-activity.controller';
 import { UserActivityService } from '../services/user-activity.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserActivityType } from '@prisma/client';
+import { NotificationType, UserActivityType } from '@prisma/client';
 import {
   BadRequestException,
   ConflictException,
@@ -217,23 +217,21 @@ describe('UserActivityController', () => {
   });
 
   it('should create user activity', async () => {
-    const userId = 1; // Declare the userId variable
+    const userId = 1;
     const createUserActivityDto = {
-      id: 1,
       userId,
       activityType: UserActivityType.POST_CREATED,
       creationDate: new Date(),
       entityId: 1,
+      notificationType: NotificationType.FRIEND_REQUEST, 
     };
     const mockActivity = { id: 1, ...createUserActivityDto };
     jest.spyOn(service, 'createUserActivity').mockResolvedValue(mockActivity);
-
+  
     const result = await controller.createUserActivity(createUserActivityDto);
-
+  
     expect(result).toEqual(mockActivity);
-    expect(service.createUserActivity).toHaveBeenCalledWith(
-      createUserActivityDto,
-    );
+    expect(service.createUserActivity).toHaveBeenCalledWith(createUserActivityDto);
   });
 
   it('should throw ConflictException if create user activity fails', async () => {
@@ -281,10 +279,9 @@ describe('UserActivityController', () => {
 
   it('should throw BadRequestException if update user activity fails', async () => {
     const activityId = 1;
-    const patchUserActivityDto = { activityType: 'logout' };
-    jest
-      .spyOn(service, 'updateUserActivity')
-      .mockRejectedValue(new BadRequestException());
+    const patchUserActivityDto = { userId: 1, activityType: 'logout' as UserActivityType, entityId: 1, creationDate: new Date(), notificationType: 'email' as NotificationType };
+
+    jest.spyOn(service, 'updateUserActivity').mockRejectedValue(new BadRequestException());
 
     await expect(
       controller.updateUserActivity(activityId, patchUserActivityDto),
