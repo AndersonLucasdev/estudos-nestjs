@@ -237,13 +237,15 @@ describe('UserActivityController', () => {
   it('should throw ConflictException if create user activity fails', async () => {
     const createUserActivityDto = {
       userId: 1,
-      activityType: 'login',
+      activityType: 'login' as UserActivityType,
       creationDate: new Date(),
+      entityId: 1,
+      notificationType: 'email' as NotificationType,
     };
     jest
       .spyOn(service, 'createUserActivity')
       .mockRejectedValue(new ConflictException());
-
+  
     await expect(
       controller.createUserActivity(createUserActivityDto),
     ).rejects.toThrow(ConflictException);
