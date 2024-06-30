@@ -5,7 +5,6 @@ import { CreateUserActivityDto } from '../dto/CreateUserActivity.dto';
 import { PatchUserActivityDto } from '../dto/PatchUserActivity.dto';
 import { UserActivityType } from '@prisma/client';
 import { NotificationType } from '@prisma/client';
-
 import {
   NotFoundException,
   ConflictException,
