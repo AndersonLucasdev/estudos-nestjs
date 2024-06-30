@@ -97,5 +97,67 @@ describe('UserController', () => {
     });
   });
 
+  describe('deleteUser', () => {
+    it('should delete a user by ID', async () => {
+      const userId = 1;
+      const mockUser = { id: userId, username: 'user1' };
+      jest.spyOn(service, 'DeleteUser').mockResolvedValue(mockUser);
   
+      const result = await controller.deleteUser(userId);
+  
+      expect(result).toEqual({ message: 'User removed successfully!', user: mockUser });
+      expect(service.DeleteUser).toHaveBeenCalledWith(userId);
+    });
+  
+    it('should throw NotFoundException if error deleting user', async () => {
+      const userId = 1;
+      jest.spyOn(service, 'DeleteUser').mockRejectedValue(new Error('Error'));
+  
+      await expect(controller.deleteUser(userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('patchUser', () => {
+    it('should update a user by ID', async () => {
+      const userId = 1;
+      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
+      const mockUser = { id: userId, ...patchUserDto };
+      jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
+      jest.spyOn(service, 'PatchUser').mockResolvedValue(mockUser);
+  
+      const result = await controller.patchUser(userId, patchUserDto);
+  
+      expect(result).toEqual({ message: 'Usuário atualizado com sucesso!', user: mockUser });
+      expect(service.GetUserById).toHaveBeenCalledWith(userId);
+      expect(service.PatchUser).toHaveBeenCalledWith(userId, patchUserDto);
+    });
+  
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 1;
+      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
+      jest.spyOn(service, 'GetUserById').mockResolvedValue(null);
+  
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(NotFoundException);
+    });
+  
+    it('should throw ConflictException if email is already in use', async () => {
+      const userId = 1;
+      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
+      const mockUser = { id: userId, username: 'user1', email: 'oldEmail@example.com' };
+      const mockExistingUser = { id: 2, username: 'user2', email: 'newEmail@example.com' };
+      jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
+      jest.spyOn(service, 'GetUserByEmail').mockResolvedValue(mockExistingUser);
+  
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(ConflictException);
+    });
+  
+    it('should throw BadRequestException if passwords do not match', async () => {
+      const userId = 1;
+      const patchUserDto = { password: 'password1', confirmPassword: 'password2' };
+      const mockUser = { id: userId, username: 'user1', email: 'oldEmail@example.com' };
+      jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
+  
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(BadRequestException);
+    });
+  });
 });
