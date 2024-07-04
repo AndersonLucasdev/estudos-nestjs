@@ -204,7 +204,23 @@ describe('UserController', () => {
     it('should throw BadRequestException if passwords do not match', async () => {
       const userId = 1;
       const patchUserDto = { password: 'password1', confirmPassword: 'password2' };
-      const mockUser = { id: userId, username: 'user1', email: 'oldEmail@example.com' };
+      const mockUser = {
+        id: 1,
+        username: 'user1',
+        name: 'User One',
+        email: 'user1@example.com',
+        password: 'hashed_password',
+        confirmPassword: 'hashed_password',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
+      };
+      
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
   
       await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(BadRequestException);
