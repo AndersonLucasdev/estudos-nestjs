@@ -57,7 +57,7 @@ describe('UserController', () => {
       connectionId: 'connection_id',
       gender: 'MALE' as Gender,
     };
-    
+
     const mockUsers = [mockUser];
     jest.spyOn(service, 'GetAllUsers').mockResolvedValue(mockUsers);
 
@@ -86,20 +86,22 @@ describe('UserController', () => {
         connectionId: 'connection_id',
         gender: 'MALE' as Gender,
       };
-      
+
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
-  
+
       const result = await controller.getUserById(userId);
-  
+
       expect(result).toEqual({ user: mockUser });
       expect(service.GetUserById).toHaveBeenCalledWith(userId);
     });
-  
+
     it('should throw NotFoundException if user not found', async () => {
       const userId = 1;
       jest.spyOn(service, 'GetUserById').mockResolvedValue(null);
-  
-      await expect(controller.getUserById(userId)).rejects.toThrow(NotFoundException);
+
+      await expect(controller.getUserById(userId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -112,13 +114,16 @@ describe('UserController', () => {
       };
       const mockUser = { id: 1, ...createUserDto };
       jest.spyOn(service, 'CreateUser').mockResolvedValue(mockUser);
-  
+
       const result = await controller.createUser(createUserDto);
-  
-      expect(result).toEqual({ message: 'User created successfully!', user: mockUser });
+
+      expect(result).toEqual({
+        message: 'User created successfully!',
+        user: mockUser,
+      });
       expect(service.CreateUser).toHaveBeenCalledWith(createUserDto);
     });
-  
+
     it('should throw NotFoundException if error creating user', async () => {
       const createUserDto = {
         username: 'user1',
@@ -126,8 +131,10 @@ describe('UserController', () => {
         password: 'password',
       };
       jest.spyOn(service, 'CreateUser').mockRejectedValue(new Error('Error'));
-  
-      await expect(controller.createUser(createUserDto)).rejects.toThrow(NotFoundException);
+
+      await expect(controller.createUser(createUserDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -150,60 +157,92 @@ describe('UserController', () => {
         connectionId: 'connection_id',
         gender: 'MALE' as Gender,
       };
-      
+
       jest.spyOn(service, 'DeleteUser').mockResolvedValue(mockUser);
-  
+
       const result = await controller.deleteUser(userId);
-  
-      expect(result).toEqual({ message: 'User removed successfully!', user: mockUser });
+
+      expect(result).toEqual({
+        message: 'User removed successfully!',
+        user: mockUser,
+      });
       expect(service.DeleteUser).toHaveBeenCalledWith(userId);
     });
-  
+
     it('should throw NotFoundException if error deleting user', async () => {
       const userId = 1;
       jest.spyOn(service, 'DeleteUser').mockRejectedValue(new Error('Error'));
-  
-      await expect(controller.deleteUser(userId)).rejects.toThrow(NotFoundException);
+
+      await expect(controller.deleteUser(userId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
   describe('patchUser', () => {
     it('should update a user by ID', async () => {
       const userId = 1;
-      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
+      const patchUserDto = {
+        username: 'newUsername',
+        email: 'newEmail@example.com',
+      };
       const mockUser = { id: userId, ...patchUserDto };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
       jest.spyOn(service, 'PatchUser').mockResolvedValue(mockUser);
-  
+
       const result = await controller.patchUser(userId, patchUserDto);
-  
-      expect(result).toEqual({ message: 'Usuário atualizado com sucesso!', user: mockUser });
+
+      expect(result).toEqual({
+        message: 'Usuário atualizado com sucesso!',
+        user: mockUser,
+      });
       expect(service.GetUserById).toHaveBeenCalledWith(userId);
       expect(service.PatchUser).toHaveBeenCalledWith(userId, patchUserDto);
     });
-  
+
     it('should throw NotFoundException if user not found', async () => {
       const userId = 1;
-      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
+      const patchUserDto = {
+        username: 'newUsername',
+        email: 'newEmail@example.com',
+      };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(null);
-  
-      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(NotFoundException);
+
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
-  
+
     it('should throw ConflictException if email is already in use', async () => {
       const userId = 1;
-      const patchUserDto = { username: 'newUsername', email: 'newEmail@example.com' };
-      const mockUser = { id: userId, username: 'user1', email: 'oldEmail@example.com' };
-      const mockExistingUser = { id: 2, username: 'user2', email: 'newEmail@example.com' };
+      const patchUserDto = {
+        username: 'newUsername',
+        email: 'newEmail@example.com',
+      };
+      const mockUser = {
+        id: userId,
+        username: 'user1',
+        email: 'oldEmail@example.com',
+      };
+      const mockExistingUser = {
+        id: 2,
+        username: 'user2',
+        email: 'newEmail@example.com',
+      };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
       jest.spyOn(service, 'GetUserByEmail').mockResolvedValue(mockExistingUser);
-  
-      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(ConflictException);
+
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(
+        ConflictException,
+      );
     });
-  
+
     it('should throw BadRequestException if passwords do not match', async () => {
       const userId = 1;
-      const patchUserDto = { password: 'password1', confirmPassword: 'password2' };
+      const patchUserDto = {
+        password: 'password1',
+        confirmPassword: 'password2',
+      };
       const mockUser = {
         id: 1,
         username: 'user1',
@@ -220,10 +259,12 @@ describe('UserController', () => {
         connectionId: 'connection_id',
         gender: 'MALE' as Gender,
       };
-      
+
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
-  
-      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(BadRequestException);
+
+      await expect(controller.patchUser(userId, patchUserDto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });
