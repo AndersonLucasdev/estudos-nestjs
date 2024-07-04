@@ -3,6 +3,7 @@ import { UserController } from '../controllers/user.controller';
 import { UserService } from '../services/user.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationType, UserActivityType } from '@prisma/client';
+import { Gender } from '@prisma/client';
 import {
   BadRequestException,
   ConflictException,
@@ -56,6 +57,8 @@ describe('UserController', () => {
       connectionId: 'connection_id',
       gender: 'MALE' as Gender,
     };
+    
+    const mockUsers = [mockUser];
     jest.spyOn(service, 'GetAllUsers').mockResolvedValue(mockUsers);
 
     const result = await controller.getAllUsers(userId);
@@ -67,7 +70,23 @@ describe('UserController', () => {
   describe('getUserById', () => {
     it('should get a user by ID', async () => {
       const userId = 1;
-      const mockUser = { id: userId, username: 'user1' };
+      const mockUser = {
+        id: 1,
+        username: 'user1',
+        name: 'User One',
+        email: 'user1@example.com',
+        password: 'hashed_password',
+        confirmPassword: 'hashed_password',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
+      };
+      
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
   
       const result = await controller.getUserById(userId);
@@ -115,7 +134,23 @@ describe('UserController', () => {
   describe('deleteUser', () => {
     it('should delete a user by ID', async () => {
       const userId = 1;
-      const mockUser = { id: userId, username: 'user1' };
+      const mockUser = {
+        id: 1,
+        username: 'user1',
+        name: 'User One',
+        email: 'user1@example.com',
+        password: 'hashed_password',
+        confirmPassword: 'hashed_password',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
+      };
+      
       jest.spyOn(service, 'DeleteUser').mockResolvedValue(mockUser);
   
       const result = await controller.deleteUser(userId);
