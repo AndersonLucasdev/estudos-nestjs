@@ -124,9 +124,9 @@ describe('UserController', () => {
       };
       const mockUser = { id: 1, ...createUserDto };
       jest.spyOn(service, 'CreateUser').mockResolvedValue(mockUser);
-  
+
       const result = await controller.createUser(createUserDto);
-  
+
       expect(result).toEqual({
         message: 'User created successfully!',
         user: mockUser,
@@ -140,7 +140,7 @@ describe('UserController', () => {
         email: 'user1@example.com',
         password: 'password',
         confirmPassword: 'password',
-        name: 'User One'
+        name: 'User One',
       };
       jest.spyOn(service, 'CreateUser').mockRejectedValue(new Error('Error'));
 
@@ -199,7 +199,15 @@ describe('UserController', () => {
         email: 'user1@example.com',
         password: 'password',
         confirmPassword: 'password',
-        name: 'User One'
+        name: 'User One',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
       };
       const mockUser = { id: userId, ...patchUserDto };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
@@ -222,7 +230,7 @@ describe('UserController', () => {
         email: 'user1@example.com',
         password: 'password',
         confirmPassword: 'password',
-        name: 'User One'
+        name: 'User One',
       };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(null);
 
@@ -238,17 +246,39 @@ describe('UserController', () => {
         email: 'user1@example.com',
         password: 'password',
         confirmPassword: 'password',
-        name: 'User One'
+        name: 'User One',
       };
       const mockUser = {
         id: userId,
         username: 'user1',
-        email: 'oldEmail@example.com',
+        email: 'oldemail@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
       };
       const mockExistingUser = {
-        id: 2,
+        id: userId,
         username: 'user2',
         email: 'newEmail@example.com',
+        password: 'hashed_password',
+        confirmPassword: 'hashed_password',
+        name: 'User Two',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
       };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
       jest.spyOn(service, 'GetUserByEmail').mockResolvedValue(mockExistingUser);
