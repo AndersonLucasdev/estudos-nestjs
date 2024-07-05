@@ -111,12 +111,22 @@ describe('UserController', () => {
         username: 'user1',
         email: 'user1@example.com',
         password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: Gender.MALE,
       };
       const mockUser = { id: 1, ...createUserDto };
       jest.spyOn(service, 'CreateUser').mockResolvedValue(mockUser);
-
+  
       const result = await controller.createUser(createUserDto);
-
+  
       expect(result).toEqual({
         message: 'User created successfully!',
         user: mockUser,
