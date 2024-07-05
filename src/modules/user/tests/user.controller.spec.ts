@@ -139,6 +139,8 @@ describe('UserController', () => {
         username: 'user1',
         email: 'user1@example.com',
         password: 'password',
+        confirmPassword: 'password',
+        name: 'User One'
       };
       jest.spyOn(service, 'CreateUser').mockRejectedValue(new Error('Error'));
 
@@ -193,8 +195,11 @@ describe('UserController', () => {
     it('should update a user by ID', async () => {
       const userId = 1;
       const patchUserDto = {
-        username: 'newUsername',
-        email: 'newEmail@example.com',
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One'
       };
       const mockUser = { id: userId, ...patchUserDto };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(mockUser);
@@ -213,8 +218,11 @@ describe('UserController', () => {
     it('should throw NotFoundException if user not found', async () => {
       const userId = 1;
       const patchUserDto = {
-        username: 'newUsername',
-        email: 'newEmail@example.com',
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One'
       };
       jest.spyOn(service, 'GetUserById').mockResolvedValue(null);
 
@@ -226,8 +234,11 @@ describe('UserController', () => {
     it('should throw ConflictException if email is already in use', async () => {
       const userId = 1;
       const patchUserDto = {
-        username: 'newUsername',
-        email: 'newEmail@example.com',
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One'
       };
       const mockUser = {
         id: userId,
