@@ -6,6 +6,7 @@ import { PatchUserDto } from '../dto/PatchUser.dto';
 import { UserActivityType } from '@prisma/client';
 import { NotificationType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { Gender } from '@prisma/client';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import {
   NotFoundException,
@@ -386,7 +387,22 @@ describe('UserService', () => {
         confirmPassword: 'password',
         name: 'User One',
       };
-      const mockUser = { id: userId, username: 'user1', password: 'hashedPassword' };
+      const mockUser = {
+        id: userId,
+        username: 'user1',
+        email: 'oldemail@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date('2000-01-01'),
+        phone: '1234567890',
+        Bio: 'This is user one.',
+        profilePhoto: 'profile_photo_url',
+        connectionId: 'connection_id',
+        gender: 'MALE' as Gender,
+      };
 
       prisma.user.findUnique = jest.fn().mockResolvedValue(mockUser);
       prisma.user.update = jest.fn().mockResolvedValue(mockUser);
