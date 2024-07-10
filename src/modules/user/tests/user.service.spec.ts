@@ -5,7 +5,7 @@ import { CreateUserDto } from '../dto/CreatUser.dto';
 import { PatchUserDto } from '../dto/PatchUser.dto';
 import { UserActivityType } from '@prisma/client';
 import { NotificationType } from '@prisma/client';
-
+import * as bcrypt from 'bcrypt';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import {
   NotFoundException,
