@@ -70,7 +70,7 @@ export class TagService {
     await this.prisma.tag.delete({ where: { id } });
   }
 
-  async updateTag(id: number, patchTagDto: PatchTagDto): Promise<Tag> {
+  async patchTag(id: number, patchTagDto: PatchTagDto): Promise<Tag> {
     let tag = await this.prisma.tag.findUnique({ where: { id } });
     if (!tag) {
       throw new NotFoundException('Tag not found.');

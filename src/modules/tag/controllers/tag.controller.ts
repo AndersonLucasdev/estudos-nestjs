@@ -87,12 +87,12 @@ export class TagController {
   @ApiBody({ type: PatchTagDto })
   @ApiResponse({ status: 200, description: 'Tag updated successfully.' })
   @ApiResponse({ status: 404, description: 'Tag not found.' })
-  async updateTag(
+  async patchTag(
     @Param('id', ParseIntPipe) id: number,
     @Body() patchTagDto: PatchTagDto,
   ) {
     try {
-      const tag = await this.tagService.updateTag(id, patchTagDto);
+      const tag = await this.tagService.patchTag(id, patchTagDto);
       if (!tag) {
         throw new NotFoundException('Tag not found.');
       }
