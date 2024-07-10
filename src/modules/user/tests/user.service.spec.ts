@@ -235,6 +235,45 @@ describe('UserService', () => {
     });
   });
 
+  describe('ListFollowers', () => {
+    it('should return followers for a specific user', async () => {
+      const userId = 1;
+      const mockFollowersData = [
+        { id: 1, userId: 2, relatedUserId: userId },
+        { id: 2, userId: 3, relatedUserId: userId },
+      ];
+
+      prisma.userFollowers.findMany = jest.fn().mockResolvedValue(mockFollowersData);
+
+      const result = await service.ListFollowers(userId);
+
+      expect(result).toEqual(mockFollowersData);
+      expect(prisma.userFollowers.findMany).toHaveBeenCalledWith({ where: { relatedUserId: userId } });
+    });
+  });
+
+  describe('ListFollowing', () => {
+    it('should return following users for a specific user', async () => {
+      const userId = 1;
+      const mockFollowingData = [
+        { relatedUser: { id: 2, username: 'user2' } },
+        { relatedUser: { id: 3, username: 'user3' } },
+      ];
+
+      prisma.userFollowers.findMany = jest.fn().mockResolvedValue(mockFollowingData);
+
+      const result = await service.ListFollowing(userId);
+
+      expect(result).toEqual(mockFollowingData.map(follow => follow.relatedUser));
+      expect(prisma.userFollowers.findMany).toHaveBeenCalledWith({
+        where: { userId },
+        select: {
+          relatedUser: true,
+        },
+      });
+    });
+  });
+
   describe('CreateUser', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUserDto = {
