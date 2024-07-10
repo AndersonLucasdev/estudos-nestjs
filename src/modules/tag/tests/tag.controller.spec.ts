@@ -75,5 +75,38 @@ describe('TagController', () => {
     });
   });
 
-  
+  describe('deleteTag', () => {
+    it('should delete a tag by ID', async () => {
+      jest.spyOn(service, 'deleteTag').mockResolvedValue(undefined);
+
+      const result = await controller.deleteTag(1);
+      expect(result).toEqual({ message: 'Tag deleted successfully.' });
+      expect(service.deleteTag).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if tag not found', async () => {
+      jest.spyOn(service, 'deleteTag').mockRejectedValue(new NotFoundException());
+
+      await expect(controller.deleteTag(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('updateTag', () => {
+    it('should update a tag by ID', async () => {
+      const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
+      const mockTag = { id: 1, ...patchTagDto };
+      jest.spyOn(service, 'updateTag').mockResolvedValue(mockTag);
+
+      const result = await controller.updateTag(1, patchTagDto);
+      expect(result).toEqual({ tag: mockTag });
+      expect(service.updateTag).toHaveBeenCalledWith(1, patchTagDto);
+    });
+
+    it('should throw NotFoundException if tag not found', async () => {
+      const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
+      jest.spyOn(service, 'updateTag').mockRejectedValue(new NotFoundException());
+
+      await expect(controller.updateTag(1, patchTagDto)).rejects.toThrow(NotFoundException);
+    });
+  });
 });
