@@ -4,6 +4,8 @@ import { TagService } from '../services/tag.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationType, UserActivityType } from '@prisma/client';
 import { Gender } from '@prisma/client';
+import { CreateTagDto } from '../dto/CreateTag.dto';
+import { PatchTagDto } from '../dto/PatchTag.dto';
 import {
   BadRequestException,
   ConflictException,
@@ -40,7 +42,16 @@ describe('TagController', () => {
 
   describe('getTagById', () => {
     it('should return a tag by ID', async () => {
-      const mockTag = { id: 1, name: 'Test Tag' };
+      const mockTag = {
+        id: 1,
+        name: 'Test Tag',
+        createdAt: new Date(),
+        taggedUserId: 1,
+        userId: 1,
+        postId: null,
+        commentId: null,
+        storyId: null,
+      };
       jest.spyOn(service, 'getTagById').mockResolvedValue(mockTag);
 
       const result = await controller.getTagById(1);
@@ -57,7 +68,13 @@ describe('TagController', () => {
 
   describe('createTag', () => {
     it('should create a new tag', async () => {
-      const createTagDto: CreateTagDto = { name: 'New Tag' };
+      const createTagDto: CreateTagDto = {
+        createdAt: new Date(),
+        taggedUserId: 1,
+        userId: 1,
+        postId: null,
+        commentId: null,
+        storyId: null, };
       const mockTag = { id: 1, ...createTagDto };
       jest.spyOn(service, 'createTag').mockResolvedValue(mockTag);
 
