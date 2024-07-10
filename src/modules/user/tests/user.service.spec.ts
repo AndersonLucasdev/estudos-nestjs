@@ -108,6 +108,133 @@ describe('UserService', () => {
     });
   });
 
+  describe('GetUserByEmail', () => {
+    it('should return user by email', async () => {
+      const email = 'user1@example.com';
+      const mockUser = { id: 1, email };
+
+      prisma.user.findFirst = jest.fn().mockResolvedValue(mockUser);
+
+      const result = await service.GetUserByEmail(email);
+
+      expect(result).toEqual(mockUser);
+      expect(prisma.user.findFirst).toHaveBeenCalledWith({ where: { email } });
+    });
+  });
+
+  describe('GetUserByUsername', () => {
+    it('should return user by username', async () => {
+      const username = 'user1';
+      const mockUser = { id: 1, username };
+
+      prisma.user.findFirst = jest.fn().mockResolvedValue(mockUser);
+
+      const result = await service.GetUserByUsername(username);
+
+      expect(result).toEqual(mockUser);
+      expect(prisma.user.findFirst).toHaveBeenCalledWith({ where: { username } });
+    });
+  });
+
+  describe('GetUsersByUsername', () => {
+    it('should return users containing the username', async () => {
+      const username = 'user';
+      const mockUsers = [
+        { id: 1, username: 'user1' },
+        { id: 2, username: 'user2' },
+      ];
+
+      prisma.user.findMany = jest.fn().mockResolvedValue(mockUsers);
+
+      const result = await service.GetUsersByUsername(username);
+
+      expect(result).toEqual(mockUsers);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: {
+          username: {
+            contains: username,
+          },
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      });
+    });
+  });
+
+  describe('GetUsersWithMostLikes', () => {
+    it('should return users with the most likes', async () => {
+      const mockUsersWithMostLikes = [
+        { id: 1, username: 'user1', postLikes: [{ id: 1 }] },
+        { id: 2, username: 'user2', postLikes: [{ id: 2 }] },
+      ];
+
+      prisma.user.findMany = jest.fn().mockResolvedValue(mockUsersWithMostLikes);
+
+      const result = await service.GetUsersWithMostLikes();
+
+      expect(result).toEqual(mockUsersWithMostLikes);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          postLikes: {
+            select: {
+              id: true,
+            },
+            orderBy: {
+              id: 'desc',
+            },
+            take: 3,
+          },
+        },
+        orderBy: {
+          postLikes: {
+            _count: 'desc',
+          },
+        },
+      });
+    });
+
+    it('should throw NotFoundException if no users with likes found', async () => {
+      prisma.user.findMany = jest.fn().mockResolvedValue([]);
+
+      await expect(service.GetUsersWithMostLikes()).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('GetUsersWithRecentActivity', () => {
+    it('should return users with recent activity', async () => {
+      const days = 7;
+      const mockUsers = [
+        { id: 1, username: 'user1', lastUpdateDate: new Date() },
+        { id: 2, username: 'user2', lastUpdateDate: new Date() },
+      ];
+
+      prisma.user.findMany = jest.fn().mockResolvedValue(mockUsers);
+
+      const result = await service.GetUsersWithRecentActivity(days);
+
+      expect(result).toEqual(mockUsers);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: {
+          lastUpdateDate: {
+            gte: new Date(new Date().getTime() - days * 24 * 60 * 60 * 1000),
+          },
+        },
+      });
+    });
+
+    it('should throw NotFoundException if no users with recent activity found', async () => {
+      const days = 7;
+
+      prisma.user.findMany = jest.fn().mockResolvedValue([]);
+
+      await expect(service.GetUsersWithRecentActivity(days)).rejects.toThrow(NotFoundException);
+    });
+  });
+
   describe('CreateUser', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUserDto = {
