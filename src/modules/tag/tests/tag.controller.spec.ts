@@ -38,5 +38,42 @@ describe('TagController', () => {
     service = module.get<TagService>(TagService);
   });
 
+  describe('getTagById', () => {
+    it('should return a tag by ID', async () => {
+      const mockTag = { id: 1, name: 'Test Tag' };
+      jest.spyOn(service, 'getTagById').mockResolvedValue(mockTag);
+
+      const result = await controller.getTagById(1);
+      expect(result).toEqual({ tag: mockTag });
+      expect(service.getTagById).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if tag not found', async () => {
+      jest.spyOn(service, 'getTagById').mockResolvedValue(null);
+
+      await expect(controller.getTagById(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('createTag', () => {
+    it('should create a new tag', async () => {
+      const createTagDto: CreateTagDto = { name: 'New Tag' };
+      const mockTag = { id: 1, ...createTagDto };
+      jest.spyOn(service, 'createTag').mockResolvedValue(mockTag);
+
+      const result = await controller.createTag(createTagDto);
+      expect(result).toEqual({ tag: mockTag });
+      expect(service.createTag).toHaveBeenCalledWith(createTagDto);
+    });
+
+    it('should throw BadRequestException if error creating tag', async () => {
+      jest.spyOn(service, 'createTag').mockRejectedValue(new Error('Error'));
+
+      await expect(controller.createTag({ name: 'New Tag' })).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+  });
+
   
 });
