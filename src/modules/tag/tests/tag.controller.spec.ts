@@ -26,7 +26,7 @@ describe('TagController', () => {
             getTagById: jest.fn(),
             createTag: jest.fn(),
             deleteTag: jest.fn(),
-            updateTag: jest.fn(),
+            patchtag: jest.fn(),
             getUserTags: jest.fn(),
             getPostTags: jest.fn(),
             getCommentTags: jest.fn(),
@@ -74,7 +74,8 @@ describe('TagController', () => {
         userId: 1,
         postId: null,
         commentId: null,
-        storyId: null, };
+        storyId: null,
+      };
       const mockTag = { id: 1, ...createTagDto };
       jest.spyOn(service, 'createTag').mockResolvedValue(mockTag);
 
@@ -108,22 +109,22 @@ describe('TagController', () => {
     });
   });
 
-  describe('updateTag', () => {
+  describe('patchtag', () => {
     it('should update a tag by ID', async () => {
       const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
       const mockTag = { id: 1, ...patchTagDto };
-      jest.spyOn(service, 'updateTag').mockResolvedValue(mockTag);
+      jest.spyOn(service, 'patchTag').mockResolvedValue(mockTag);
 
-      const result = await controller.updateTag(1, patchTagDto);
+      const result = await controller.patchTag(1, patchTagDto);
       expect(result).toEqual({ tag: mockTag });
-      expect(service.updateTag).toHaveBeenCalledWith(1, patchTagDto);
+      expect(service.patchTag).toHaveBeenCalledWith(1, patchTagDto);
     });
 
     it('should throw NotFoundException if tag not found', async () => {
       const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
-      jest.spyOn(service, 'updateTag').mockRejectedValue(new NotFoundException());
+      jest.spyOn(service, 'patchTag').mockRejectedValue(new NotFoundException());
 
-      await expect(controller.updateTag(1, patchTagDto)).rejects.toThrow(NotFoundException);
+      await expect(controller.patchtag(1, patchTagDto)).rejects.toThrow(NotFoundException);
     });
   });
 });
