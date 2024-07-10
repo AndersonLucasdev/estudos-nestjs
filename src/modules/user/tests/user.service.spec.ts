@@ -56,6 +56,58 @@ describe('UserService', () => {
     webSocketService = module.get<WebSocketService>(WebSocketService);
   });
 
+  describe('GetAllUsers', () => {
+    it('should return all users excluding blocked users', async () => {
+      const userId = 1;
+      const blockedUserIds = [2, 3];
+      const mockUsers = [
+        { id: 4, username: 'user4' },
+        { id: 5, username: 'user5' },
+      ];
+
+      prisma.block.findMany = jest.fn().mockResolvedValue(blockedUserIds.map(id => ({ blockedUserId: id })));
+      prisma.user.findMany = jest.fn().mockResolvedValue(mockUsers);
+
+      const result = await service.GetAllUsers(userId);
+
+      expect(result).toEqual(mockUsers);
+      expect(prisma.block.findMany).toHaveBeenCalledWith({ where: { userId } });
+      expect(prisma.user.findMany).toHaveBeenCalledWith({ where: { NOT: { id: { in: blockedUserIds } } } });
+    });
+
+    it('should throw NotFoundException if no users found', async () => {
+      const userId = 1;
+      const blockedUserIds = [2, 3];
+
+      prisma.block.findMany = jest.fn().mockResolvedValue(blockedUserIds.map(id => ({ blockedUserId: id })));
+      prisma.user.findMany = jest.fn().mockResolvedValue([]);
+
+      await expect(service.GetAllUsers(userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('GetUserById', () => {
+    it('should return user by ID', async () => {
+      const userId = 1;
+      const mockUser = { id: userId, username: 'user1' };
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(mockUser);
+
+      const result = await service.GetUserById(userId);
+
+      expect(result).toEqual(mockUser);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: userId } });
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 1;
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(service.GetUserById(userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
   describe('CreateUser', () => {
     it('should create a new user', async () => {
       const createUserDto: CreateUserDto = {
@@ -129,6 +181,53 @@ describe('UserService', () => {
       };
 
       await expect(service.CreateUser(createUserDto)).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('DeleteUser', () => {
+    it('should delete a user by ID', async () => {
+      const userId = 1;
+      const mockUser = { id: userId, username: 'user1' };
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(mockUser);
+      prisma.user.delete = jest.fn().mockResolvedValue(mockUser);
+      const removeUserConnectionSpy = jest.spyOn(webSocketService, 'removeUserConnection').mockImplementation();
+
+      const result = await service.DeleteUser(userId);
+
+      expect(result).toEqual(mockUser);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: userId } });
+      expect(prisma.user.delete).toHaveBeenCalledWith({ where: { id: userId } });
+      expect(removeUserConnectionSpy).toHaveBeenCalledWith(userId);
+    });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 1;
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(service.DeleteUser(userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('PatchUser', () => {
+    it('should update a user by ID', async () => {
+      const userId = 1;
+      const patchUserDto: PatchUserDto = {
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
+      };
+      const mockUser = { id: userId, username: 'user1', password: 'hashedPassword' };
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(mockUser);
+      prisma.user.update = jest.fn().mockResolvedValue(mockUser);
+      const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword');
+
+      const result = await service.PatchUser(userId, patchUserDto);
+
     });
   });
 });
