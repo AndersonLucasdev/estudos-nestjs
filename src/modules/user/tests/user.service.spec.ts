@@ -394,6 +394,42 @@ describe('UserService', () => {
 
       const result = await service.PatchUser(userId, patchUserDto);
 
+      expect(result).toEqual(mockUser);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: userId } });
+      expect(bcryptHashSpy).toHaveBeenCalledWith(patchUserDto.password.trim(), 10);
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: userId },
+        data: { password: 'hashedPassword' },
+      });
     });
-  });
+
+    it('should throw NotFoundException if user not found', async () => {
+      const userId = 1;
+      const patchUserDto: PatchUserDto = {
+        password: 'newPassword',
+      };
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(null);
+
+      await expect(service.PatchUser(userId, patchUserDto)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should not update password if not provided', async () => {
+      const userId = 1;
+      const patchUserDto: PatchUserDto = {};
+      const mockUser = { id: userId, username: 'user1', password: 'oldPassword' };
+      const updatedUser = { ...mockUser, ...patchUserDto };
+
+      prisma.user.findUnique = jest.fn().mockResolvedValue(mockUser);
+      prisma.user.update = jest.fn().mockResolvedValue(updatedUser);
+
+      const result = await service.PatchUser(userId, patchUserDto);
+
+      expect(result).toEqual(updatedUser);
+      expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: userId } });
+      expect(prisma.user.update).toHaveBeenCalledWith({
+        where: { id: userId },
+        data: patchUserDto,
+      });
+    });
 });
