@@ -4,6 +4,9 @@ export class CreateTagDto {
   @IsInt()
   taggedUserId: number;
 
+  @IsDate()
+  createdAt: Date;
+
   @IsInt()
   userId: number;
 
@@ -19,6 +22,4 @@ export class CreateTagDto {
   @IsInt()
   storyId?: number;
 
-  @IsDate()
-  createdAt: Date;
 }

@@ -76,7 +76,16 @@ describe('TagController', () => {
         commentId: null,
         storyId: null,
       };
-      const mockTag = { id: 1, ...createTagDto };
+
+      const mockTag = {
+        id: 1,
+        createdAt: new Date(),
+        taggedUserId: 1,
+        userId: 1,
+        postId: null,
+        commentId: null,
+        storyId: null,
+      };
       jest.spyOn(service, 'createTag').mockResolvedValue(mockTag);
 
       const result = await controller.createTag(createTagDto);
@@ -85,9 +94,17 @@ describe('TagController', () => {
     });
 
     it('should throw BadRequestException if error creating tag', async () => {
+      const createTagDto: CreateTagDto = {
+        createdAt: new Date(),
+        taggedUserId: 1,
+        userId: 1,
+        postId: null,
+        commentId: null,
+        storyId: null,
+      };
       jest.spyOn(service, 'createTag').mockRejectedValue(new Error('Error'));
 
-      await expect(controller.createTag({ name: 'New Tag' })).rejects.toThrow(
+      await expect(controller.createTag(createTagDto)).rejects.toThrow(
         BadRequestException,
       );
     });
@@ -103,7 +120,9 @@ describe('TagController', () => {
     });
 
     it('should throw NotFoundException if tag not found', async () => {
-      jest.spyOn(service, 'deleteTag').mockRejectedValue(new NotFoundException());
+      jest
+        .spyOn(service, 'deleteTag')
+        .mockRejectedValue(new NotFoundException());
 
       await expect(controller.deleteTag(1)).rejects.toThrow(NotFoundException);
     });
@@ -122,9 +141,13 @@ describe('TagController', () => {
 
     it('should throw NotFoundException if tag not found', async () => {
       const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
-      jest.spyOn(service, 'patchTag').mockRejectedValue(new NotFoundException());
+      jest
+        .spyOn(service, 'patchTag')
+        .mockRejectedValue(new NotFoundException());
 
-      await expect(controller.patchtag(1, patchTagDto)).rejects.toThrow(NotFoundException);
+      await expect(controller.patchTag(1, patchTagDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
