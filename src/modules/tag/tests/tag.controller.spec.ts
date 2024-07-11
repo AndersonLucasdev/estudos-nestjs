@@ -128,10 +128,25 @@ describe('TagController', () => {
     });
   });
 
-  describe('patchtag', () => {
+  describe('patchTag', () => {
     it('should update a tag by ID', async () => {
-      const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
-      const mockTag = { id: 1, ...patchTagDto };
+      const patchTagDto: PatchTagDto = {
+        createdAt: new Date(),
+        taggedUserId: 2,
+        userId: 3,
+        postId: 4,
+        commentId: 5,
+        storyId: 6,
+      };
+      const mockTag = {
+        id: 1,
+        createdAt: new Date(),
+        taggedUserId: 2,
+        userId: 3,
+        postId: 4,
+        commentId: 5,
+        storyId: 6,
+      };
       jest.spyOn(service, 'patchTag').mockResolvedValue(mockTag);
 
       const result = await controller.patchTag(1, patchTagDto);
@@ -140,7 +155,14 @@ describe('TagController', () => {
     });
 
     it('should throw NotFoundException if tag not found', async () => {
-      const patchTagDto: PatchTagDto = { name: 'Updated Tag' };
+      const patchTagDto: PatchTagDto = {
+        id: 3,
+        taggedUserId: 2,
+        userId: 3,
+        postId: 4,
+        commentId: 5,
+        storyId: 6,
+      };
       jest
         .spyOn(service, 'patchTag')
         .mockRejectedValue(new NotFoundException());

@@ -3,11 +3,11 @@ import { IsInt, IsOptional, IsDate } from 'class-validator';
 export class PatchTagDto {
   @IsOptional()
   @IsInt()
-  taggedUserId: number;
+  taggedUserId?: number;
 
   @IsOptional()
   @IsInt()
-  userId: number;
+  userId?: number;
 
   @IsOptional()
   @IsInt()
@@ -23,5 +23,5 @@ export class PatchTagDto {
 
   @IsOptional()
   @IsDate()
-  createdAt: Date;
+  createdAt?: Date;
 }
