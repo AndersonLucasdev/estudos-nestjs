@@ -156,7 +156,6 @@ describe('TagController', () => {
 
     it('should throw NotFoundException if tag not found', async () => {
       const patchTagDto: PatchTagDto = {
-        id: 3,
         taggedUserId: 2,
         userId: 3,
         postId: 4,
