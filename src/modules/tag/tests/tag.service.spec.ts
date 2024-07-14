@@ -70,6 +70,134 @@ describe('TagService', () => {
     });
   });
 
+  describe('getUserTags', () => {
+    it('should return tags for a user', async () => {
+      const mockTags: Tag[] = [
+        {
+          id: 1,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: null,
+          storyId: null,
+        },
+        {
+          id: 2,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: null,
+          storyId: null,
+        },
+      ];
+      jest.spyOn(prisma.tag, 'findMany').mockResolvedValue(mockTags);
+
+      const result = await service.getUserTags(1);
+      expect(result).toEqual(mockTags);
+      expect(prisma.tag.findMany).toHaveBeenCalledWith({
+        where: { userId: 1 },
+      });
+    });
+  });
+
+  describe('getPostTags', () => {
+    it('should return tags for a post', async () => {
+      const mockTags: Tag[] = [
+        {
+          id: 1,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: 1,
+          commentId: null,
+          storyId: null,
+        },
+        {
+          id: 2,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: 1,
+          commentId: null,
+          storyId: null,
+        },
+      ];
+      jest.spyOn(prisma.tag, 'findMany').mockResolvedValue(mockTags);
+
+      const result = await service.getPostTags(1);
+      expect(result).toEqual(mockTags);
+      expect(prisma.tag.findMany).toHaveBeenCalledWith({
+        where: { postId: 1 },
+      });
+    });
+  });
+
+  describe('getCommentTags', () => {
+    it('should return tags for a comment', async () => {
+      const mockTags: Tag[] = [
+        {
+          id: 1,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: 1,
+          storyId: null,
+        },
+        {
+          id: 2,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: 1,
+          storyId: null,
+        },
+      ];
+      jest.spyOn(prisma.tag, 'findMany').mockResolvedValue(mockTags);
+
+      const result = await service.getCommentTags(1);
+      expect(result).toEqual(mockTags);
+      expect(prisma.tag.findMany).toHaveBeenCalledWith({
+        where: { commentId: 1 },
+      });
+    });
+  });
+
+  describe('getStoryTags', () => {
+    it('should return tags for a story', async () => {
+      const mockTags: Tag[] = [
+        {
+          id: 1,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: null,
+          storyId: 1,
+        },
+        {
+          id: 2,
+          createdAt: new Date(),
+          taggedUserId: 1,
+          userId: 1,
+          postId: null,
+          commentId: null,
+          storyId: 1,
+        },
+      ];
+      jest.spyOn(prisma.tag, 'findMany').mockResolvedValue(mockTags);
+
+      const result = await service.getStoryTags(1);
+      expect(result).toEqual(mockTags);
+      expect(prisma.tag.findMany).toHaveBeenCalledWith({
+        where: { storyId: 1 },
+      });
+    });
+  });
+
   describe('createTag', () => {
     it('should create a new tag', async () => {
       const createTagDto = {
@@ -135,7 +263,7 @@ describe('TagService', () => {
       };
       jest.spyOn(prisma.tag, 'findUnique').mockResolvedValue(mockTag);
       jest.spyOn(prisma.tag, 'update').mockResolvedValue(mockTag);
-  
+
       const result = await service.patchTag(1, patchTagDto);
       expect(result).toEqual(mockTag);
       expect(prisma.tag.findUnique).toHaveBeenCalledWith({ where: { id: 1 } });
@@ -143,6 +271,6 @@ describe('TagService', () => {
         where: { id: 1 },
         data: patchTagDto,
       });
-    });  
+    });
   });
 });
