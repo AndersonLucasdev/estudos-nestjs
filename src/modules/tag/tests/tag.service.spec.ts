@@ -272,5 +272,20 @@ describe('TagService', () => {
         data: patchTagDto,
       });
     });
+
+    it('should throw NotFoundException if tag not found', async () => {
+      const patchTagDto: PatchTagDto = {
+        taggedUserId: 2,
+        userId: 3,
+        postId: 4,
+        commentId: 5,
+        storyId: 6,
+      };
+      jest.spyOn(prisma.tag, 'findUnique').mockResolvedValue(null);
+
+      await expect(service.patchTag(1, patchTagDto)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
   });
-});
+  });
