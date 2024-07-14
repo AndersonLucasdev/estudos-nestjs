@@ -12,3 +12,35 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
+
+describe('TagService', () => {
+  let service: TagService;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        TagService,
+        {
+          provide: PrismaService,
+          useValue: {
+            tag: {
+              findUnique: jest.fn(),
+              findMany: jest.fn(),
+              create: jest.fn(),
+              delete: jest.fn(),
+              update: jest.fn(),
+            },
+          },
+        },
+        {
+          provide: WebSocketService,
+          useValue: {},
+        },
+      ],
+    }).compile();
+
+    service = module.get<TagService>(TagService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+});
