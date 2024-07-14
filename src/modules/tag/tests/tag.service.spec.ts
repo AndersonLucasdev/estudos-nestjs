@@ -43,4 +43,21 @@ describe('TagService', () => {
     service = module.get<TagService>(TagService);
     prisma = module.get<PrismaService>(PrismaService);
   });
+
+  describe('getTagById', () => {
+    it('should return a tag by ID', async () => {
+      const mockTag: Tag = { id: 1, createdAt: new Date(), taggedUserId: 1, userId: 1, postId: null, commentId: null, storyId: null };
+      jest.spyOn(prisma.tag, 'findUnique').mockResolvedValue(mockTag);
+
+      const result = await service.getTagById(1);
+      expect(result).toEqual(mockTag);
+      expect(prisma.tag.findUnique).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
+
+    it('should throw NotFoundException if tag not found', async () => {
+      jest.spyOn(prisma.tag, 'findUnique').mockResolvedValue(null);
+
+      await expect(service.getTagById(1)).rejects.toThrow(NotFoundException);
+    });
+  });
 });
