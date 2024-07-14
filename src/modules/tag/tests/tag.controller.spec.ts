@@ -4,6 +4,7 @@ import { TagService } from '../services/tag.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationType, UserActivityType } from '@prisma/client';
 import { Gender } from '@prisma/client';
+import { Tag } from '@prisma/client';
 import { CreateTagDto } from '../dto/CreateTag.dto';
 import { PatchTagDto } from '../dto/PatchTag.dto';
 import {
@@ -42,9 +43,8 @@ describe('TagController', () => {
 
   describe('getTagById', () => {
     it('should return a tag by ID', async () => {
-      const mockTag = {
+      const mockTag: Tag = {
         id: 1,
-        name: 'Test Tag',
         createdAt: new Date(),
         taggedUserId: 1,
         userId: 1,
