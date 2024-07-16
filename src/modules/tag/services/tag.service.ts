@@ -31,6 +31,9 @@ export class TagService {
     const userTags = await this.prisma.tag.findMany({
       where: { userId },
     });
+    if (!userTags) {
+      throw new NotFoundException('Tag not found.');
+    }
     return userTags;
   }
 
@@ -38,6 +41,9 @@ export class TagService {
     const postTags = await this.prisma.tag.findMany({
       where: { postId },
     });
+    if (!postTags) {
+      throw new NotFoundException('Tag not found.');
+    }
     return postTags;
   }
 
@@ -45,6 +51,9 @@ export class TagService {
     const commentTags = await this.prisma.tag.findMany({
       where: { commentId },
     });
+    if (!commentTags) {
+      throw new NotFoundException('Tag not found.');
+    }
     return commentTags;
   }
 
@@ -52,6 +61,9 @@ export class TagService {
     const storyTags = await this.prisma.tag.findMany({
       where: { storyId },
     });
+    if (!storyTags) {
+      throw new NotFoundException('Tag not found.');
+    }
     return storyTags;
   }
 
@@ -59,11 +71,17 @@ export class TagService {
     const tag = await this.prisma.tag.create({
       data: CreateTagDto,
     });
+    if (!tag) {
+      throw new NotFoundException('Tag not found.');
+    }
     return tag;
   }
 
   async deleteTag(id: number): Promise<void> {
     const tag = await this.prisma.tag.findUnique({ where: { id } });
+    if (!tag) {
+      throw new NotFoundException('Tag not found.');
+    }
     if (!tag) {
       throw new NotFoundException('Tag not found.');
     }
