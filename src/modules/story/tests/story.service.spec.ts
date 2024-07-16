@@ -14,3 +14,35 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 
+describe('StoryService', () => {
+    let service: StoryService;
+    let prisma: PrismaService;
+  
+    beforeEach(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          StoryService,
+          {
+            provide: PrismaService,
+            useValue: {
+              Story: {
+                findUnique: jest.fn(),
+                findMany: jest.fn(),
+                create: jest.fn(),
+                delete: jest.fn(),
+                update: jest.fn(),
+              },
+            },
+          },
+          {
+            provide: WebSocketService,
+            useValue: {},
+          },
+        ],
+      }).compile();
+  
+      service = module.get<StoryService>(StoryService);
+      prisma = module.get<PrismaService>(PrismaService);
+    });
+
+});
