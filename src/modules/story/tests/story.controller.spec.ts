@@ -4,6 +4,9 @@ import { StoryService } from '../services/story.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationType, UserActivityType } from '@prisma/client';
 import { Gender } from '@prisma/client';
+import { CreateUserDto } from 'src/modules/user/dto/CreatUser.dto';
+import { User } from '@prisma/client';
+import { Message } from '@prisma/client';
 import { Story } from '@prisma/client';
 import { CreateStoryDto } from '../dto/CreateStory.dto';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
@@ -138,12 +141,12 @@ describe('StoryController', () => {
       const mockStories: Story[] = [
         {
           id: 1,
-        creationDate: new Date(),
-        viewCount: 1,
-        userId: 1,
-        postId: null,
-        image: null,
-        expirationDate: null,
+          creationDate: new Date(),
+          viewCount: 1,
+          userId: 1,
+          postId: null,
+          image: null,
+          expirationDate: null,
         },
       ];
       jest
@@ -166,15 +169,33 @@ describe('StoryController', () => {
 
   describe('getUsersWhoViewedStory', () => {
     it('should return users who viewed the story', async () => {
+      const createUserDto: CreateUserDto = {
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
+      };
+
       const mockUser: User = {
         id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
+        username: createUserDto.username,
+        email: createUserDto.email,
+        password: createUserDto.password,
+        confirmPassword: createUserDto.confirmPassword,
+        name: createUserDto.name,
+        creationDate: new Date(),
+        lastUpdateDate: new Date(),
+        birthDate: new Date(),
+        phone: '',
+        Bio: '',
+        profilePhoto: '',
+        connectionId: '',
+        gender: Gender.MALE,
       };
+
       const mockUsers: User[] = [mockUser];
-      jest
-        .spyOn(service, 'getUsersWhoViewedStory')
-        .mockResolvedValue(mockUsers);
+      jest.spyOn(service, 'getUsersWhoViewedStory').mockResolvedValue(mockUsers);
 
       const result = await controller.getUsersWhoViewedStory(1);
       expect(result).toEqual(mockUsers);
@@ -184,16 +205,21 @@ describe('StoryController', () => {
     it('should throw NotFoundException if users not found', async () => {
       jest.spyOn(service, 'getUsersWhoViewedStory').mockResolvedValue([]);
 
-      await expect(controller.getUsersWhoViewedStory(1)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(controller.getUsersWhoViewedStory(1)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('getStoryReplies', () => {
     it('should return replies to a story', async () => {
       const mockReplies: Message[] = [
-        { id: 1, content: 'Test Reply', createdAt: new Date() },
+        {
+          id: 1,
+          creationDate: new Date(),
+          senderId: 1,
+          recipientId: 2,
+          content: 'Teste',
+          conversationId: null,
+        },
       ];
       jest.spyOn(service, 'getStoryReplies').mockResolvedValue(mockReplies);
 
