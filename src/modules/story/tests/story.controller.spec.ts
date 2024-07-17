@@ -195,7 +195,9 @@ describe('StoryController', () => {
       };
 
       const mockUsers: User[] = [mockUser];
-      jest.spyOn(service, 'getUsersWhoViewedStory').mockResolvedValue(mockUsers);
+      jest
+        .spyOn(service, 'getUsersWhoViewedStory')
+        .mockResolvedValue(mockUsers);
 
       const result = await controller.getUsersWhoViewedStory(1);
       expect(result).toEqual(mockUsers);
@@ -205,7 +207,9 @@ describe('StoryController', () => {
     it('should throw NotFoundException if users not found', async () => {
       jest.spyOn(service, 'getUsersWhoViewedStory').mockResolvedValue([]);
 
-      await expect(controller.getUsersWhoViewedStory(1)).rejects.toThrow(NotFoundException);
+      await expect(controller.getUsersWhoViewedStory(1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
