@@ -31,4 +31,33 @@ describe('StoryController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  describe('getStoryById', () => {
+    it('should return a story by ID', async () => {
+      const mockStory: Story = {
+        id: 1,
+        creationDate: new Date(),
+        viewCount: 1,
+        userId: 1,
+        postId: null,
+        image: null,
+        expirationDate: null,
+      };
+      jest.spyOn(service, 'GetStoryById').mockResolvedValue(mockStory);
+
+      const result = await controller.getStoryById(1);
+      expect(result).toEqual(mockStory);
+      expect(service.GetStoryById).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if story not found', async () => {
+      jest
+        .spyOn(service, 'GetStoryById')
+        .mockRejectedValue(new NotFoundException());
+
+      await expect(controller.getStoryById(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
 });
