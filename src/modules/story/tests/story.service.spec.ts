@@ -132,8 +132,8 @@ describe('StoryService', () => {
       const patchStoryDto: PatchStoryDto = {
         userId: 1,
         disableComments: null,
-        image: null
-      }
+        image: null,
+      };
       const mockStory: Story = {
         id: 1,
         creationDate: new Date(),
@@ -154,7 +154,11 @@ describe('StoryService', () => {
     });
 
     it('should throw NotFoundException if story not found', async () => {
-      const patchStoryDto: PatchStoryDto = { viewCount: 10 };
+      const patchStoryDto: PatchStoryDto = {
+        userId: 1,
+        disableComments: null,
+        image: null,
+      };
       jest
         .spyOn(prisma.story, 'update')
         .mockRejectedValue(new NotFoundException());
