@@ -6,6 +6,8 @@ import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { NotificationType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { Story } from '@prisma/client';
+import { User } from '@prisma/client';
+import { Message } from '@prisma/client';
 import { Gender } from '@prisma/client';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
 import {
@@ -72,18 +74,40 @@ describe('StoryService', () => {
 
   describe('getStoriesByUserId', () => {
     it('should return stories by user ID', async () => {
-      const mockStories: Story[] = [{ id: 1, userId: 1, viewCount: 0, creationDate: new Date(), expirationDate: new Date() }];
+      const mockStories: Story[] = [
+        {
+          id: 1,
+          creationDate: new Date(),
+          viewCount: 1,
+          userId: 1,
+          postId: null,
+          image: null,
+          expirationDate: null,
+        },
+      ];
       jest.spyOn(prisma.story, 'findMany').mockResolvedValue(mockStories);
 
       const result = await service.getStoriesByUserId(1);
       expect(result).toEqual(mockStories);
-      expect(prisma.story.findMany).toHaveBeenCalledWith({ where: { userId: 1 } });
+      expect(prisma.story.findMany).toHaveBeenCalledWith({
+        where: { userId: 1 },
+      });
     });
   });
 
   describe('getLast24HoursStoriesByUser', () => {
     it('should return stories from the last 24 hours by user ID', async () => {
-      const mockStories: Story[] = [{ id: 1, userId: 1, viewCount: 0, creationDate: new Date(), expirationDate: new Date() }];
+      const mockStories: Story[] = [
+        {
+          id: 1,
+          creationDate: new Date(),
+          viewCount: 1,
+          userId: 1,
+          postId: null,
+          image: null,
+          expirationDate: null,
+        },
+      ];
       jest.spyOn(prisma.story, 'findMany').mockResolvedValue(mockStories);
 
       const result = await service.getLast24HoursStoriesByUser(1);
@@ -94,7 +118,15 @@ describe('StoryService', () => {
 
   describe('incrementViewCount', () => {
     it('should increment the view count of a story', async () => {
-      const mockStory: Story = { id: 1, userId: 1, viewCount: 1, creationDate: new Date(), expirationDate: new Date() };
+      const mockStory: Story = {
+        id: 1,
+        creationDate: new Date(),
+        viewCount: 1,
+        userId: 1,
+        postId: null,
+        image: null,
+        expirationDate: null,
+      };
       jest.spyOn(prisma.story, 'update').mockResolvedValue(mockStory);
 
       const result = await service.incrementViewCount(1);
@@ -108,37 +140,53 @@ describe('StoryService', () => {
 
   describe('getUsersWhoViewedStory', () => {
     it('should return users who viewed the story', async () => {
-      const mockUser: User = { id: 1, name: 'Test User', email: 'test@example.com' };
+      const mockUser: User = {
+        id: 1,
+        name: 'Test User',
+        email: 'test@example.com',
+      };
       const mockStory: any = { id: 1, user: mockUser };
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(mockStory);
 
       const result = await service.getUsersWhoViewedStory(1);
       expect(result).toEqual([mockUser]);
-      expect(prisma.story.findUnique).toHaveBeenCalledWith({ where: { id: 1 }, include: { user: true } });
+      expect(prisma.story.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+        include: { user: true },
+      });
     });
 
     it('should throw NotFoundException if story or user not found', async () => {
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.getUsersWhoViewedStory(1)).rejects.toThrow(NotFoundException);
+      await expect(service.getUsersWhoViewedStory(1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
   describe('getStoryReplies', () => {
     it('should return replies to a story', async () => {
-      const mockReplies: Message[] = [{ id: 1, content: 'Test Reply', createdAt: new Date() }];
+      const mockReplies: Message[] = [
+        { id: 1, content: 'Test Reply', createdAt: new Date() },
+      ];
       const mockStory: any = { id: 1, replies: mockReplies };
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(mockStory);
 
       const result = await service.getStoryReplies(1);
       expect(result).toEqual(mockReplies);
-      expect(prisma.story.findUnique).toHaveBeenCalledWith({ where: { id: 1 }, include: { replies: true } });
+      expect(prisma.story.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+        include: { replies: true },
+      });
     });
 
     it('should throw NotFoundException if story not found', async () => {
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(null);
 
-      await expect(service.getStoryReplies(1)).rejects.toThrow(NotFoundException);
+      await expect(service.getStoryReplies(1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
