@@ -104,6 +104,142 @@ describe('StoryController', () => {
     });
   });
 
+  describe('getStoriesByUserId', () => {
+    it('should return stories by user ID', async () => {
+      const mockStories: Story[] = [
+        {
+          id: 1,
+          creationDate: new Date(),
+          viewCount: 1,
+          userId: 1,
+          postId: null,
+          image: null,
+          expirationDate: null,
+        },
+      ];
+      jest.spyOn(service, 'getStoriesByUserId').mockResolvedValue(mockStories);
+
+      const result = await controller.getStoriesByUserId(1);
+      expect(result).toEqual(mockStories);
+      expect(service.getStoriesByUserId).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if stories not found', async () => {
+      jest.spyOn(service, 'getStoriesByUserId').mockResolvedValue([]);
+
+      await expect(controller.getStoriesByUserId(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('getLast24HoursStoriesByUser', () => {
+    it('should return stories from the last 24 hours by user ID', async () => {
+      const mockStories: Story[] = [
+        {
+          id: 1,
+        creationDate: new Date(),
+        viewCount: 1,
+        userId: 1,
+        postId: null,
+        image: null,
+        expirationDate: null,
+        },
+      ];
+      jest
+        .spyOn(service, 'getLast24HoursStoriesByUser')
+        .mockResolvedValue(mockStories);
+
+      const result = await controller.getLast24HoursStoriesByUser(1);
+      expect(result).toEqual(mockStories);
+      expect(service.getLast24HoursStoriesByUser).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if stories not found', async () => {
+      jest.spyOn(service, 'getLast24HoursStoriesByUser').mockResolvedValue([]);
+
+      await expect(controller.getLast24HoursStoriesByUser(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('getUsersWhoViewedStory', () => {
+    it('should return users who viewed the story', async () => {
+      const mockUser: User = {
+        id: 1,
+        name: 'Test User',
+        email: 'test@example.com',
+      };
+      const mockUsers: User[] = [mockUser];
+      jest
+        .spyOn(service, 'getUsersWhoViewedStory')
+        .mockResolvedValue(mockUsers);
+
+      const result = await controller.getUsersWhoViewedStory(1);
+      expect(result).toEqual(mockUsers);
+      expect(service.getUsersWhoViewedStory).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if users not found', async () => {
+      jest.spyOn(service, 'getUsersWhoViewedStory').mockResolvedValue([]);
+
+      await expect(controller.getUsersWhoViewedStory(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('getStoryReplies', () => {
+    it('should return replies to a story', async () => {
+      const mockReplies: Message[] = [
+        { id: 1, content: 'Test Reply', createdAt: new Date() },
+      ];
+      jest.spyOn(service, 'getStoryReplies').mockResolvedValue(mockReplies);
+
+      const result = await controller.getStoryReplies(1);
+      expect(result).toEqual(mockReplies);
+      expect(service.getStoryReplies).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if replies not found', async () => {
+      jest.spyOn(service, 'getStoryReplies').mockResolvedValue([]);
+
+      await expect(controller.getStoryReplies(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('incrementViewCount', () => {
+    it('should increment the view count of a story', async () => {
+      const mockStory: Story = {
+        id: 1,
+        creationDate: new Date(),
+        viewCount: 1,
+        userId: 1,
+        postId: null,
+        image: null,
+        expirationDate: null,
+      };
+      jest.spyOn(service, 'incrementViewCount').mockResolvedValue(mockStory);
+
+      const result = await controller.incrementViewCount(1);
+      expect(result).toEqual(mockStory);
+      expect(service.incrementViewCount).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException if error incrementing views', async () => {
+      jest
+        .spyOn(service, 'incrementViewCount')
+        .mockRejectedValue(new NotFoundException());
+
+      await expect(controller.incrementViewCount(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
   describe('updateStory', () => {
     it('should update a story by ID', async () => {
       const patchStoryDto: PatchStoryDto = {
