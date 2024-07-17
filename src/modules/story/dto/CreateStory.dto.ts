@@ -5,6 +5,7 @@ import {
   IsDate,
   IsEnum,
   Equals,
+  IsBoolean,
   MinLength,
   Matches,
   IsOptional,
@@ -31,6 +32,11 @@ export class CreateStoryDto {
 
   @IsInt()
   viewCount: number;
+
+
+  @IsBoolean()
+  @IsOptional()
+  disableComments?: boolean;
 
   // @IsOptional()
   // @IsInt({ each: true })
