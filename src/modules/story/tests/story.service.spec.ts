@@ -69,4 +69,56 @@ describe('StoryService', () => {
           await expect(service.GetStoryById(1)).rejects.toThrow(NotFoundException);
         });
       });
+
+      describe('CreateStory', () => {
+        it('should create a new story', async () => {
+          const createStoryDto: CreateStoryDto = { userId: 1 };
+          const mockStory: Story = { id: 1, userId: 1, viewCount: 0, creationDate: new Date(), expirationDate: new Date() };
+          jest.spyOn(prisma.story, 'create').mockResolvedValue(mockStory);
+    
+          const result = await service.CreateStory(createStoryDto);
+          expect(result).toEqual(mockStory);
+          expect(prisma.story.create).toHaveBeenCalledWith({ 
+            data: { 
+              ...createStoryDto, 
+              expirationDate: expect.any(Date),
+            } 
+          });
+        });
+      });
+    
+      describe('DeleteStory', () => {
+        it('should delete a story by ID', async () => {
+          const mockStory: Story = { id: 1, userId: 1, viewCount: 0, creationDate: new Date(), expirationDate: new Date() };
+          jest.spyOn(prisma.story, 'delete').mockResolvedValue(mockStory);
+    
+          await service.DeleteStory(1);
+          expect(prisma.story.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+        });
+    
+        it('should throw NotFoundException if story not found', async () => {
+          jest.spyOn(prisma.story, 'delete').mockRejectedValue(new NotFoundException());
+    
+          await expect(service.DeleteStory(1)).rejects.toThrow(NotFoundException);
+        });
+      });
+
+      describe('UpdateStory', () => {
+        it('should update a story by ID', async () => {
+          const patchStoryDto: PatchStoryDto = { viewCount: 10 };
+          const mockStory: Story = { id: 1, userId: 1, viewCount: 10, creationDate: new Date(), expirationDate: new Date() };
+          jest.spyOn(prisma.story, 'update').mockResolvedValue(mockStory);
+    
+          const result = await service.UpdateStory(1, patchStoryDto);
+          expect(result).toEqual(mockStory);
+          expect(prisma.story.update).toHaveBeenCalledWith({ where: { id: 1 }, data: patchStoryDto });
+        });
+    
+        it('should throw NotFoundException if story not found', async () => {
+          const patchStoryDto: PatchStoryDto = { viewCount: 10 };
+          jest.spyOn(prisma.story, 'update').mockRejectedValue(new NotFoundException());
+    
+          await expect(service.UpdateStory(1, patchStoryDto)).rejects.toThrow(NotFoundException);
+        });
+      });
 });
