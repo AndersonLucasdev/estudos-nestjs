@@ -106,7 +106,11 @@ describe('StoryController', () => {
 
   describe('updateStory', () => {
     it('should update a story by ID', async () => {
-      const patchStoryDto: PatchStoryDto = { viewCount: 10 };
+      const patchStoryDto: PatchStoryDto = {
+        userId: 1,
+        disableComments: null,
+        image: null,
+      };
       const mockStory: Story = {
         id: 1,
         creationDate: new Date(),
@@ -124,7 +128,11 @@ describe('StoryController', () => {
     });
 
     it('should throw NotFoundException if story not found', async () => {
-      const patchStoryDto: PatchStoryDto = { viewCount: 10 };
+      const patchStoryDto: PatchStoryDto = {
+        userId: 1,
+        disableComments: null,
+        image: null,
+      };
       jest
         .spyOn(service, 'UpdateStory')
         .mockRejectedValue(new NotFoundException());
