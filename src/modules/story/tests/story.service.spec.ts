@@ -5,8 +5,8 @@ import { CreateStoryDto } from '../dto/CreateStory.dto';
 import { PatchStoryDto } from '../dto/PatchStory.dto';
 import { NotificationType } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/modules/user/dto/CreatUser.dto';
 import { Story } from '@prisma/client';
-import { User } from '@prisma/client';
 import { Message } from '@prisma/client';
 import { Gender } from '@prisma/client';
 import { WebSocketService } from 'src/modules/websocket/websocket.service';
@@ -140,11 +140,15 @@ describe('StoryService', () => {
 
   describe('getUsersWhoViewedStory', () => {
     it('should return users who viewed the story', async () => {
-      const mockUser: User = {
-        id: 1,
-        name: 'Test User',
-        email: 'test@example.com',
+      const createUserDto: CreateUserDto = {
+        username: 'user1',
+        email: 'user1@example.com',
+        password: 'password',
+        confirmPassword: 'password',
+        name: 'User One',
       };
+
+      const mockUser = { id: 1, ...createUserDto };
       const mockStory: any = { id: 1, user: mockUser };
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(mockStory);
 
@@ -168,7 +172,14 @@ describe('StoryService', () => {
   describe('getStoryReplies', () => {
     it('should return replies to a story', async () => {
       const mockReplies: Message[] = [
-        { id: 1, content: 'Test Reply', createdAt: new Date() },
+        {
+          id: 1,
+          creationDate: new Date(),
+          senderId: 1,
+          recipientId: 2,
+          content: 'Teste',
+          conversationId: null,
+        },
       ];
       const mockStory: any = { id: 1, replies: mockReplies };
       jest.spyOn(prisma.story, 'findUnique').mockResolvedValue(mockStory);
