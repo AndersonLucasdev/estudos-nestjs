@@ -80,6 +80,7 @@ describe('ReportService', () => {
         reporterId: 1,
         postId: 1,
         commentId: 1,
+        createdAt: new Date(),
         storyId: 1,
         reason: 'Test reason',
       };
@@ -87,7 +88,7 @@ describe('ReportService', () => {
       const mockReport: Report = {
         id: 1,
         ...createReportDto,
-        status: 'pending',
+        status: ReportStatus.RESOLVED,
       };
   
       jest.spyOn(prisma.report, 'create').mockResolvedValue(mockReport);
@@ -102,11 +103,12 @@ describe('ReportService', () => {
       const mockReport: Report = {
         id: 1,
         reporterId: 1,
-        postId: 1,
-        commentId: 1,
-        storyId: 1,
         reason: 'Test reason',
-        status: 'pending',
+        createdAt: new Date(),
+        postId: null,
+        commentId: null,
+        storyId: null,
+        status: ReportStatus.AWAITING_REVIEW
       };
   
       jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(mockReport);
@@ -122,4 +124,34 @@ describe('ReportService', () => {
       await expect(service.deleteReport(1)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('updateReport', () => {
+    it('should update a report by ID', async () => {
+      const mockReport: Report = {
+        id: 1,
+        reporterId: 1,
+        reason: 'Test reason',
+        createdAt: new Date(),
+        postId: null,
+        commentId: null,
+        storyId: null,
+        status: ReportStatus.AWAITING_REVIEW
+      };
+  
+      const patchReportDto: PatchReportDto = {
+        status: ReportStatus.RESOLVED,
+        reason: 'Test Patch reason'
+      }
+
+      jest.spyOn(prisma.story, 'update').mockResolvedValue(mockReport);
+
+      const result = await service.updateReport(1, patchReportDto);
+      expect(result).toEqual(mockReport);
+      expect(prisma.story.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: patchReportDto,
+      });
+    })
+  });
+
 });
