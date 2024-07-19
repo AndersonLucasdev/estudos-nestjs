@@ -12,3 +12,23 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
+
+describe('ReportService', () => {
+  let service: ReportService;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [ReportService, PrismaService, WebSocketService],
+    }).compile();
+
+    service = module.get<ReportService>(ReportService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  
+});
