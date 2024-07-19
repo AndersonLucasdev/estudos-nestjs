@@ -13,4 +13,29 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+describe('ReportController', () => {
+  let controller: ReportController;
+  let service: ReportService;
 
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [ReportController],
+      providers: [
+        {
+          provide: ReportService,
+          useValue: {
+            getReportById: jest.fn(),
+            getAllReports: jest.fn(),
+            getReportsByUserId: jest.fn(),
+            createReport: jest.fn(),
+            deleteReport: jest.fn(),
+            updateReport: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
+
+    controller = module.get<ReportController>(ReportController);
+    service = module.get<ReportService>(ReportService);
+  });
+});
