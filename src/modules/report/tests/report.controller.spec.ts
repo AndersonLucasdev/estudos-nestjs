@@ -38,4 +38,12 @@ describe('ReportController', () => {
     controller = module.get<ReportController>(ReportController);
     service = module.get<ReportService>(ReportService);
   });
+
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  
+
 });

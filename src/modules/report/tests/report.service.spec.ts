@@ -58,19 +58,77 @@ describe('ReportService', () => {
         postId: null,
         commentId: null,
         storyId: null,
-        status: ReportStatus.AWAITING_REVIEW
+        status: ReportStatus.AWAITING_REVIEW,
       };
-  
+
       jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(mockReport);
-  
+
       const result = await service.getReportById(1);
       expect(result).toEqual(mockReport);
     });
-  
+
     it('should throw NotFoundException if report not found', async () => {
       jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(null);
-  
+
       await expect(service.getReportById(1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getAllReports', () => {
+    it('should return all reports', async () => {
+      const mockReports: Report[] = [
+        {
+          id: 1,
+          reporterId: 1,
+          reason: 'Test reason',
+          createdAt: new Date(),
+          postId: null,
+          commentId: null,
+          storyId: null,
+          status: ReportStatus.AWAITING_REVIEW,
+        },
+      ];
+
+      jest.spyOn(prisma.report, 'findMany').mockResolvedValue(mockReports);
+
+      const result = await service.getAllReports();
+      expect(result).toEqual(mockReports);
+    });
+
+    it('should throw NotFoundException if no reports found', async () => {
+      jest.spyOn(prisma.report, 'findMany').mockResolvedValue([]);
+
+      await expect(service.getAllReports()).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getReportsByUserId', () => {
+    it('should return reports by user ID', async () => {
+      const mockReports: Report[] = [
+        {
+          id: 1,
+          reporterId: 1,
+          reason: 'Test reason',
+          createdAt: new Date(),
+          postId: null,
+          commentId: null,
+          storyId: null,
+          status: ReportStatus.AWAITING_REVIEW,
+        },
+      ];
+
+      jest.spyOn(prisma.report, 'findMany').mockResolvedValue(mockReports);
+
+      const result = await service.getReportsByUserId(1);
+      expect(result).toEqual(mockReports);
+    });
+
+    it('should throw NotFoundException if no reports found', async () => {
+      jest.spyOn(prisma.report, 'findMany').mockResolvedValue([]);
+
+      await expect(service.getReportsByUserId(1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -84,15 +142,15 @@ describe('ReportService', () => {
         storyId: 1,
         reason: 'Test reason',
       };
-  
+
       const mockReport: Report = {
         id: 1,
         ...createReportDto,
         status: ReportStatus.RESOLVED,
       };
-  
+
       jest.spyOn(prisma.report, 'create').mockResolvedValue(mockReport);
-  
+
       const result = await service.createReport(createReportDto);
       expect(result).toEqual(mockReport);
     });
@@ -108,19 +166,19 @@ describe('ReportService', () => {
         postId: null,
         commentId: null,
         storyId: null,
-        status: ReportStatus.AWAITING_REVIEW
+        status: ReportStatus.AWAITING_REVIEW,
       };
-  
+
       jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(mockReport);
       jest.spyOn(prisma.report, 'delete').mockResolvedValue(mockReport);
-  
+
       await service.deleteReport(1);
       expect(prisma.report.delete).toHaveBeenCalledWith({ where: { id: 1 } });
     });
-  
+
     it('should throw NotFoundException if report not found', async () => {
       jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(null);
-  
+
       await expect(service.deleteReport(1)).rejects.toThrow(NotFoundException);
     });
   });
@@ -135,31 +193,35 @@ describe('ReportService', () => {
         postId: null,
         commentId: null,
         storyId: null,
-        status: ReportStatus.AWAITING_REVIEW
+        status: ReportStatus.AWAITING_REVIEW,
       };
-  
+
       const patchReportDto: PatchReportDto = {
         status: ReportStatus.RESOLVED,
-        reason: 'Test Patch reason'
-      }
+        reason: 'Test Patch reason',
+      };
 
       jest.spyOn(prisma.report, 'update').mockResolvedValue({
         ...mockReport,
         ...patchReportDto,
       });
-  
+
       const result = await service.updateReport(1, patchReportDto);
       expect(result).toEqual({
         ...mockReport,
         ...patchReportDto,
       });
     });
-  
+
     it('should throw NotFoundException if report not found', async () => {
       jest.spyOn(prisma.report, 'update').mockResolvedValue(null);
-  
-      await expect(service.updateReport(1, { status: ReportStatus.AWAITING_REVIEW, reason: 'Updated reason' })).rejects.toThrow(NotFoundException);
+
+      await expect(
+        service.updateReport(1, {
+          status: ReportStatus.AWAITING_REVIEW,
+          reason: 'Updated reason',
+        }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
-
 });
