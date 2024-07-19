@@ -24,7 +24,22 @@ describe('StoryController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StoryController],
-      providers: [StoryService, PrismaService, WebSocketService],
+      providers: [
+        {
+          provide: StoryService,
+          useValue: {
+            GetStoryById: jest.fn(),
+            getStoriesByUserId: jest.fn(),
+            getLast24HoursStoriesByUser: jest.fn(),
+            getUsersWhoViewedStory: jest.fn(),
+            getStoryReplies: jest.fn(),
+            incrementViewCount: jest.fn(),
+            CreateStory: jest.fn(),
+            UpdateStory: jest.fn(),
+            DeleteStory: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<StoryController>(StoryController);
