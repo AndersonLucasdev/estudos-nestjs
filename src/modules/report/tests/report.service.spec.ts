@@ -73,4 +73,53 @@ describe('ReportService', () => {
       await expect(service.getReportById(1)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('createReport', () => {
+    it('should create a new report', async () => {
+      const createReportDto = {
+        reporterId: 1,
+        postId: 1,
+        commentId: 1,
+        storyId: 1,
+        reason: 'Test reason',
+      };
+  
+      const mockReport: Report = {
+        id: 1,
+        ...createReportDto,
+        status: 'pending',
+      };
+  
+      jest.spyOn(prisma.report, 'create').mockResolvedValue(mockReport);
+  
+      const result = await service.createReport(createReportDto);
+      expect(result).toEqual(mockReport);
+    });
+  });
+
+  describe('deleteReport', () => {
+    it('should delete a report by ID', async () => {
+      const mockReport: Report = {
+        id: 1,
+        reporterId: 1,
+        postId: 1,
+        commentId: 1,
+        storyId: 1,
+        reason: 'Test reason',
+        status: 'pending',
+      };
+  
+      jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(mockReport);
+      jest.spyOn(prisma.report, 'delete').mockResolvedValue(mockReport);
+  
+      await service.deleteReport(1);
+      expect(prisma.report.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
+  
+    it('should throw NotFoundException if report not found', async () => {
+      jest.spyOn(prisma.report, 'findUnique').mockResolvedValue(null);
+  
+      await expect(service.deleteReport(1)).rejects.toThrow(NotFoundException);
+    });
+  });
 });
