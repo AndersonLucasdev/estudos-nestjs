@@ -47,6 +47,10 @@ describe('StoryService', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('getStoryById', () => {
     it('should return a tag by ID', async () => {
       const mockStory: Story = {

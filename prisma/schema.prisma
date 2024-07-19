@@ -187,12 +187,12 @@ model Story {
 model Report {
   id         Int          @id @default(autoincrement())
   reporterId Int
+  reason     String
+  createdAt  DateTime     @default(now()) @db.Timestamp(6)
   postId     Int?
   commentId  Int?
   storyId    Int?
-  reason     String
   status     ReportStatus @default(AWAITING_REVIEW)
-  createdAt  DateTime     @default(now()) @db.Timestamp(6)
   reporter   User         @relation(fields: [reporterId], references: [id])
   post       Post?        @relation(fields: [postId], references: [id])
   comment    Comment?     @relation(fields: [commentId], references: [id])
