@@ -72,6 +72,66 @@ describe('ReportController', () => {
     });
   });
 
+  describe('getAllReports', () => {
+    it('should return all reports', async () => {
+      const mockReports: Report[] = [
+        {
+          id: 1,
+          reporterId: 1,
+          reason: 'Test reason',
+          createdAt: new Date(),
+          postId: null,
+          commentId: null,
+          storyId: null,
+          status: ReportStatus.AWAITING_REVIEW,
+        },
+      ];
+
+      jest.spyOn(service, 'getAllReports').mockResolvedValue(mockReports);
+
+      const result = await controller.getAllReports();
+      expect(result).toEqual(mockReports);
+    });
+
+    it('should throw NotFoundException if no reports found', async () => {
+      jest.spyOn(service, 'getAllReports').mockResolvedValue([]);
+
+      await expect(controller.getAllReports()).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('getReportsByUserId', () => {
+    it('should return reports by user ID', async () => {
+      const mockReports: Report[] = [
+        {
+          id: 1,
+          reporterId: 1,
+          reason: 'Test reason',
+          createdAt: new Date(),
+          postId: null,
+          commentId: null,
+          storyId: null,
+          status: ReportStatus.AWAITING_REVIEW,
+        },
+      ];
+
+      jest.spyOn(service, 'getReportsByUserId').mockResolvedValue(mockReports);
+
+      const result = await controller.getReportsByUserId(1);
+      expect(result).toEqual(mockReports);
+    });
+
+    it('should throw NotFoundException if no reports found', async () => {
+      jest.spyOn(service, 'getReportsByUserId').mockResolvedValue([]);
+
+      await expect(controller.getReportsByUserId(1)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
   describe('createReport', () => {
     it('should create a new report', async () => {
       const createReportDto: CreateReportDto = {
@@ -90,7 +150,7 @@ describe('ReportController', () => {
         postId: null,
         commentId: null,
         storyId: null,
-        status: ReportStatus.AWAITING_REVIEW
+        status: ReportStatus.AWAITING_REVIEW,
       };
 
       jest.spyOn(service, 'createReport').mockResolvedValue(mockReport);
@@ -150,7 +210,7 @@ describe('ReportController', () => {
         postId: null,
         commentId: null,
         storyId: null,
-        status: ReportStatus.AWAITING_REVIEW
+        status: ReportStatus.AWAITING_REVIEW,
       };
 
       jest.spyOn(service, 'updateReport').mockResolvedValue(mockReport);
