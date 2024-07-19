@@ -158,7 +158,7 @@ describe('ReportService', () => {
     it('should throw NotFoundException if report not found', async () => {
       jest.spyOn(prisma.report, 'update').mockResolvedValue(null);
   
-      await expect(service.updateReport(1, { status: 'resolved', reason: 'Updated reason' })).rejects.toThrow(NotFoundException);
+      await expect(service.updateReport(1, { status: ReportStatus.AWAITING_REVIEW, reason: 'Updated reason' })).rejects.toThrow(NotFoundException);
     });
   });
 
