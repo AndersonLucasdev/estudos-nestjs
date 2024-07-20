@@ -46,4 +46,25 @@ describe('PostLikeService', () => {
     prismaService = module.get<PrismaService>(PrismaService);
     webSocketService = module.get<WebSocketService>(WebSocketService);
   });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  describe('GetLikeById', () => {
+    it('should return a like by ID', async () => {
+      const mockLike: PostLike = { id: 1, userId: 1, postId: 1 };
+  
+      jest.spyOn(prismaService.postLike, 'findUnique').mockResolvedValue(mockLike);
+  
+      const result = await service.GetLikeById(1);
+      expect(result).toEqual(mockLike);
+    });
+  
+    it('should throw NotFoundException if like not found', async () => {
+      jest.spyOn(prismaService.postLike, 'findUnique').mockResolvedValue(null);
+  
+      await expect(service.GetLikeById(1)).rejects.toThrow(NotFoundException);
+    });
+  });
 });
