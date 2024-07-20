@@ -67,4 +67,58 @@ describe('PostLikeService', () => {
       await expect(service.GetLikeById(1)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('CreateLike', () => {
+    it('should create a new like', async () => {
+      const mockLike: PostLike = { id: 1, userId: 1, postId: 1 };
+  
+      jest.spyOn(prismaService.postLike, 'create').mockResolvedValue(mockLike);
+      jest.spyOn(service, 'notifyPostLikeChange').mockResolvedValue();
+  
+      const result = await service.CreateLike(1, 1);
+      expect(result).toEqual(mockLike);
+      expect(service.notifyPostLikeChange).toHaveBeenCalledWith(1, 1);
+    });
+  });
+
+  describe('RemoveLike', () => {
+    it('should remove a like', async () => {
+      const mockLike: PostLike[] = [{ id: 1, userId: 1, postId: 1 }];
+  
+      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue(mockLike);
+  
+      const result = await service.RemoveLike(1, 1);
+      expect(result).toEqual(mockLike[0]);
+    });
+  
+    it('should throw NotFoundException if like not found', async () => {
+      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue([]);
+  
+      await expect(service.RemoveLike(1, 1)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('notifyPostLikeChange', () => {
+    it('should notify post like change', async () => {
+      const mockPost = { id: 1, userId: 1 };
+  
+      jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(mockPost);
+      jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue();
+  
+      await service.notifyPostLikeChange(1, 1);
+      expect(prismaService.post.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+        select: { userId: true },
+      });
+      expect(webSocketService.sendNotificationToUser).toHaveBeenCalledWith(1, {
+        message: `Alguém curtiu seu post.`,
+      });
+    });
+  
+    it('should throw NotFoundException if post not found', async () => {
+      jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(null);
+  
+      await expect(service.notifyPostLikeChange(1, 1)).rejects.toThrow(NotFoundException);
+    });
+  });
 });
