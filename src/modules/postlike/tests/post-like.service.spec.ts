@@ -68,6 +68,35 @@ describe('PostLikeService', () => {
     });
   });
 
+  describe('GetAllLikes', () => {
+    it('should return all likes', async () => {
+      const mockLikes: PostLike[] = [
+        { id: 1, userId: 1, postId: 1 },
+        { id: 2, userId: 2, postId: 2 },
+      ];
+  
+      jest.spyOn(prismaService.postLike, 'findMany').mockResolvedValue(mockLikes);
+  
+      const result = await service.GetAllLikes();
+      expect(result).toEqual(mockLikes);
+    });
+  });
+
+  describe('GetLikesForPost', () => {
+    it('should return likes for a post', async () => {
+      const mockLikes: PostLike[] = [
+        { id: 1, userId: 1, postId: 1 },
+        { id: 2, userId: 2, postId: 1 },
+      ];
+  
+      jest.spyOn(prismaService.postLike, 'findMany').mockResolvedValue(mockLikes);
+  
+      const result = await service.GetLikesForPost(1);
+      expect(result).toEqual(mockLikes);
+    });
+  });
+  
+
   describe('CreateLike', () => {
     it('should create a new like', async () => {
       const mockLike: PostLike = { id: 1, userId: 1, postId: 1 };
