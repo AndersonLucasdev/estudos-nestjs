@@ -125,20 +125,18 @@ describe('PostLikeService', () => {
 
   describe('RemoveLike', () => {
     it('should remove a like', async () => {
-      const mockLike: PostLike[] = [{ id: 1, userId: 1, postId: 1 }];
-  
-      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue(mockLike);
-  
-      const result = await service.RemoveLike(1, 1);
-      expect(result).toEqual(mockLike[0]);
+      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue({ count: 1 });
+
+      await expect(service.RemoveLike(1, 1)).resolves.toBeUndefined();
     });
-  
+
     it('should throw NotFoundException if like not found', async () => {
-      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue([]);
-  
+      jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue({ count: 0 });
+
       await expect(service.RemoveLike(1, 1)).rejects.toThrow(NotFoundException);
     });
   });
+
 
   describe('notifyPostLikeChange', () => {
     it('should notify post like change', async () => {

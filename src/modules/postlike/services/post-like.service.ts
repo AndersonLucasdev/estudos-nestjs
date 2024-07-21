@@ -132,19 +132,17 @@ export class PostLikeService {
   }
 
   // Remove o like de um usuário em um post específico
-  async RemoveLike(userId: number, postId: number): Promise<PostLike> {
-    const deletedPostLike = await this.prisma.postLike.deleteMany({
+  async RemoveLike(userId: number, postId: number): Promise<void> {
+    const result = await this.prisma.postLike.deleteMany({
       where: {
         userId: userId,
         postId: postId,
       },
     });
 
-    if (!deletedPostLike) {
+    if (result.count === 0) {
       throw new NotFoundException('Like não encontrado.');
     }
-
-    return deletedPostLike[0];
   }
 
   private async notifyPostLikeChange(postId: number, likerId: number): Promise<void> {
