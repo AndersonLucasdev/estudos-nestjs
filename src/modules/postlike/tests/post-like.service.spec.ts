@@ -113,11 +113,13 @@ describe('PostLikeService', () => {
       const mockLike: PostLike = { id: 1, userId: 1, postId: 1 };
   
       jest.spyOn(prismaService.postLike, 'create').mockResolvedValue(mockLike);
-      jest.spyOn(service, 'notifyPostLikeChange').mockResolvedValue();
+      
+      // Acessa o método privado indiretamente
+      jest.spyOn<any, any>(service, 'notifyPostLikeChange').mockImplementation(() => Promise.resolve());
   
       const result = await service.CreateLike(1, 1);
       expect(result).toEqual(mockLike);
-      expect(service.notifyPostLikeChange).toHaveBeenCalledWith(1, 1);
+      expect(service['notifyPostLikeChange']).toHaveBeenCalledWith(1, 1);
     });
   });
 

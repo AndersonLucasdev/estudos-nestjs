@@ -118,7 +118,7 @@ export class PostLikeService {
   }
 
   // Cria um novo like para um post e um usuário específico
-  async CreateLike(userId: number, postId: number): Promise<PostLike> {
+  public async CreateLike(userId: number, postId: number): Promise<PostLike> {
     const newLike = await this.prisma.postLike.create({
       data: {
         userId,
@@ -126,7 +126,7 @@ export class PostLikeService {
       },
     });
 
-    this.notifyPostLikeChange(postId, userId);
+    await this.notifyPostLikeChange(postId, userId);
 
     return newLike;
   }
@@ -148,7 +148,6 @@ export class PostLikeService {
   }
 
   private async notifyPostLikeChange(postId: number, likerId: number): Promise<void> {
-    // Recupere o autor do post
     const post = await this.prisma.post.findUnique({
       where: { id: postId },
       select: { userId: true },
@@ -158,7 +157,6 @@ export class PostLikeService {
       throw new NotFoundException('Post não encontrado.');
     }
 
-    // Envie uma notificação WebSocket para o autor do post
     this.webSocketService.sendNotificationToUser(post.userId, { message: `Alguém curtiu seu post.` });
   }
 }
