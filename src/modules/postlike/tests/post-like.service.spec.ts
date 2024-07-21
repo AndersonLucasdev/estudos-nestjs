@@ -96,6 +96,17 @@ describe('PostLikeService', () => {
     });
   });
   
+  describe('CountLikesForPost', () => {
+    it('should return the number of likes for a post', async () => {
+      const mockCount = 5;
+  
+      jest.spyOn(prismaService.postLike, 'count').mockResolvedValue(mockCount);
+  
+      const result = await service.CountLikesForPost(1);
+      expect(result).toBe(mockCount);
+    });
+  });
+  
 
   describe('CreateLike', () => {
     it('should create a new like', async () => {
