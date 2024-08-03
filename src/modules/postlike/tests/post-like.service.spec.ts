@@ -140,7 +140,7 @@ describe('PostLikeService', () => {
 
   describe('notifyPostLikeChange', () => {
     it('should notify post like change', async () => {
-      const mockPost = { id: 1, userId: 1 };
+      const mockPost = { id: 1, userId: 1, image: 'test', description: null, disableComments: true };
   
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(mockPost);
       jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue();
