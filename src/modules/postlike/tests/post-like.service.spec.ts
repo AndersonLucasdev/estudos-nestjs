@@ -114,7 +114,7 @@ describe('PostLikeService', () => {
 
       jest.spyOn(prismaService.postLike, 'create').mockResolvedValue(mockLike);
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(mockPost);
-      jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(Promise.resolve());
+      // jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(undefined);
 
       const result = await service.CreateLike(1, 1);
       expect(result).toEqual(mockLike);
@@ -138,7 +138,7 @@ describe('PostLikeService', () => {
     it('should remove a like and notify the post author', async () => {
       jest.spyOn(prismaService.postLike, 'deleteMany').mockResolvedValue({ count: 1 });
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue({ id: 1, userId: 1, creationDate: new Date(), disableComments: false, likes: 0, description: 'test', image: 'test' });
-      jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(Promise.resolve());
+      // jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(undefined);
 
       await expect(service.RemoveLike(1, 1)).resolves.toBeUndefined();
       expect(prismaService.post.findUnique).toHaveBeenCalledWith({
@@ -162,7 +162,7 @@ describe('PostLikeService', () => {
       const mockPost = { id: 1, userId: 1, creationDate: new Date(), disableComments: false, likes: 0, description: 'test', image: 'test' };
 
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(mockPost);
-      jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(Promise.resolve());
+      // jest.spyOn(webSocketService, 'sendNotificationToUser').mockResolvedValue(undefined);
 
       await service['notifyPostLikeChange'](1, 1);
       expect(prismaService.post.findUnique).toHaveBeenCalledWith({
